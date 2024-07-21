@@ -31,3 +31,7 @@
 
 en:
   hello: "Hello world"
+  errors:
+    models:
+      product:
+        invalid_price: 'Price of product must be greater than 0'

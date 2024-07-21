@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :product do
-    name { "MyString" }
-    description { "MyString" }
+    name { 'MyString' }
+    description { 'MyString' }
     price { 9.99 }
-    thumbnail { "MyString" }
+    thumbnail { 'MyString' }
   end
 end
