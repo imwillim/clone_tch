@@ -1,5 +1,5 @@
-class ApplicationController < ActionController::API
-  def show
+# frozen_string_literal: true
 
-  end
+class ApplicationController < ActionController::API
+  def show; end
 end

@@ -1,6 +1,8 @@
-require_relative "boot"
+# frozen_string_literal: true
 
-require "rails/all"
+require_relative 'boot'
+
+require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -32,7 +34,7 @@ module Tch
                        routing_specs: false,
                        controller_specs: true,
                        request_specs: false
-      g.fixture_replacement :factory_bot, dir: "spec/factories"
+      g.fixture_replacement :factory_bot, dir: 'spec/factories'
     end
   end
 end
