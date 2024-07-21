@@ -7,4 +7,5 @@ class Product < ApplicationRecord
   validates :description, presence: true
   has_many :sizes, dependent: :destroy
   has_many :toppings, dependent: :destroy
+  has_one :tag, dependent: :destroy
 end
