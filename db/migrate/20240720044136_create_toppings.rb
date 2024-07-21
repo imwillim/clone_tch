@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateToppings < ActiveRecord::Migration[7.0]
   def change
     create_table :toppings, id: :uuid do |t|
@@ -5,7 +7,6 @@ class CreateToppings < ActiveRecord::Migration[7.0]
       t.decimal :price, null: false
       t.timestamps
       t.references :product, foreign_key: true, type: :uuid
-
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Topping < ApplicationRecord
   validates :name, presence: true
   validates :price, numericality: {

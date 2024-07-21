@@ -54,15 +54,14 @@ vietnam_coffee.sizes.append(small_size, medium_size)
 blao_milktea.sizes.append(large_size)
 
 jelly = Topping.create(
-  name: "Thạch",
+  name: 'Thạch',
   price: 2000
 )
 
 bubble = Topping.create(
-  name: "Trân châu",
+  name: 'Trân châu',
   price: 5000
 )
 
 vietnam_coffee.toppings.append(jelly)
 blao_milktea.toppings.append(bubble)
-
