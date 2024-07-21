@@ -1,0 +1,105 @@
+# Get products
+GET api/v1/tch/products/:category_id{?limit,page}
+
+Parameters:
+    + category_id (UUID, optional) - Category id
+    + limit (int, optional) - Maximum results can be returned
+        + Default: `5`
+    + page (int) - The index of page
+        + Default: `1`
+Response: 200 (application/json)
+    {
+        "message": "Get products successfully."
+        "status_code": 200,
+        "data":
+        {
+            "categories":
+            [{
+                    "name": "Cà phê Việt Nam",
+                    "products":
+                    [
+                        {
+                            "id": 1,
+                            "name": "Cà phê sữa đá",
+                            "price": 20000,
+                            "thumbnail": "ca_phe_sua_da.jpg",
+                            "tag":
+                            {
+                                "name": "Bán chạy",
+                                "color": "Đỏ"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+
+
+# Get categories
+GET api/v1/tch/categories/:category_id{?level}
+
+Parameters:
+    category_id: UUID, optional,
+    level: int, optional
+Response: 200 (application/json)
+    {
+            "message": "Get categories successfully."
+            "status_code": 200,
+            "data":
+            [{
+                "id": `sdgmdlkgmsd`
+                "name": "Tất cả",
+                "categories":
+                [
+                    {
+                        "id": 1,
+                        "name": "Cà phê",
+                        "categories":
+                        [
+                            {
+                                "id": `sdsdsds`
+                                "name": "Cà phê Việt Nam",
+                                "categories":[]
+                            }
+                        ]
+                    },
+                ],
+            }]
+    }
+
+
+# Get product
+Request
+    path param: api/v1/tch/products/:product_id
+Response 200 (application/json)
+ {
+     "message": "Get a product successfully."
+     "status_code": 200,
+     "data":
+     {
+        "id": `dsd121`,
+        "name": "Cà phê Sữa đá",
+        "price": 29000,
+        "images": ["ca_phe_sua_da.jpg"],
+        "sizes":
+        [{
+            "id": `sd11`,
+            "name": "Vừa",
+            "price": 10000,
+            "icon": "medium.jpg"
+        }],
+        "toppings":
+        [{
+            "id": `aawq1s`,
+            "name": "Trân châu trắng",
+            "price": 10000,
+        }],
+        "tag":
+        {
+            "id": `21sasq`,
+            "name": "Bán chạy",
+            "color": "Đỏ",
+            "url": "image1.png"
+        }
+     }
