@@ -32,9 +32,4 @@
 en:
   errors:
     models:
-      product:
-        invalid_price: 'Price of product must be greater than 0'
-      size:
-        invalid_price: 'Price of size must be greater than 0'
-      topping:
-        invalid_price: 'Price of topping must be greater than 0'
+      invalid_price: 'Price of %{record} must be greater than 0'
