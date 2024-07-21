@@ -41,7 +41,6 @@ jobs:
 
       - name: Setup database
         run: |
-          cp config/database.yml config/database.yml
           bin/rails db:create
           bin/rails db:schema:load
 
