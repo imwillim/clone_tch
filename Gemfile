@@ -32,6 +32,7 @@ gem "bootsnap", require: false
 
 gem 'active_model_serializers'
 gem 'byebug'
+gem 'rubocop-rails', require: false
 gem 'rspec'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
