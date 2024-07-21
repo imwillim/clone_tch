@@ -2,7 +2,7 @@
 
 class Product < ApplicationRecord
   validates :price, numericality: { greater_than: 0, message: I18n.t('errors.models.invalid_price', record: :product) }
-  validates :name, presence: true, uniqueness: true # rubocop:disable Rails/UniqueValidationWithoutIndex
+  validates :name, presence: true, uniqueness: true
   validates :thumbnail, presence: true
   validates :description, presence: true
   has_many :sizes, dependent: :destroy
