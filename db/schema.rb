@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_20_044136) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_21_095606) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,7 +22,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_20_044136) do
     t.string "image_urls", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_products_on_name"
+    t.index ["name"], name: "index_products_on_name", unique: true
   end
 
   create_table "sizes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -35,15 +35,25 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_20_044136) do
     t.index ["product_id"], name: "index_sizes_on_product_id"
   end
 
+  create_table "tags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "color", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "product_id"
+    t.index ["product_id"], name: "index_tags_on_product_id"
+  end
+
   create_table "toppings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.decimal "price", null: false
-    t.uuid "product_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "product_id"
     t.index ["product_id"], name: "index_toppings_on_product_id"
   end
 
   add_foreign_key "sizes", "products"
+  add_foreign_key "tags", "products"
   add_foreign_key "toppings", "products"
 end
