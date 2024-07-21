@@ -5,4 +5,5 @@ class Product < ApplicationRecord
   validates :name, presence: true
   validates :thumbnail, presence: true
   validates :description, presence: true
+  has_many :sizes, dependent: :destroy
 end
