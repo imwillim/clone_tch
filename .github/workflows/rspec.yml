@@ -1,4 +1,4 @@
-name: Ruby on Rails CI
+name: Check rspec
 
 on:
   push:
@@ -44,7 +44,7 @@ jobs:
 
       - name: Setup database
         run: |
-          cp config/database.yml.ci config/database.yml
+          cp config/database.yml config/database.yml
           bin/rails db:create
           bin/rails db:schema:load
 
