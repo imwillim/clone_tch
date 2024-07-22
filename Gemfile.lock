@@ -269,6 +269,7 @@ DEPENDENCIES
   rspec-rails
   rubocop-factory_bot
   rubocop-rails
+  rubocop-rspec
   rubocop-rspec_rails
   shoulda-matchers
   tzinfo-data
