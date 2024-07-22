@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_21_095606) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_21_120944) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "parent_id"
+    t.index ["name"], name: "index_categories_on_name", unique: true
+    t.index ["parent_id"], name: "index_categories_on_parent_id"
+  end
 
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
@@ -22,6 +31,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_21_095606) do
     t.string "image_urls", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "category_id", null: false
+    t.index ["category_id"], name: "index_products_on_category_id"
     t.index ["name"], name: "index_products_on_name", unique: true
   end
 
@@ -53,6 +64,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_21_095606) do
     t.index ["product_id"], name: "index_toppings_on_product_id"
   end
 
+  add_foreign_key "categories", "categories", column: "parent_id"
+  add_foreign_key "products", "categories"
   add_foreign_key "sizes", "products"
   add_foreign_key "tags", "products"
   add_foreign_key "toppings", "products"
