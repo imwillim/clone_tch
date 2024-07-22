@@ -8,12 +8,32 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
+beverage_category = Category.create(
+  name: 'Thức uống'
+)
+
+coffee_category = Category.create(
+  name: 'Cà phê'
+)
+
+tea_category = Category.create(
+  name: 'Trà'
+)
+
+milk_tea_category = Category.create(
+  name: 'Trà sữa'
+)
+
+beverage_category.children.append(coffee_category, tea_category)
+tea_category.children.append(milk_tea_category)
+
 vietnam_coffee = Product.create(
   name: 'Cà phê Việt Nam',
   description: 'Cà phê xuất xứ từ Việt Nam',
   price: 39_000,
   thumbnail: 'ca_phe_viet_nam1.png',
-  image_urls: %w[ca_phe_viet_nam1.png ca_phe_viet_nam2.png]
+  image_urls: %w[ca_phe_viet_nam1.png ca_phe_viet_nam2.png],
+  category: coffee_category
 )
 
 Product.create(
@@ -21,7 +41,8 @@ Product.create(
   description: 'Trà được làm từ bột latte',
   price: 49_000,
   thumbnail: 'tra_xanh_latte.png',
-  image_urls: %w[tra_xanh_latte1.png tra_xanh_latte2.png]
+  image_urls: %w[tra_xanh_latte1.png tra_xanh_latte2.png],
+  category: tea_category
 )
 
 blao_milktea = Product.create(
@@ -29,7 +50,8 @@ blao_milktea = Product.create(
   description: 'Trà sữa đậm vị',
   price: 55_000,
   thumbnail: 'tra_sua_blao.png',
-  image_urls: %w[tra_sua_blao2.png tra_sua_blao3.png]
+  image_urls: %w[tra_sua_blao2.png tra_sua_blao3.png],
+  category: milk_tea_category
 )
 
 large_size = Size.create(
@@ -65,3 +87,10 @@ bubble = Topping.create(
 
 vietnam_coffee.toppings.append(jelly)
 blao_milktea.toppings.append(bubble)
+
+new_tag = Tag.create(
+  name: 'Mới',
+  color: 'white'
+)
+
+vietnam_coffee.tag = new_tag
