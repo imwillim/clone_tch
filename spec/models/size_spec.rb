@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Size, type: :model do
+RSpec.describe Size do
   let(:size) { build(:size) }
 
   describe 'validations' do

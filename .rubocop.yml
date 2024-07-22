@@ -1,9 +1,13 @@
 require:
   - rubocop-rails
+  - rubocop-rspec_rails
+  - rubocop-factory_bot
 
 AllCops:
   NewCops: enable
 
+RSpec/MultipleExpectations:
+  Enabled: false
 Gemspec/AddRuntimeDependency:
   Enabled: true
 Gemspec/DeprecatedAttributeAssignment:
