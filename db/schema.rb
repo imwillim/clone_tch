@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_21_120944) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_21_145844) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,7 +42,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_21_120944) do
     t.decimal "price", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "product_id"
+    t.uuid "product_id", null: false
     t.index ["product_id"], name: "index_sizes_on_product_id"
   end
 
@@ -51,7 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_21_120944) do
     t.string "color", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "product_id"
+    t.uuid "product_id", null: false
     t.index ["product_id"], name: "index_tags_on_product_id"
   end
 
@@ -60,7 +60,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_21_120944) do
     t.decimal "price", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "product_id"
+    t.uuid "product_id", null: false
     t.index ["product_id"], name: "index_toppings_on_product_id"
   end
 
