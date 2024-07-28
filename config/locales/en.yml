@@ -33,3 +33,4 @@ en:
   errors:
     models:
       invalid_price: 'Price of %{record} must be greater than 0'
+      not_found: '%{record} is not found.'

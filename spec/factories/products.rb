@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :product do
-    name { 'MyString' }
+    name { Faker::Coffee.unique.blend_name }
     description { 'MyString' }
     price { 9.99 }
     thumbnail { 'MyString' }
