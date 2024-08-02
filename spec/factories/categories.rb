@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :category do
-    name { 'Thức uống' }
+    name { 'Cà phê' }
   end
 end

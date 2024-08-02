@@ -7,12 +7,12 @@ describe GetProductService do
 
   let(:product_id) { SecureRandom.uuid }
 
-  let!(:category) { create(:category) }
-  let!(:sizes) { create_list(:size, 2, product: second_product) }
-  let!(:toppings) { create_list(:topping, 2, product: second_product) }
-  let!(:tag) { create(:tag, product: second_product) }
-  let!(:first_product) { create(:product, category:) }
-  let!(:second_product) { create(:product, id: product_id, category:) }
+  let!(:tea_category) { create(:category, name: 'tea_category') }
+  let!(:sizes) { create_list(:size, 2, product: milk_tea) }
+  let!(:toppings) { create_list(:topping, 2, product: milk_tea) }
+  let!(:tag) { create(:tag, product: milk_tea) }
+  let!(:milk_tea) { create(:product, category: tea_category, name: 'milk tea') }
+  let!(:tea) { create(:product, category: tea_category, name: 'tea') }
 
   describe '#validate' do
     context 'when product_id is nil' do
@@ -27,8 +27,7 @@ describe GetProductService do
     end
 
     context 'when product_id does not exist in database' do
-      let(:another_product_id) { SecureRandom.uuid }
-      let(:second_product) { create(:product, id: another_product_id, category:, name: 'Trà sữa') }
+      let(:product_id) { SecureRandom.uuid }
 
       it 'returns error' do
         service.call
@@ -41,12 +40,14 @@ describe GetProductService do
 
   describe '#call' do
     context 'when validation succeeds' do
-      it 'returns first_product' do
+      let(:product_id) { tea.id }
+
+      it 'returns tea' do
         service.call
 
         expect(service.success?).to eq true
-        expect(service.result.id).to eq second_product.id
-        expect(service.result.id).not_to eq first_product.id
+        expect(service.result.id).to eq tea.id
+        expect(service.result.id).not_to eq milk_tea.id
       end
     end
   end
