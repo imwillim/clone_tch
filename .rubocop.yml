@@ -91,6 +91,8 @@ Metrics/CollectionLiteralLength:
   Enabled: true
 Metrics/BlockLength:
   Enabled: false
+Metrics/MethodLength:
+  Enabled: true
 Naming/BlockForwarding:
   Enabled: true
 Security/CompoundHash:
