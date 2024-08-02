@@ -8,8 +8,8 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-beverage_category = Category.create(
-  name: 'Thức uống'
+all_category = Category.create(
+  name: 'Tất cả'
 )
 
 coffee_category = Category.create(
@@ -24,8 +24,12 @@ milk_tea_category = Category.create(
   name: 'Trà sữa'
 )
 
-beverage_category.children.append(coffee_category, tea_category)
-tea_category.children.append(milk_tea_category)
+hi_tea_category = Category.create(
+  name: 'Trà Hi-Tea'
+)
+
+all_category.children.append(coffee_category, tea_category)
+tea_category.children.append(milk_tea_category, hi_tea_category)
 
 vietnam_coffee = Product.create(
   name: 'Cà phê Việt Nam',
@@ -52,6 +56,15 @@ blao_milktea = Product.create(
   thumbnail: 'tra_sua_blao.png',
   image_urls: %w[tra_sua_blao2.png tra_sua_blao3.png],
   category: milk_tea_category
+)
+
+Product.create(
+  name: 'Hi-Tea Đào Kombucha',
+  description: 'Trà hoa Hibiscus',
+  price: 55_000,
+  thumbnail: 'dao_kombucha.png',
+  image_urls: %w[dao_kombucha1.png dao_kombucha2.png],
+  category: hi_tea_category
 )
 
 large_size = Size.create(
