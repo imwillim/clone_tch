@@ -34,6 +34,8 @@ gem 'bootsnap', require: false
 
 gem 'active_model_serializers'
 gem 'byebug'
+gem 'dry-schema'
+gem 'dry-validation'
 gem 'faker'
 gem 'rspec'
 gem 'rubocop-factory_bot', require: false
