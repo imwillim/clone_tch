@@ -98,6 +98,9 @@ GEM
       reline (>= 0.3.8)
     diff-lcs (1.5.1)
     drb (2.2.1)
+    dry-auto_inject (1.0.1)
+      dry-core (~> 1.0)
+      zeitwerk (~> 2.6)
     dry-configurable (1.2.0)
       dry-core (~> 1.0, < 2)
       zeitwerk (~> 2.6)
@@ -110,6 +113,10 @@ GEM
       concurrent-ruby (~> 1.0)
       dry-core (~> 1.0, < 2)
       zeitwerk (~> 2.6)
+    dry-rails (0.7.0)
+      dry-schema (~> 1.7)
+      dry-system (~> 1.0, < 2)
+      dry-validation (~> 1.5)
     dry-schema (1.13.4)
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 1.0, >= 1.0.1)
@@ -118,6 +125,11 @@ GEM
       dry-logic (>= 1.4, < 2)
       dry-types (>= 1.7, < 2)
       zeitwerk (~> 2.6)
+    dry-system (1.0.1)
+      dry-auto_inject (~> 1.0, < 2)
+      dry-configurable (~> 1.0, < 2)
+      dry-core (~> 1.0, < 2)
+      dry-inflector (~> 1.0, < 2)
     dry-types (1.7.2)
       bigdecimal (~> 3.0)
       concurrent-ruby (~> 1.0)
@@ -311,8 +323,8 @@ DEPENDENCIES
   bootsnap
   byebug
   debug
+  dry-rails
   dry-schema
-  dry-validation
   factory_bot_rails
   faker
   pg (~> 1.1)
