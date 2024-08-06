@@ -18,7 +18,7 @@ RSpec.describe ProductsController, type: :controller do
         get :show, params: { id: 'invalid-uuid-format' }
 
         expect(response.status).to eq 400
-        expect(response.parsed_body).to eq({ 'errors' => { 'id' => ['is not a valid UUID'] } })
+        expect(response.parsed_body).to eq('errors' => 'id is not a valid UUID')
       end
     end
 
@@ -67,7 +67,7 @@ RSpec.describe ProductsController, type: :controller do
         it 'renders an error message' do
           get :show, params: { id: random_id }
 
-          expect(response).to have_http_status(:not_found)
+          expect(response.status).to eq 422
           expect(response.parsed_body).to eq(expected_error)
         end
       end

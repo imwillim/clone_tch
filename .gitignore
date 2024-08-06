@@ -34,6 +34,7 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/tch.iml
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -53,3 +54,5 @@
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
+
+.byebug_history
