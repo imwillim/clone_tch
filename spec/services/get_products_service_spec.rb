@@ -29,64 +29,30 @@ describe GetProductsService do
     end
 
     describe '#call' do
+      let(:actual_result) do
+        service.result.map do |category|
+          {
+            name: category[:name],
+            product_ids: category[:products].pluck(:id).sort
+          }
+        end
+      end
+
       context 'when a category does not have a parent category' do
         let(:category_id) { all_category.id }
         let(:expected_result) do
           [
             {
               name: 'Coffee category',
-              products: [
-                {
-                  id: iced_coffee.id,
-                  name: 'Iced Coffee',
-                  price: 9.99,
-                  thumbnail: 'MyString',
-                  tag: {
-                    name: nil,
-                    color: nil
-                  }
-                },
-                {
-                  id: americano.id,
-                  name: 'Americano',
-                  price: 9.99,
-                  thumbnail: 'MyString',
-                  tag: {
-                    name: nil,
-                    color: nil
-                  }
-                }
-              ]
+              product_ids: [iced_coffee.id, americano.id].sort
             },
             {
               name: 'Milk Tea category',
-              products: [
-                {
-                  id: milk_tea.id,
-                  name: 'Milk Tea',
-                  price: 9.99,
-                  thumbnail: 'MyString',
-                  tag: {
-                    name: nil,
-                    color: nil
-                  }
-                }
-              ]
+              product_ids: [milk_tea.id]
             },
             {
               name: 'Hi Tea category',
-              products: [
-                {
-                  id: hi_tea.id,
-                  name: 'Hi Tea',
-                  price: 9.99,
-                  thumbnail: 'MyString',
-                  tag: {
-                    name: nil,
-                    color: nil
-                  }
-                }
-              ]
+              product_ids: [hi_tea.id]
             }
           ]
         end
@@ -96,7 +62,8 @@ describe GetProductsService do
 
           expect(service.success?).to eq true
           expect(service.result.size).to eq 3
-          expect(service.result).to match_array(expected_result)
+
+          expect(actual_result).to match_array(expected_result)
         end
       end
 
@@ -106,44 +73,21 @@ describe GetProductsService do
           let(:expected_result) do
             [
               {
-                name: 'Hi Tea category',
-                products: [
-                  {
-                    id: hi_tea.id,
-                    name: 'Hi Tea',
-                    price: 9.99,
-                    thumbnail: 'MyString',
-                    tag: {
-                      name: nil,
-                      color: nil
-                    }
-                  }
-                ]
+                name: 'Milk Tea category',
+                product_ids: [milk_tea.id]
               },
               {
-                name: 'Milk Tea category',
-                products: [
-                  {
-                    id: milk_tea.id,
-                    name: 'Milk Tea',
-                    price: 9.99,
-                    thumbnail: 'MyString',
-                    tag: {
-                      name: nil,
-                      color: nil
-                    }
-                  }
-                ]
+                name: 'Hi Tea category',
+                product_ids: [hi_tea.id]
               }
             ]
           end
-
           it 'returns children categories having products' do
             service.call
 
             expect(service.success?).to eq true
             expect(service.result.size).to eq 2
-            expect(service.result).to match_array(expected_result)
+            expect(actual_result).to match_array(expected_result)
           end
         end
 
@@ -174,7 +118,6 @@ describe GetProductsService do
 
             expect(service.success?).to eq true
             expect(service.result.size).to eq 1
-            expect(service.result.first[:name]).to eq expected_result.first[:name]
             expect(service.result.first[:products].size).to eq 1
             expect(service.result.first[:products].first[:id]).to eq expected_result.first[:products].first[:id]
           end

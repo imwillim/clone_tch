@@ -40,18 +40,18 @@ class GetProductsService < BaseService
   end
 
   def fetch_products
-    products = build_query
-    products.group_by { |product| product[:category_name] }.map do |category_name, elements|
+    result = build_query
+    result.group_by { |product| product[:category_name] }.map do |category_name, products|
       {
         name: category_name,
-        products: elements.map do |element|
-          map_product(element)
+        products: products.map do |product|
+          format_product(product)
         end
       }
     end
   end
 
-  def map_product(product)
+  def format_product(product)
     {
       id: product[:product_id],
       name: product[:product_name],
