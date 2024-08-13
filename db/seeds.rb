@@ -49,6 +49,15 @@ Product.create(
   category: tea_category
 )
 
+Product.create(
+  name: 'Trà sữa Trân châu',
+  description: 'Trà sữa có topping trân châu',
+  price: 55_000,
+  thumbnail: 'tra_sua_tran_chau.png',
+  image_urls: %w[tra_sua_tran_chau1.png tra_sua_tran_chau3.png],
+  category: milk_tea_category
+)
+
 blao_milktea = Product.create(
   name: 'Trà sữa ô long Blao',
   description: 'Trà sữa đậm vị',
@@ -106,4 +115,4 @@ new_tag = Tag.create(
   color: 'white'
 )
 
-vietnam_coffee.tag = new_tag
+blao_milktea.tag = new_tag

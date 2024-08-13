@@ -1,5 +1,5 @@
 # Get products
-GET api/v1/tch/products/:category_id{?limit,page}
+GET api/v1/tch/products{?category_id, limit, page}
 
 Parameters:
     + category_id (UUID, optional) - Category id
@@ -103,3 +103,4 @@ Response 200 (application/json)
             "color": "Đỏ",
         }
      }
+}
