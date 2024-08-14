@@ -33,7 +33,7 @@ describe GetProductsService do
         service.result.map do |category|
           {
             name: category[:name],
-            product_ids: category[:products].pluck(:id).sort
+            product_ids: category[:products].pluck(:id)
           }
         end
       end
@@ -44,15 +44,15 @@ describe GetProductsService do
           [
             {
               name: 'Coffee category',
-              product_ids: [iced_coffee.id, americano.id].sort
+              product_ids: match_array([iced_coffee.id, americano.id])
             },
             {
               name: 'Milk Tea category',
-              product_ids: [milk_tea.id]
+              product_ids: match_array([milk_tea.id])
             },
             {
               name: 'Hi Tea category',
-              product_ids: [hi_tea.id]
+              product_ids: match_array([hi_tea.id])
             }
           ]
         end
@@ -74,11 +74,11 @@ describe GetProductsService do
             [
               {
                 name: 'Milk Tea category',
-                product_ids: [milk_tea.id]
+                product_ids: match_array([milk_tea.id])
               },
               {
                 name: 'Hi Tea category',
-                product_ids: [hi_tea.id]
+                product_ids: match_array([hi_tea.id])
               }
             ]
           end
