@@ -29,30 +29,61 @@ describe GetProductsService do
     end
 
     describe '#call' do
-      let(:actual_result) do
-        service.result.map do |category|
-          {
-            name: category[:name],
-            product_ids: category[:products].pluck(:id)
-          }
-        end
-      end
-
       context 'when a category does not have a parent category' do
         let(:category_id) { all_category.id }
         let(:expected_result) do
           [
             {
               name: 'Coffee category',
-              product_ids: match_array([iced_coffee.id, americano.id])
+              products: match_array([
+                                      {
+                                        id: iced_coffee.id,
+                                        name: iced_coffee.name,
+                                        price: iced_coffee.price,
+                                        thumbnail: iced_coffee.thumbnail,
+                                        tag: {
+                                          color: nil,
+                                          name: nil
+                                        }
+                                      },
+                                      {
+                                        id: americano.id,
+                                        name: americano.name,
+                                        price: americano.price,
+                                        thumbnail: americano.thumbnail,
+                                        tag: {
+                                          color: nil,
+                                          name: nil
+                                        }
+                                      }
+                                    ])
+
             },
             {
               name: 'Milk Tea category',
-              product_ids: match_array([milk_tea.id])
+              products: match_array([{
+                                      id: milk_tea.id,
+                                      name: milk_tea.name,
+                                      price: milk_tea.price,
+                                      thumbnail: milk_tea.thumbnail,
+                                      tag: {
+                                        color: nil,
+                                        name: nil
+                                      }
+                                    }])
             },
             {
               name: 'Hi Tea category',
-              product_ids: match_array([hi_tea.id])
+              products: match_array([{
+                                      id: hi_tea.id,
+                                      name: hi_tea.name,
+                                      price: hi_tea.price,
+                                      thumbnail: hi_tea.thumbnail,
+                                      tag: {
+                                        color: nil,
+                                        name: nil
+                                      }
+                                    }])
             }
           ]
         end
@@ -63,7 +94,7 @@ describe GetProductsService do
           expect(service.success?).to eq true
           expect(service.result.size).to eq 3
 
-          expect(actual_result).to match_array(expected_result)
+          expect(service.result).to match_array(expected_result)
         end
       end
 
@@ -73,12 +104,30 @@ describe GetProductsService do
           let(:expected_result) do
             [
               {
-                name: 'Milk Tea category',
-                product_ids: match_array([milk_tea.id])
+                name: 'Hi Tea category',
+                products: match_array([{
+                                        id: hi_tea.id,
+                                        name: hi_tea.name,
+                                        price: hi_tea.price,
+                                        thumbnail: hi_tea.thumbnail,
+                                        tag: {
+                                          color: nil,
+                                          name: nil
+                                        }
+                                      }])
               },
               {
-                name: 'Hi Tea category',
-                product_ids: match_array([hi_tea.id])
+                name: 'Milk Tea category',
+                products: match_array([{
+                                        id: milk_tea.id,
+                                        name: milk_tea.name,
+                                        price: milk_tea.price,
+                                        thumbnail: milk_tea.thumbnail,
+                                        tag: {
+                                          color: nil,
+                                          name: nil
+                                        }
+                                      }])
               }
             ]
           end
@@ -87,7 +136,7 @@ describe GetProductsService do
 
             expect(service.success?).to eq true
             expect(service.result.size).to eq 2
-            expect(actual_result).to match_array(expected_result)
+            expect(service.result).to match_array(expected_result)
           end
         end
 
