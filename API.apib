@@ -104,3 +104,125 @@ Response 200 (application/json)
         }
      }
 }
+
+# Get districts
+GET api/v1/tch/cities/:city_id/districts
+Parameters:
+    city_id: UUID
+Response 200 (application/json)
+ {
+    data: [
+        {
+            "id": `1tdas1`,
+            "name": "Quận Tân Bình",
+        },
+        {
+            "id": `23sdw12`,
+            "name": "Quận Phú Nhuận",
+        },
+        {
+            "id": `12wdf2`,
+            "name": "Quận 3",
+        }
+    ]
+ }
+
+# Get stores
+GET api/v1/tch/stores{?city_id, district}
+Parameters:
+    + city_id (UUID)
+    + district (string, optional)
+Response 200 (application/json)
+ {
+    data: [
+        {
+            "id": `1tdas1`,
+            "name": "HCM Lê Văn Sĩ",
+            "images": ["levansi1.png", "levansi2.png"],
+            "address": "1 Lê Văn Sĩ, Phường 1, Quận Tân Bình, Thành phố Hồ Chí Minh",
+            "working_hours": [
+                {
+                    "day": "Thứ sáu",
+                    "period": "7:00 - 22:00",
+                },
+                {
+                    "day": "Thứ bảy",
+                    "period": "7:00 - 21:00",
+                },
+            ]
+            "facilities": [
+                {
+                    "name": "Mua mang đi",
+                    "icon": "cart_icon"
+                }
+                {
+                    "name": "Thân thiện với gia đình",
+                    "icon": "kid_icon"
+                }
+            ]
+        },
+        {
+            "id": `1tdas1`,
+            "name": "HCM Hoa Hồng",
+            "images": ["hoahong.png", "hoahong1.png"],
+            "address": "1 Hoa Hồng, Phường 2, Quận Phú Nhuận, Thành phố Hồ Chí Minh",
+            "working_hours": [
+                {
+                    "day": "Chủ nhật",
+                    "period": "8:00 - 21:00",
+                },
+                {
+                    "day": "Thứ hai",
+                    "period": "8:00 - 22:00",
+                },
+            ]
+            "facilities": [
+                {
+                    "name": "Phục vụ tại chỗ",
+                    "icon": "store_icon"
+                }
+                {
+                    "name": "Thân thiện với gia đình",
+                    "icon": "kid_icon"
+                }
+            ]
+        }
+    ]
+ }
+
+
+ # Get store
+ GET api/v1/tch/stores/:store_id
+ Parameters:
+     + store_id (UUID)
+ Response 200 (application/json)
+  {
+     data: {
+            "id": `1tdas1`,
+            "name": "HCM Hoa Hồng",
+            "description": "Nhà cà phê toạ lạc tại đường Hoa Hồng"
+            "images": ["hoahong.png", "hoahong1.png"],
+            "address": "1 Hoa Hồng, Phường 2, Quận Phú Nhuận, Thành phố Hồ Chí Minh",
+            "working_hours": [
+                {
+                    "day": "Chủ nhật",
+                    "period": "8:00 - 21:00",
+                },
+                {
+                    "day": "Thứ hai",
+                    "period": "8:00 - 22:00",
+                },
+            ]
+            "facilities": [
+                {
+                    "name": "Phục vụ tại chỗ",
+                    "icon": "store_icon"
+                }
+                {
+                    "name": "Thân thiện với gia đình",
+                    "icon": "kid_icon"
+                }
+            ]
+     }
+  }
+
