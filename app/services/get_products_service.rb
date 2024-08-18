@@ -10,8 +10,8 @@ class GetProductsService < BaseService
     validate
     return self if error?
 
-    @result = build_query
-    result
+    fetch_products
+    self
   end
 
   private
@@ -37,6 +37,31 @@ class GetProductsService < BaseService
              products.id AS product_id, products.name AS product_name,
              products.price AS product_price, products.thumbnail AS product_thumbnail,
              tags.name AS tag_name, tags.color AS tag_color')
+  end
+
+  def fetch_products
+    products = build_query
+    @result = products.group_by { |product| product[:category_name] }.map do |category_name, elements|
+      {
+        name: category_name,
+        products: elements.map! do |element|
+          transform_product(element)
+        end
+      }
+    end
+  end
+
+  def transform_product(product)
+    {
+      id: product[:product_id],
+      name: product[:product_name],
+      price: product[:product_price],
+      thumbnail: product[:product_thumbnail],
+      tag: {
+        name: product[:tag_name],
+        color: product[:tag_color]
+      }
+    }
   end
 
   def validate
