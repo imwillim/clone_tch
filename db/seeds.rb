@@ -116,3 +116,18 @@ new_tag = Tag.create(
 )
 
 blao_milktea.tag = new_tag
+
+TPHCM = City.create(
+  name: 'Thành phố Hồ Chí Minh',
+  code: 'HCM'
+)
+
+Hanoi = City.create(
+  name: 'Hà Nội',
+  code: 'HN'
+)
+
+Danang = City.create(
+  name: 'Đà Nẵng',
+  code: 'DAN'
+)
