@@ -419,3 +419,23 @@ Address.create(house_number: 'Lô A4 - 2', street: 'Nguyễn Văn Linh', ward: '
 
 Address.create(house_number: '01', street: 'Núi Thành', ward: '3', district: 'Hải Châu',
                city: Danang, store: Nui_Thanh)
+
+facilities = [
+  Facility.create(name: 'Mua mang đi'),
+  Facility.create(name: 'Phục vụ tại chỗ'),
+  Facility.create(name: 'Có chỗ đỗ xe hơi'),
+  Facility.create(name: 'Thân thiện với gia đình')
+]
+
+stores = [
+  Ap_Bac, Le_Van_Sy, Hong_Ha, Hoang_Viet, Hong_Lac, Nguyen_Xi, Phan_Van_Tri,
+  Bui_Huu_Nghia, Ngo_Tat_To, Nguyen_Van_Thuong, Dien_Bien_Phu, The_Grace_Tower,
+  Nguyen_Thi_Thap, Huynh_Tan_Phat, Nguyen_Thi_Thap_2, Sky_Garden, Victoria_Van_Phu,
+  Van_Khe, Vu_Tong_Phan, Aeon_Mall_Ha_Dong, Nguyen_Van_Loc, The_Park_Home, Hoang_Dao_Thuy_2,
+  Nguyen_Khanh_Toan, Ho_Tung_Mau, Vu_Pham_Ham, Discovery, Nguyen_Van_Linh, Nui_Thanh
+]
+
+stores.each do |store|
+  store_facilities = facilities.sample(rand(3..4)) # Randomly select 3 to 4 facilities
+  store.facilities.append(*store_facilities)       # Append them to the store
+end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_18_135421) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_24_083928) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -46,6 +46,23 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_18_135421) do
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_cities_on_code", unique: true
     t.index ["name"], name: "index_cities_on_name", unique: true
+  end
+
+  create_table "facilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "icon"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_facilities_on_name", unique: true
+  end
+
+  create_table "facilities_stores", primary_key: ["store_id", "facility_id"], force: :cascade do |t|
+    t.bigint "store_id", null: false
+    t.uuid "facility_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["facility_id"], name: "index_facilities_stores_on_facility_id"
+    t.index ["store_id"], name: "index_facilities_stores_on_store_id"
   end
 
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -101,6 +118,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_18_135421) do
   add_foreign_key "addresses", "cities"
   add_foreign_key "addresses", "stores"
   add_foreign_key "categories", "categories", column: "parent_id"
+  add_foreign_key "facilities_stores", "facilities"
+  add_foreign_key "facilities_stores", "stores"
   add_foreign_key "products", "categories"
   add_foreign_key "sizes", "products"
   add_foreign_key "tags", "products"
