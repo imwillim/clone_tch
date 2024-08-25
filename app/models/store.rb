@@ -5,4 +5,7 @@ class Store < ApplicationRecord
 
   has_one :address, dependent: :nullify
   has_one :city, through: :address
+
+  has_many :facilities_stores, class_name: 'FacilityStore', dependent: :destroy
+  has_many :facilities, through: :facilities_stores
 end
