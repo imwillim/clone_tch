@@ -439,3 +439,35 @@ stores.each do |store|
   store_facilities = facilities.sample(rand(3..4)) # Randomly select 3 to 4 facilities
   store.facilities.append(*store_facilities)       # Append them to the store
 end
+
+weekend1 = WorkingHour.create(open_hour: '6:00', close_hour: '20:30')
+day1 = WorkingHour.create(open_hour: '7:00', close_hour: '21:30')
+
+weekend2 = WorkingHour.create(open_hour: '6:30', close_hour: '21:00')
+day2 = WorkingHour.create(open_hour: '7:30', close_hour: '22:00')
+
+weekend3 = WorkingHour.create(open_hour: '6:00', close_hour: '21:30')
+day3 = WorkingHour.create(open_hour: '7:00', close_hour: '22:30')
+
+weekend4 = WorkingHour.create(open_hour: '6:30', close_hour: '19:30')
+day4 = WorkingHour.create(open_hour: '7:30', close_hour: '20:30')
+
+working_hour_pairs = [
+  { weekend: weekend1, day: day1 },
+  { weekend: weekend2, day: day2 },
+  { weekend: weekend3, day: day3 },
+  { weekend: weekend4, day: day4 }
+]
+
+days_of_week = %w[Monday Tuesday Wednesday Thursday Friday]
+
+stores.each do |store|
+  selected_pair = working_hour_pairs.sample
+
+  store.stores_working_hours.create(day: 'Saturday', working_hour: selected_pair[:weekend])
+  store.stores_working_hours.create(day: 'Sunday', working_hour: selected_pair[:weekend])
+
+  days_of_week.each do |day|
+    store.stores_working_hours.create(day:, working_hour: selected_pair[:day])
+  end
+end
