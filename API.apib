@@ -234,3 +234,37 @@ Response 200 (application/json)
             ]
      }
   }
+
+# Get directions from user location to specific store
+GET api/v1/tch/stores/:store_id/directions{?ward, district, transport}
+ Parameters:
+     + store_id (required, UUID)
+     + ward (required, string)
+     + district (required, string)
+     + transport (optional, string, default = 'driving')
+ Response 200 (application/json)
+  {
+     data: {
+            [{
+              "duration": 603.833,
+              "distance": 3184.425,
+              "steps":[
+                   "Turn right onto Hẻm 333/12 Lê Văn Sỹ.",
+                   "Turn left to stay on Hẻm 333/12 Lê Văn Sỹ.",
+                   "Your destination is on the right."
+              ]},
+              {
+                "duration": 503.833,
+                "distance": 1984.321,
+                "steps": [
+                    "Turn right onto Hoàng Văn Thụ.",
+                    "Turn left onto Trương Quốc Dung.",
+                    "Your destination is on the right."]
+              }]
+     }
+  }
+
+  Response 500 (application/json)
+  {
+      message: 'Server not available'
+  }
