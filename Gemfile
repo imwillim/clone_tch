@@ -43,6 +43,7 @@ gem 'redis'
 gem 'rspec'
 gem 'rubocop-factory_bot', require: false
 gem 'rubocop-rails', require: false
+gem 'redis'
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
