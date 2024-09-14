@@ -97,6 +97,7 @@ GEM
       irb (~> 1.10)
       reline (>= 0.3.8)
     diff-lcs (1.5.1)
+    dotenv (3.1.2)
     drb (2.2.1)
     dry-auto_inject (1.0.1)
       dry-core (~> 1.0)
@@ -151,6 +152,11 @@ GEM
       railties (>= 5.0.0)
     faker (3.4.2)
       i18n (>= 1.8.11, < 2)
+    faraday (2.11.0)
+      faraday-net_http (>= 2.0, < 3.4)
+      logger
+    faraday-net_http (3.3.0)
+      net-http
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.5)
@@ -162,6 +168,7 @@ GEM
     json (2.7.2)
     jsonapi-renderer (0.2.2)
     language_server-protocol (3.17.0.3)
+    logger (1.6.0)
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -175,6 +182,8 @@ GEM
     minitest (5.24.1)
     msgpack (1.7.2)
     mutex_m (0.2.0)
+    net-http (0.4.1)
+      uri
     net-imap (0.4.14)
       date
       net-protocol
@@ -308,6 +317,9 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
+    uri (0.13.1)
+    vcr (6.3.1)
+      base64
     webrick (1.8.1)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
@@ -327,10 +339,12 @@ DEPENDENCIES
   bootsnap
   byebug
   debug
+  dotenv
   dry-rails
   dry-schema
   factory_bot_rails
   faker
+  faraday
   pg (~> 1.1)
   puma (~> 5.0)
   rails (~> 7.1.0)
@@ -341,6 +355,7 @@ DEPENDENCIES
   rubocop-rails
   shoulda-matchers
   tzinfo-data
+  vcr
 
 RUBY VERSION
    ruby 3.3.0p0
