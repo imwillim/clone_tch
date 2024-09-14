@@ -36,3 +36,5 @@ en:
       not_found: '%{record} is not found.'
       taken: '%{record} has been taken.'
       not_valid: '%{record} is not valid'
+      blank: '%{record} is blank.'
+      not_supported: '%{record} is not supported.'
