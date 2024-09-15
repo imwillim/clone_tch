@@ -27,6 +27,7 @@ jobs:
     env:
       RAILS_ENV: test
       DATABASE_URL: postgres://postgres:postgres@localhost/tch_test
+      MAP_BOT_ACCESS_TOKEN: ${{ secrets.MAP_BOT_ACCESS_TOKEN }}
 
     steps:
       - name: Checkout code
