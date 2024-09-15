@@ -34,9 +34,11 @@ gem 'bootsnap', require: false
 
 gem 'active_model_serializers'
 gem 'byebug'
+gem 'dotenv', groups: %i[development test]
 gem 'dry-rails'
 gem 'dry-schema'
 gem 'faker'
+gem 'faraday'
 gem 'redis'
 gem 'rspec'
 gem 'rubocop-factory_bot', require: false
@@ -61,4 +63,5 @@ end
 
 group :test do
   gem 'shoulda-matchers'
+  gem 'vcr'
 end
