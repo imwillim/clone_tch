@@ -1,0 +1,53 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.mapbox.com/directions/v5/mapbox/truck/106.6732885,10.8096836;106.6653261,10.7943273?access_token=pk.eyJ1Ijoia2thbjEyMCIsImEiOiJjbTBkeDRxczMwaXZrMmxwd2prbnh0cGx3In0.QA7FjWBZaREcgjBMgZ2Gfg&overview=full&steps=true
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.11.0
+  response:
+    status:
+      code: 403
+      message: Forbidden
+    headers:
+      content-type:
+      - application/json; charset=utf-8
+      content-length:
+      - '39'
+      connection:
+      - keep-alive
+      date:
+      - Sun, 15 Sep 2024 09:52:42 GMT
+      access-control-allow-origin:
+      - "*"
+      x-mapbox-request-id:
+      - GDJqGQtU58WD37BDkAMP2HWO3zTh0FxcAWMLNto_5917g7E4MuVWLA==
+      x-rate-limit-limit:
+      - '300'
+      x-rate-limit-interval:
+      - '60'
+      x-rate-limit-reset:
+      - '1726394022'
+      x-content-type-options:
+      - nosniff
+      vary:
+      - Accept-Encoding
+      x-cache:
+      - Error from cloudfront
+      via:
+      - 1.1 6cefdda96960ae9a9ec957de62cdd4b0.cloudfront.net (CloudFront)
+      x-amz-cf-pop:
+      - SGN50-P1
+      alt-svc:
+      - h3=":443"; ma=86400
+      x-amz-cf-id:
+      - GDJqGQtU58WD37BDkAMP2HWO3zTh0FxcAWMLNto_5917g7E4MuVWLA==
+    body:
+      encoding: UTF-8
+      string: '{"message":"truck profile not allowed"}'
+  recorded_at: Sun, 15 Sep 2024 09:52:42 GMT
+recorded_with: VCR 6.3.1

@@ -1,0 +1,53 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.mapbox.com/directions/v5/mapbox/driving/91,91;92,92?access_token=pk.eyJ1Ijoia2thbjEyMCIsImEiOiJjbTBkeDRxczMwaXZrMmxwd2prbnh0cGx3In0.QA7FjWBZaREcgjBMgZ2Gfg&overview=full&steps=true
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.11.0
+  response:
+    status:
+      code: 422
+      message: Unknown
+    headers:
+      content-type:
+      - application/json; charset=utf-8
+      content-length:
+      - '71'
+      connection:
+      - keep-alive
+      date:
+      - Sun, 15 Sep 2024 09:50:22 GMT
+      access-control-allow-origin:
+      - "*"
+      x-mapbox-request-id:
+      - _5m1h_f5WhoA-wQBV7syP7nwFzAu2Qmssi1FCtPLKKpOyztY3v8CBg==
+      x-rate-limit-limit:
+      - '300'
+      x-rate-limit-interval:
+      - '60'
+      x-rate-limit-reset:
+      - '1726393882'
+      x-content-type-options:
+      - nosniff
+      vary:
+      - Accept-Encoding
+      x-cache:
+      - Error from cloudfront
+      via:
+      - 1.1 34aacfee77e8fe9d0a2d28051c0aaec0.cloudfront.net (CloudFront)
+      x-amz-cf-pop:
+      - SGN50-P1
+      alt-svc:
+      - h3=":443"; ma=86400
+      x-amz-cf-id:
+      - 8Qh1J3ajFaRQqiQeWQAQVJXccFWeugaC9tug4hSGP5HIoCxPQ12jXg==
+    body:
+      encoding: UTF-8
+      string: '{"message":"Latitude must be between -90 and 90","code":"InvalidInput"}'
+  recorded_at: Sun, 15 Sep 2024 09:50:22 GMT
+recorded_with: VCR 6.3.1
