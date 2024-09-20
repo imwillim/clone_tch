@@ -1,0 +1,99 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.mapbox.com/search/geocode/v6/forward?access_token=pk.eyJ1Ijoia2thbjEyMCIsImEiOiJjbTBkeDRxczMwaXZrMmxwd2prbnh0cGx3In0.QA7FjWBZaREcgjBMgZ2Gfg&q=phuong+3%2C+quan+go+vap
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.11.0
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - application/vnd.geo+json; charset=utf-8
+      transfer-encoding:
+      - chunked
+      connection:
+      - keep-alive
+      date:
+      - Tue, 10 Sep 2024 14:42:01 GMT
+      content-encoding:
+      - gzip
+      x-powered-by:
+      - Express
+      access-control-allow-origin:
+      - "*"
+      access-control-expose-headers:
+      - x-rate-limit-interval,x-rate-limit-limit,x-rate-limit-remaining,x-rate-limit-reset,ip-proximity
+      cache-control:
+      - max-age=432000,stale-while-revalidate=600,stale-if-error=86400
+      x-rate-limit-limit:
+      - '1000'
+      x-rate-limit-interval:
+      - '60'
+      x-rate-limit-reset:
+      - '1725979381'
+      last-modified:
+      - Tue, 10 Sep 2024 01:40:31 GMT
+      etag:
+      - '"455506d7395f4c3efccef3b0aec9a6c5"'
+      vary:
+      - Accept-Encoding
+      x-cache:
+      - Miss from cloudfront
+      via:
+      - 1.1 c1bd4c89f1f6daf71922ce6048514b9e.cloudfront.net (CloudFront)
+      x-amz-cf-pop:
+      - SGN50-P1
+      alt-svc:
+      - h3=":443"; ma=86400
+      x-amz-cf-id:
+      - b8OTWzGudRW1nwYNSTDKTTWSDwJUg_nfdciYPZeDayaWp25sQfOWiw==
+    body:
+      encoding: UTF-8
+      string: '{"type":"FeatureCollection","features":[{"type":"Feature","id":"dXJuOm1ieHBsYzpYc3ow","geometry":{"type":"Point","coordinates":[106.679382,10.814459]},"properties":{"mapbox_id":"dXJuOm1ieHBsYzpYc3ow","feature_type":"neighborhood","full_address":"Phường
+        3, 71400, Gò Vấp, Ho Chi Minh City, Vietnam","name":"Phường 3","name_preferred":"Phường
+        3","coordinates":{"longitude":106.679382,"latitude":10.814459},"place_formatted":"71400,
+        Gò Vấp, Ho Chi Minh City, Vietnam","bbox":[106.672682,10.810412,106.6856,10.826986],"context":{"postcode":{"mapbox_id":"dXJuOm1ieHBsYzpBZVVPOUE","name":"71400"},"locality":{"mapbox_id":"dXJuOm1ieHBsYzpCWVBLOUE","name":"Gò
+        Vấp","wikidata_id":"Q5574953"},"place":{"mapbox_id":"dXJuOm1ieHBsYzpKUFE","name":"Ho
+        Chi Minh City","wikidata_id":"Q1854","short_code":"VN-SG"},"region":{"mapbox_id":"dXJuOm1ieHBsYzpKUFE","name":"Ho
+        Chi Minh City","wikidata_id":"Q1854","region_code":"SG","region_code_full":"VN-SG"},"country":{"mapbox_id":"dXJuOm1ieHBsYzpJdlE","name":"Vietnam","wikidata_id":"Q881","country_code":"VN","country_code_alpha_3":"VNM"},"neighborhood":{"mapbox_id":"dXJuOm1ieHBsYzpYc3ow","name":"Phường
+        3","wikidata_id":"Q1913761"}}}},{"type":"Feature","id":"dXJuOm1ieHBsYzpYY3ow","geometry":{"type":"Point","coordinates":[106.638386,10.758738]},"properties":{"mapbox_id":"dXJuOm1ieHBsYzpYY3ow","feature_type":"neighborhood","full_address":"Phường
+        3, 72600, Quận 11, Ho Chi Minh City, Vietnam","name":"Phường 3","name_preferred":"Phường
+        3","coordinates":{"longitude":106.638386,"latitude":10.758738},"place_formatted":"72600,
+        Quận 11, Ho Chi Minh City, Vietnam","bbox":[106.634201,10.757838,106.64238,10.769524],"context":{"postcode":{"mapbox_id":"dXJuOm1ieHBsYzpBZWFPOUE","name":"72600"},"locality":{"mapbox_id":"dXJuOm1ieHBsYzpCWGpLOUE","name":"Quận
+        11","wikidata_id":"Q1319960"},"place":{"mapbox_id":"dXJuOm1ieHBsYzpKUFE","name":"Ho
+        Chi Minh City","wikidata_id":"Q1854","short_code":"VN-SG"},"region":{"mapbox_id":"dXJuOm1ieHBsYzpKUFE","name":"Ho
+        Chi Minh City","wikidata_id":"Q1854","region_code":"SG","region_code_full":"VN-SG"},"country":{"mapbox_id":"dXJuOm1ieHBsYzpJdlE","name":"Vietnam","wikidata_id":"Q881","country_code":"VN","country_code_alpha_3":"VNM"},"neighborhood":{"mapbox_id":"dXJuOm1ieHBsYzpYY3ow","name":"Phường
+        3","wikidata_id":"Q2189978"}}}},{"type":"Feature","id":"dXJuOm1ieHBsYzpYcXow","geometry":{"type":"Point","coordinates":[106.662398,10.791852]},"properties":{"mapbox_id":"dXJuOm1ieHBsYzpYcXow","feature_type":"neighborhood","full_address":"Phường
+        3, 72100, Tân Bình, Ho Chi Minh City, Vietnam","name":"Phường 3","name_preferred":"Phường
+        3","coordinates":{"longitude":106.662398,"latitude":10.791852},"place_formatted":"72100,
+        Tân Bình, Ho Chi Minh City, Vietnam","bbox":[106.659317,10.790733,106.666145,10.7966],"context":{"postcode":{"mapbox_id":"dXJuOm1ieHBsYzpBZVh1OUE","name":"72100"},"locality":{"mapbox_id":"dXJuOm1ieHBsYzpCWWVxOUE","name":"Tân
+        Bình","wikidata_id":"Q2200028"},"place":{"mapbox_id":"dXJuOm1ieHBsYzpKUFE","name":"Ho
+        Chi Minh City","wikidata_id":"Q1854","short_code":"VN-SG"},"region":{"mapbox_id":"dXJuOm1ieHBsYzpKUFE","name":"Ho
+        Chi Minh City","wikidata_id":"Q1854","region_code":"SG","region_code_full":"VN-SG"},"country":{"mapbox_id":"dXJuOm1ieHBsYzpJdlE","name":"Vietnam","wikidata_id":"Q881","country_code":"VN","country_code_alpha_3":"VNM"},"neighborhood":{"mapbox_id":"dXJuOm1ieHBsYzpYcXow","name":"Phường
+        3","wikidata_id":"Q4920077"}}}},{"type":"Feature","id":"dXJuOm1ieHBsYzpYb3ow","geometry":{"type":"Point","coordinates":[106.682977,10.801811]},"properties":{"mapbox_id":"dXJuOm1ieHBsYzpYb3ow","feature_type":"neighborhood","full_address":"Phường
+        3, 72200, Phú Nhuận, Ho Chi Minh City, Vietnam","name":"Phường 3","name_preferred":"Phường
+        3","coordinates":{"longitude":106.682977,"latitude":10.801811},"place_formatted":"72200,
+        Phú Nhuận, Ho Chi Minh City, Vietnam","bbox":[106.678993,10.7992,106.68454,10.804415],"context":{"postcode":{"mapbox_id":"dXJuOm1ieHBsYzpBZVlPOUE","name":"72200"},"locality":{"mapbox_id":"dXJuOm1ieHBsYzpCWWNLOUE","name":"Phú
+        Nhuận","wikidata_id":"Q2194003"},"place":{"mapbox_id":"dXJuOm1ieHBsYzpKUFE","name":"Ho
+        Chi Minh City","wikidata_id":"Q1854","short_code":"VN-SG"},"region":{"mapbox_id":"dXJuOm1ieHBsYzpKUFE","name":"Ho
+        Chi Minh City","wikidata_id":"Q1854","region_code":"SG","region_code_full":"VN-SG"},"country":{"mapbox_id":"dXJuOm1ieHBsYzpJdlE","name":"Vietnam","wikidata_id":"Q881","country_code":"VN","country_code_alpha_3":"VNM"},"neighborhood":{"mapbox_id":"dXJuOm1ieHBsYzpYb3ow","name":"Phường
+        3","wikidata_id":"Q2638229"}}}},{"type":"Feature","id":"dXJuOm1ieHBsYzpYa3ow","geometry":{"type":"Point","coordinates":[106.699731,10.757933]},"properties":{"mapbox_id":"dXJuOm1ieHBsYzpYa3ow","feature_type":"neighborhood","full_address":"Phường
+        3, 72800, Quận 4, Ho Chi Minh City, Vietnam","name":"Phường 3","name_preferred":"Phường
+        3","coordinates":{"longitude":106.699731,"latitude":10.757933},"place_formatted":"72800,
+        Quận 4, Ho Chi Minh City, Vietnam","bbox":[106.695289,10.752236,106.70223,10.758917],"context":{"postcode":{"mapbox_id":"dXJuOm1ieHBsYzpBZWJPOUE","name":"72800"},"locality":{"mapbox_id":"dXJuOm1ieHBsYzpCWGxxOUE","name":"Quận
+        4","wikidata_id":"Q5283252"},"place":{"mapbox_id":"dXJuOm1ieHBsYzpKUFE","name":"Ho
+        Chi Minh City","wikidata_id":"Q1854","short_code":"VN-SG"},"region":{"mapbox_id":"dXJuOm1ieHBsYzpKUFE","name":"Ho
+        Chi Minh City","wikidata_id":"Q1854","region_code":"SG","region_code_full":"VN-SG"},"country":{"mapbox_id":"dXJuOm1ieHBsYzpJdlE","name":"Vietnam","wikidata_id":"Q881","country_code":"VN","country_code_alpha_3":"VNM"},"neighborhood":{"mapbox_id":"dXJuOm1ieHBsYzpYa3ow","name":"Phường
+        3","wikidata_id":"Q3077294"}}}}],"attribution":"NOTICE: © 2024 Mapbox and
+        its suppliers. All rights reserved. Use of this data is subject to the Mapbox
+        Terms of Service (https://www.mapbox.com/about/maps/). This response and the
+        information it contains may not be retained."}'
+  recorded_at: Tue, 10 Sep 2024 14:42:01 GMT
+recorded_with: VCR 6.3.1
