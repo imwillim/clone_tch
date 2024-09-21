@@ -4,44 +4,22 @@ require 'rails_helper'
 
 describe GetUserCoordinatesService, type: :service do
   subject(:service) { described_class.new(params:) }
-
-  let(:ward) { 'Ward 3' }
-  let(:district) { 'District 3' }
+  let(:address) { 'ward 3, district 3' }
   let(:params) do
     {
-      ward:,
-      district:
+      address:
     }
   end
-  let(:address_search) { "#{ward} #{district}" }
 
   describe '#validate' do
-    context 'when address_search is empty' do
-      let(:ward) { '' }
-      let(:district) { '' }
+    context 'when address is empty' do
+      let(:address) { '' }
 
       it 'returns error' do
         service.call
 
         expect(service.success?).to eq false
-        expect(service.first_error.message).to eq 'address_search is empty'
-      end
-    end
-
-    context 'when address_search is too long' do
-      let(:ward) do
-        'iewxtjatiewudcebvhrpqrlxjczsjwnfeodbmltolvzjaifoapiotmcdzyiemstyfskexkwadyxbmvvvuzrserjpmbvakbhkhptyxmysgflvyw
-dbmbcdbznfuhwjwcxumogknjbrquksgrhzkelgsvatowikujkxebkyafovpklayiyqkmswtryawaokwiilxtyowkengkoialbqpirxpqysnlufhqirwqnnqu
-ynrmfzaspvmllgrhyuyiscpfmtkztqctsvxbpyoopubvgprywfjhwzfhhwgbbhhjeelrmejmwgzkencuimqgwdwyjeidqfonjwjlpdkjamtnjclbocdzjeh
-drudumlxhwmcxsfhnytghskqjagymhmazxekpxvdopdzdfkorvcfwbstrybdfsottbczeylcoilgyonpdihfhosimrcqswwsolzkhtdqubzpoksqggsr
-ikqqzprgqsbjsevpcaxcnzu'
-      end
-
-      it 'returns error' do
-        service.call
-
-        expect(service.success?).to eq false
-        expect(service.first_error.message).to eq 'address_search is too long'
+        expect(service.first_error.message).to eq 'address is empty'
       end
     end
   end
@@ -52,7 +30,7 @@ ikqqzprgqsbjsevpcaxcnzu'
       let(:result) { [101, 90] }
 
       before do
-        allow(Mapbox::GetUserCoordinateRequest).to receive(:call).with(address_search:).and_return(request_success)
+        allow(Mapbox::GetUserCoordinateRequest).to receive(:call).with(address).and_return(request_success)
       end
 
       it 'returns result' do
@@ -68,7 +46,7 @@ ikqqzprgqsbjsevpcaxcnzu'
       end
 
       before do
-        allow(Mapbox::GetUserCoordinateRequest).to receive(:call).with(address_search:).and_return(request_failure)
+        allow(Mapbox::GetUserCoordinateRequest).to receive(:call).with(address).and_return(request_failure)
       end
 
       it 'adds errors' do

@@ -236,11 +236,10 @@ Response 200 (application/json)
   }
 
 # Get directions from user location to specific store
-GET api/v1/tch/stores/:store_id/directions{?ward, district, transport}
+GET api/v1/tch/stores/:store_id/directions{?address, transport}
  Parameters:
      + store_id (required, UUID)
-     + ward (required, string)
-     + district (required, string)
+     + address (required, string)
      + transport (optional, string, default = 'driving')
  Response 200 (application/json)
   {

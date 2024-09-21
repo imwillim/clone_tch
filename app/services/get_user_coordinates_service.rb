@@ -5,8 +5,7 @@ class GetUserCoordinatesService < BaseService
 
   def initialize(params:)
     super()
-    @ward = params[:ward]
-    @district = params[:district]
+    @address = params[:address]
   end
 
   def call
@@ -19,17 +18,11 @@ class GetUserCoordinatesService < BaseService
   private
 
   def validate!
-    return add_error(I18n.t('errors.params.empty', param: :address_search)) if address_search.blank?
-
-    add_error(I18n.t('errors.params.too_long', param: :address_search)) if address_search.length > LIMIT_LENGTH
-  end
-
-  def address_search
-    "#{@ward} #{@district}"
+    add_error(I18n.t('errors.params.empty', param: :address)) if @address.blank?
   end
 
   def fetch_request
-    get_user_coordinate_request = Mapbox::GetUserCoordinateRequest.call(address_search:)
+    get_user_coordinate_request = Mapbox::GetUserCoordinateRequest.call(@address)
 
     if get_user_coordinate_request.error?
       add_error(get_user_coordinate_request.first_error)
