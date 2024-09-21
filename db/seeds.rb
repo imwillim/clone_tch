@@ -307,7 +307,7 @@ Nui_Thanh = Store.create(
 )
 
 Address.create(house_number: '4 - 6', street: 'Ấp Bắc', ward: 'Phường 13', district: 'Q. Tân Bình',
-               latitude: 106.6690, longitude: 10.7905,
+               latitude: 10.7905, longitude: 106.6690,
                city: TP_HCM, store: Ap_Bac)
 
 Address.create(house_number: '281', street: 'Lê Văn Sỹ', ward: 'Phường 2', district: 'Q. Tân Bình',

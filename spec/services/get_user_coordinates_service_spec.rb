@@ -10,6 +10,7 @@ describe GetUserCoordinatesService, type: :service do
       address:
     }
   end
+  let(:address_search) { address }
 
   describe '#validate' do
     context 'when address is empty' do
@@ -30,7 +31,7 @@ describe GetUserCoordinatesService, type: :service do
       let(:result) { [101, 90] }
 
       before do
-        allow(Mapbox::GetUserCoordinateRequest).to receive(:call).with(address).and_return(request_success)
+        allow(Mapbox::GetUserCoordinateRequest).to receive(:call).with(address_search:).and_return(request_success)
       end
 
       it 'returns result' do
@@ -46,7 +47,7 @@ describe GetUserCoordinatesService, type: :service do
       end
 
       before do
-        allow(Mapbox::GetUserCoordinateRequest).to receive(:call).with(address).and_return(request_failure)
+        allow(Mapbox::GetUserCoordinateRequest).to receive(:call).with(address_search:).and_return(request_failure)
       end
 
       it 'adds errors' do

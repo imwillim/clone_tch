@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class GetUserCoordinatesService < BaseService
-  LIMIT_LENGTH = 256
-
   def initialize(params:)
     super()
     @address = params[:address]
@@ -22,7 +20,7 @@ class GetUserCoordinatesService < BaseService
   end
 
   def fetch_request
-    get_user_coordinate_request = Mapbox::GetUserCoordinateRequest.call(@address)
+    get_user_coordinate_request = Mapbox::GetUserCoordinateRequest.call(address_search: @address)
 
     if get_user_coordinate_request.error?
       add_error(get_user_coordinate_request.first_error)
