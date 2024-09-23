@@ -3,13 +3,8 @@
 require 'rails_helper'
 
 describe GetUserCoordinatesService, type: :service do
-  subject(:service) { described_class.new(params:) }
+  subject(:service) { described_class.new(address:) }
   let(:address) { 'ward 3, district 3' }
-  let(:params) do
-    {
-      address:
-    }
-  end
   let(:address_search) { address }
 
   describe '#validate' do

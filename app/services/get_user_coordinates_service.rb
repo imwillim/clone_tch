@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class GetUserCoordinatesService < BaseService
-  def initialize(params:)
+  def initialize(address:)
     super()
-    @address = params[:address]
+    @address = address
   end
 
   def call
