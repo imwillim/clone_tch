@@ -5,10 +5,10 @@ class GetDirectionsService < BaseService
 
   TRANSPORTATION_WHITE_LIST = %w[driving cycling walking].freeze
 
-  def initialize(params:, user_coordinates:)
+  def initialize(store_id:, transportation:, user_coordinates:)
     super()
-    @transportation = params[:transportation] || DEFAULT_TRANSPORTATION
-    @store_id = params[:store_id]
+    @transportation = transportation || DEFAULT_TRANSPORTATION
+    @store_id = store_id
     @user_coordinates = user_coordinates
   end
 
