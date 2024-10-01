@@ -6,11 +6,7 @@ module Mapbox
 
     SUCCESS_STATUS = 200
     BASE_ENDPOINT = 'https://api.mapbox.com'
-
-    def initialize
-      super
-      @token = ENV.fetch('MAP_BOT_ACCESS_TOKEN')
-    end
+    ACCESS_TOKEN = ENV.fetch('MAP_BOT_ACCESS_TOKEN')
 
     def connection
       return @connection if defined?(@connection)

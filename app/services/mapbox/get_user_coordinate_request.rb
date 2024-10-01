@@ -37,7 +37,7 @@ module Mapbox
     def params
       {
         q: @address_search,
-        access_token: @token
+        access_token: ACCESS_TOKEN
       }
     end
   end

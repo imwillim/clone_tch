@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.mapbox.com/directions/v5/mapbox/truck/106.6732885,10.8096836;106.6653261,10.7943273?access_token=pk.eyJ1Ijoia2thbjEyMCIsImEiOiJjbTBkeDRxczMwaXZrMmxwd2prbnh0cGx3In0.QA7FjWBZaREcgjBMgZ2Gfg&overview=full&steps=true
+    uri: https://api.mapbox.com/directions/v5/mapbox/truck/106.6732885,10.8096836;106.6653261,10.7943273?access_token=<MAP_BOX_ACCESS_TOKEN>&overview=full&steps=true
     body:
       encoding: US-ASCII
       string: ''
@@ -21,17 +21,17 @@ http_interactions:
       connection:
       - keep-alive
       date:
-      - Sun, 15 Sep 2024 09:52:42 GMT
+      - Tue, 01 Oct 2024 14:04:10 GMT
       access-control-allow-origin:
       - "*"
       x-mapbox-request-id:
-      - GDJqGQtU58WD37BDkAMP2HWO3zTh0FxcAWMLNto_5917g7E4MuVWLA==
+      - JFEnPzuXu6DxuZ0oUw3-4Us9G1Y43qD8FRIs9JmcppvAblaa325mQA==
       x-rate-limit-limit:
       - '300'
       x-rate-limit-interval:
       - '60'
       x-rate-limit-reset:
-      - '1726394022'
+      - '1727791510'
       x-content-type-options:
       - nosniff
       vary:
@@ -39,15 +39,15 @@ http_interactions:
       x-cache:
       - Error from cloudfront
       via:
-      - 1.1 6cefdda96960ae9a9ec957de62cdd4b0.cloudfront.net (CloudFront)
+      - 1.1 556b2d2deaae9fb88e614246671da062.cloudfront.net (CloudFront)
       x-amz-cf-pop:
       - SGN50-P1
       alt-svc:
       - h3=":443"; ma=86400
       x-amz-cf-id:
-      - GDJqGQtU58WD37BDkAMP2HWO3zTh0FxcAWMLNto_5917g7E4MuVWLA==
+      - sPXcDC75thrir87CbwQXyxwmgbILkKJw_xClfHzedS-6yl4d5Fcngw==
     body:
       encoding: UTF-8
       string: '{"message":"truck profile not allowed"}'
-  recorded_at: Sun, 15 Sep 2024 09:52:42 GMT
+  recorded_at: Tue, 01 Oct 2024 14:04:10 GMT
 recorded_with: VCR 6.3.1

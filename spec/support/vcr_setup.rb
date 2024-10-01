@@ -6,5 +6,5 @@ VCR.configure do |config|
   config.allow_http_connections_when_no_cassette = true
   config.configure_rspec_metadata!
   config.default_cassette_options = { record: :once, match_requests_on: %i[method uri query] }
-  config.filter_sensitive_data('<MAP_BOX_ACCESS_TOKEN>') { ENV.fetch('MAP_BOX_ACCESS_TOKEN', nil) }
+  config.filter_sensitive_data('<MAP_BOX_ACCESS_TOKEN>') { Mapbox::BaseRequest::ACCESS_TOKEN }
 end

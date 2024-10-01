@@ -55,7 +55,7 @@ module Mapbox
       {
         overview: 'full',
         steps: 'true',
-        access_token: @token
+        access_token: ACCESS_TOKEN
       }
     end
   end
