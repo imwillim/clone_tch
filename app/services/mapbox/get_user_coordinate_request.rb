@@ -24,9 +24,11 @@ module Mapbox
 
     def handle_response(response)
       if response.status == SUCCESS_STATUS
-        @response = response.body['features'].first['geometry']['coordinates']
+        data = response.body['features']
 
-        @response.presence || add_error(I18n.t('errors.models.not_found', record: :coordinate))
+        return add_error(I18n.t('errors.models.not_found', record: :coordinate)) if data.blank?
+
+        @response = data.first['geometry']['coordinates']
       else
         add_error(response.body['message'])
       end
