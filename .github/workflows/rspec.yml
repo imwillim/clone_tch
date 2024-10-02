@@ -62,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: rspec-coverage
-          path: coverage_results/.resultset.json
+          path: coverage_results/
 
   report-coverage:
     runs-on: ubuntu-latest
