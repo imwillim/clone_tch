@@ -5,6 +5,7 @@ module Mapbox
     attr_reader :response
 
     SUCCESS_STATUS = 200
+    # TEST COMMIT
     BASE_ENDPOINT = 'https://api.mapbox.com'
     ACCESS_TOKEN = ENV.fetch('MAP_BOT_ACCESS_TOKEN')
 
