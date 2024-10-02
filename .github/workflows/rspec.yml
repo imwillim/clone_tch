@@ -1,9 +1,7 @@
 name: Rspec
 
 on:
-  pull_request:
-    branches:
-      - master
+  workflow_call:
 
 
 jobs:
