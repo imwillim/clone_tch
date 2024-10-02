@@ -1,4 +1,4 @@
-name: Check rspec
+name: Rspec
 
 on:
   pull_request:
@@ -37,6 +37,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.3.4
+
       - name: Install dependencies
         run: bundle install
 
@@ -47,3 +48,33 @@ jobs:
 
       - name: Run tests
         run: bundle exec rspec
+
+      - name: Create coverage folder
+        run: mkdir -p coverage
+
+      - name: Upload coverage file
+        uses: actions/upload-artifact@v2
+        with:
+          name: rspec-coverage
+          path: coverage/
+
+  report-coverage:
+    runs-on: ubuntu-latest
+    needs: rspec
+    steps:
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: rspec-coverage
+          path: coverage/
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3.4
+
+      - name: Install dependencies
+        run: bundle install
+
+      - name: Run coverage report
+        run: bundle exec rake db:coverage:report
