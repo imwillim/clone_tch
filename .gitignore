@@ -35,6 +35,7 @@
 .idea/**/dictionaries
 .idea/**/shelf
 .idea/tch.iml
+.idea/
 
 # AWS User-specific
 .idea/**/aws.xml
