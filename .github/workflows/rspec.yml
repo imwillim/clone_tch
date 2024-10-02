@@ -63,6 +63,7 @@ jobs:
         with:
           name: rspec-coverage
           path: coverage_results/*
+          include-hidden-files: true
 
   report-coverage:
     runs-on: ubuntu-latest
