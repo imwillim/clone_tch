@@ -1,9 +1,8 @@
 name: Rspec
 
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_call:
+
 
 jobs:
   rspec:
@@ -53,7 +52,7 @@ jobs:
         run: mkdir -p coverage
 
       - name: Upload coverage file
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: rspec-coverage
           path: coverage/
@@ -63,7 +62,7 @@ jobs:
     needs: rspec
     steps:
       - name: Download coverage artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: rspec-coverage
           path: coverage/
