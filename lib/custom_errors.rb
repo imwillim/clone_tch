@@ -8,4 +8,6 @@ module CustomErrors
   end
 
   class InvalidParams < BaseError; end
+
+  class UnprocessableService < BaseError; end
 end

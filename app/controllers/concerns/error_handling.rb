@@ -4,4 +4,8 @@ module ErrorHandling
   def render_invalid_params(exception)
     render json: { errors: exception.message }, status: :bad_request
   end
+
+  def render_unprocessable_service(error)
+    render json: { errors: error }, status: :unprocessable_entity
+  end
 end
