@@ -8,4 +8,9 @@ module ErrorHandling
   def render_unprocessable_service(error)
     render json: { errors: error }, status: :unprocessable_entity
   end
+
+  def render_redis_error(error)
+    Rails.logger.info(error)
+    render json: { errors: 'Internal Server Error' }, status: :internal_server_error
+  end
 end
