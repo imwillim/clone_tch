@@ -51,6 +51,15 @@ class GetDirectionsService < BaseService
   end
 
   def store_coordinates
-    [@store.address.longitude, @store.address.latitude]
+    RedisWrapper.redis_pool.then do |redis|
+      cached_coordinates = redis.get(@store_id)
+      if cached_coordinates.nil?
+        coordinates = [@store.address.longitude, @store.address.latitude]
+        redis.set(@store_id, coordinates)
+        coordinates
+      else
+        JSON.parse(cached_coordinates).map(&:to_i)
+      end
+    end
   end
 end
