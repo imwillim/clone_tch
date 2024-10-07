@@ -24,8 +24,6 @@ class GetDirectionsService < BaseService
   def fetch_request
     get_direction_request = Mapbox::GetDirectionsRequest.call(user_coordinates: @user_coordinates, store_coordinates:,
                                                               transportation: @transportation)
-    puts "test len file moi"
-
     if get_direction_request.error?
       add_error(get_direction_request.first_error)
     else
