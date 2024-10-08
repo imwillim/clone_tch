@@ -19,24 +19,59 @@ class GetProductsService < BaseService
   attr_reader :category_id
 
   def build_category_cte
+    conn = ActiveRecord::Base.connection
     if Category.where(id: @category_id, parent_id: nil).present?
-      Category.with(categories: Category.left_outer_joins(:parent))
+      query_statement = <<-SQL
+      WITH category_cte AS (
+        SELECT categories.id as id, categories.name as name
+        FROM categories
+        LEFT OUTER JOIN categories AS parents  ON categories.parent_id = parents.id
+      )
+
+     SELECT categories.id AS category_id
+             , categories.name as category_name
+             , products.id as product_id
+             , products.name as product_name
+             , products.price as product_price
+             , products.thumbnail as product_thumbnail
+             , tags.name as tag_name
+             , tags.color as tag_color
+        FROM category_cte AS categories
+        JOIN products ON categories.id = products.category_id
+        LEFT OUTER JOIN tags ON tags.product_id = products.id;
+      SQL
+      conn.exec_query(query_statement)
     else
-      Category.with(categories: Category.left_outer_joins(:parent)
-                                        .where(parent_id: @category_id)
-                                        .or(Category.where(id: @category_id)))
+      query_statement = <<-SQL
+    WITH category_cte AS (
+        SELECT categories.id as id, categories.name as name
+        FROM categories
+        LEFT OUTER JOIN categories AS parents ON categories.parent_id = parents.id
+        WHERE categories.parent_id = :category_id
+        OR categories.id = :category_id
+      )
+    
+    SELECT categories.id AS category_id
+             , categories.name as category_name
+             , products.id as product_id
+             , products.name as product_name
+             , products.price as product_price
+             , products.thumbnail as product_thumbnail
+             , tags.name as tag_name
+             , tags.color as tag_color
+        FROM category_cte AS categories
+        JOIN products ON categories.id = products.category_id
+        LEFT OUTER JOIN tags ON tags.product_id = products.id;
+      SQL
+
+      conn.exec_query(
+        ApplicationRecord.sanitize_sql([query_statement, { category_id: @category_id }])
+      )
     end
   end
 
   def build_query
-    category_cte = build_category_cte
-    category_cte
-      .joins(:products)
-      .left_outer_joins(products: :tag)
-      .select('categories.id AS category_id, categories.name AS category_name,
-             products.id AS product_id, products.name AS product_name,
-             products.price AS product_price, products.thumbnail AS product_thumbnail,
-             tags.name AS tag_name, tags.color AS tag_color')
+    build_category_cte
   end
 
   def fetch_products
