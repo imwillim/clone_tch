@@ -10,17 +10,12 @@ class GetProductsService < BaseService
     validate
     return self if error?
 
-    RedisWrapper.redis_pool.then do |redis|
-      cached_products = redis.get(category_id)
-      if cached_products.nil?
-        @result = fetch_products
-        redis.set(category_id, result.to_json)
-        result
-      else
-        JSON.parse(cached_products)
-      end
+    if fetch_cached_value.present?
+      @result = JSON.parse(fetch_cached_value)
+    else
+      @result = fetch_products
+      assign_cached_value(@result)
     end
-    self
   end
 
   private
@@ -75,5 +70,17 @@ class GetProductsService < BaseService
 
   def validate
     add_error(I18n.t('errors.models.not_found', record: :category)) if Category.where(id: @category_id).blank?
+  end
+
+  def fetch_cached_value
+    RedisWrapper.redis_pool.then do |redis|
+      redis.get(category_id)
+    end
+  end
+
+  def assign_cached_value(products)
+    RedisWrapper.redis_pool.then do |redis|
+      redis.set(category_id, products.to_json)
+    end
   end
 end
