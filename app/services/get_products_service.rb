@@ -10,7 +10,16 @@ class GetProductsService < BaseService
     validate
     return self if error?
 
-    fetch_products
+    RedisWrapper.redis_pool.then do |redis|
+      cached_products = redis.get(category_id)
+      if cached_products.nil?
+        @result = fetch_products
+        redis.set(category_id, result.to_json)
+        result
+      else
+        JSON.parse(cached_products)
+      end
+    end
     self
   end
 
