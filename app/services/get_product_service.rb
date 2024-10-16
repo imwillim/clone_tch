@@ -10,8 +10,16 @@ class GetProductService < BaseService
     validate
     return self if error?
 
-    @result = Product.includes(:sizes, :toppings, :tag).find_by(id: product_id)
-    result
+    RedisWrapper.redis_pool.then do |redis|
+      cached_product = redis.get(@product_id)
+      if cached_product.nil?
+        @result = Product.includes(:sizes, :toppings, :tag).find_by(id: product_id)
+        redis.set(@product_id, result.to_json)
+        result
+      else
+        JSON.parse(cached_product)
+      end
+    end
   end
 
   private
