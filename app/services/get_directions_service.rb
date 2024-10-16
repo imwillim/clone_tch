@@ -16,13 +16,21 @@ class GetDirectionsService < BaseService
     validate!
     return self if error?
 
-    fetch_request
+    if fetch_cached_value.present?
+      store_coordinates = JSON.parse(fetch_cached_value)
+    else
+      store_coordinates = [@store.address.longitude, @store.address.latitude]
+      assign_cached_value(store_coordinates)
+    end
+
+    fetch_request(store_coordinates)
   end
 
   private
 
-  def fetch_request
-    get_direction_request = Mapbox::GetDirectionsRequest.call(user_coordinates: @user_coordinates, store_coordinates:,
+  def fetch_request(store_coordinates)
+    get_direction_request = Mapbox::GetDirectionsRequest.call(user_coordinates: @user_coordinates,
+                                                              store_coordinates:,
                                                               transportation: @transportation)
 
     if get_direction_request.error?
@@ -50,16 +58,15 @@ class GetDirectionsService < BaseService
     @store = Store.includes(:address).find_by(id: @store_id)
   end
 
-  def store_coordinates
+  def fetch_cached_value
     RedisWrapper.redis_pool.then do |redis|
-      cached_coordinates = redis.get(@store_id)
-      if cached_coordinates.nil?
-        coordinates = [@store.address.longitude, @store.address.latitude]
-        redis.set(@store_id, coordinates)
-        coordinates
-      else
-        JSON.parse(cached_coordinates).map(&:to_i)
-      end
+      redis.get(@store_id)
+    end
+  end
+
+  def assign_cached_value(store_coordinates)
+    RedisWrapper.redis_pool.then do |redis|
+      redis.set(@store_id, store_coordinates)
     end
   end
 end

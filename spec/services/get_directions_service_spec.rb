@@ -49,53 +49,86 @@ describe GetDirectionsService, type: :service do
   end
 
   describe '#call' do
-    context 'when validation passes' do
-      let(:store_coordinates) { [address.longitude, address.latitude] }
+    context 'when store coordinate exists in cache' do
+      let(:cached_coordinates) { store_coordinates.to_json }
 
-      context 'when direction request succeeds' do
-        let(:request_success) { instance_double(Mapbox::GetDirectionsRequest, error?: false, response: result) }
-        let(:result) do
-          [{ 'duration' => 602.736,
-             'distance' => 3112.877,
-             'steps' =>
-               ['Drive southeast on Hồng Hà.',
-                'Turn right onto Đường Hoàng Minh Giám.'] }]
-        end
+      include_context 'redis mock'
 
-        before do
-          allow(Mapbox::GetDirectionsRequest).to receive(:call).with(user_coordinates:,
-                                                                     store_coordinates:,
-                                                                     transportation:)
-                                                               .and_return(request_success)
-        end
+      before do
+        allow(redis).to receive(:get).with(store_id).and_return(cached_coordinates)
 
-        it 'returns the result' do
-          service.call
+        allow(service).to receive(:fetch_cached_value).and_return(redis.get(store_id))
+        allow(service).to receive(:fetch_request)
+      end
+      it 'fetches cache coordinate' do
+        expect(service).to receive(:fetch_request).with(JSON.parse(cached_coordinates))
 
-          expect(service.success?).to be true
-          expect(service.result).to eq(result)
-        end
+        service.call
+      end
+    end
+
+    context 'when store coordinate does not exist in cache' do
+      include_context 'redis mock'
+      before do
+        allow(redis).to receive(:get).with(store_id).and_return(nil)
+        allow(service).to receive(:fetch_cached_value).and_return(nil)
+
+        allow(service).to receive(:assign_cached_value).with(store_coordinates)
+        allow(service).to receive(:fetch_request)
       end
 
-      context 'when direction request fails' do
-        let(:request_failure) do
-          instance_double(Mapbox::GetDirectionsRequest, error?: true,
-                                                        first_error: StandardError.new('Request error'))
-        end
+      it 'get coordinate from database and assign it into cache' do
+        expect(service).to receive(:assign_cached_value).with(store_coordinates)
+        expect(service).to receive(:fetch_request).with(store_coordinates)
 
-        before do
-          allow(Mapbox::GetDirectionsRequest).to receive(:call).with(user_coordinates:,
-                                                                     store_coordinates:,
-                                                                     transportation:)
-                                                               .and_return(request_failure)
-        end
+        service.call
+      end
+    end
 
-        it 'adds errors' do
-          service.call
+    # TODO: BELOW CONTEXTS STILL SET VALUE INTO REDIS => SHOULD NOT DO THAT
+    context 'when direction request succeeds' do
+      let(:request_success) { instance_double(Mapbox::GetDirectionsRequest, error?: false, response: result) }
+      let(:result) do
+        [{ 'duration' => 602.736,
+           'distance' => 3112.877,
+           'steps' =>
+             ['Drive southeast on Hồng Hà.',
+              'Turn right onto Đường Hoàng Minh Giám.'] }]
+      end
 
-          expect(service.success?).to be false
-          expect(service.first_error.message).to eq 'Request error'
-        end
+      before do
+        allow(Mapbox::GetDirectionsRequest).to receive(:call).with(user_coordinates:,
+                                                                   store_coordinates:,
+                                                                   transportation:)
+                                                             .and_return(request_success)
+      end
+
+      it 'returns the result' do
+        service.call
+
+        expect(service.success?).to be true
+        expect(service.result).to eq(result)
+      end
+    end
+
+    context 'when direction request fails' do
+      let(:request_failure) do
+        instance_double(Mapbox::GetDirectionsRequest, error?: true,
+                                                      first_error: StandardError.new('Request error'))
+      end
+
+      before do
+        allow(Mapbox::GetDirectionsRequest).to receive(:call).with(user_coordinates:,
+                                                                   store_coordinates:,
+                                                                   transportation:)
+                                                             .and_return(request_failure)
+      end
+
+      it 'adds errors' do
+        service.call
+
+        expect(service.success?).to be false
+        expect(service.first_error.message).to eq 'Request error'
       end
     end
   end
