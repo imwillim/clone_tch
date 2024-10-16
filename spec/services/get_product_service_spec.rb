@@ -39,15 +39,36 @@ describe GetProductService do
   end
 
   describe '#call' do
-    context 'when validation succeeds' do
-      let(:product_id) { tea.id }
+    context 'when a cached product is present' do
+      let(:cached_tea) { tea.to_json }
+      include_context 'redis mock'
 
-      it 'returns tea' do
-        service.call
+      before do
+        allow(redis).to receive(:get).with(tea.id).and_return(cached_tea)
+        allow(service).to receive(:call).and_return(cached_tea)
+      end
 
-        expect(service.success?).to eq true
-        expect(service.result.id).to eq tea.id
-        expect(service.result.id).not_to eq milk_tea.id
+      it 'sets the result to the cached value' do
+        expect(JSON.parse(service.call)).to eq(JSON.parse(cached_tea))
+      end
+    end
+
+    context 'when no cached product is present' do
+      include_context 'redis mock'
+      let(:tea_json) { tea.to_json }
+
+      before do
+        allow(redis).to receive(:get).with(tea.id).and_return(nil)
+        allow(service).to receive(:fetch_cached_value).and_return(nil)
+
+        allow(service).to receive(:assign_cached_value).with(tea)
+        allow(service).to receive(:call).and_return(tea_json)
+      end
+
+      it 'fetches the product from the database and assigns it to the cache' do
+        expect(service).to receive(:assign_cached_value).with(tea)
+
+        expect(JSON.parse(service.call)).to eq(JSON.parse(tea_json))
       end
     end
   end

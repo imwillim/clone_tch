@@ -10,15 +10,11 @@ class GetProductService < BaseService
     validate
     return self if error?
 
-    RedisWrapper.redis_pool.then do |redis|
-      cached_product = redis.get(@product_id)
-      if cached_product.nil?
-        @result = Product.includes(:sizes, :toppings, :tag).find_by(id: product_id)
-        redis.set(@product_id, result.to_json)
-        result
-      else
-        JSON.parse(cached_product)
-      end
+    if fetch_cached_value.present?
+      @result = JSON.parse(fetch_cached_value)
+    else
+      @result = Product.includes(:sizes, :toppings, :tag).find_by(id: product_id)
+      assign_cached_value(@result)
     end
   end
 
@@ -28,5 +24,17 @@ class GetProductService < BaseService
 
   def validate
     add_error(I18n.t('errors.models.not_found', record: :product)) if Product.where(id: product_id).blank?
+  end
+
+  def fetch_cached_value
+    RedisWrapper.redis_pool.then do |redis|
+      redis.get(product_id)
+    end
+  end
+
+  def assign_cached_value(product)
+    RedisWrapper.redis_pool.then do |redis|
+      redis.set(product_id, product.to_json)
+    end
   end
 end
