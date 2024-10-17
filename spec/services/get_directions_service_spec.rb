@@ -49,10 +49,11 @@ describe GetDirectionsService, type: :service do
   end
 
   describe '#call' do
+    include_context 'redis mock'
+
     context 'when store coordinate exists in cache' do
       let(:cached_coordinates) { store_coordinates.to_json }
 
-      include_context 'redis mock'
 
       before do
         allow(redis).to receive(:get).with(store_id).and_return(cached_coordinates)
@@ -68,7 +69,6 @@ describe GetDirectionsService, type: :service do
     end
 
     context 'when store coordinate does not exist in cache' do
-      include_context 'redis mock'
       before do
         allow(redis).to receive(:get).with(store_id).and_return(nil)
         allow(service).to receive(:fetch_cached_value).and_return(nil)
@@ -85,7 +85,6 @@ describe GetDirectionsService, type: :service do
       end
     end
 
-    # TODO: BELOW CONTEXTS STILL SET VALUE INTO REDIS => SHOULD NOT DO THAT
     context 'when direction request succeeds' do
       let(:request_success) { instance_double(Mapbox::GetDirectionsRequest, error?: false, response: result) }
       let(:result) do
@@ -97,6 +96,9 @@ describe GetDirectionsService, type: :service do
       end
 
       before do
+        allow(redis).to receive(:get).with(store_id).and_return(store_coordinates.to_json)
+        allow(service).to receive(:fetch_cached_value).and_return(redis.get(store_id))
+
         allow(Mapbox::GetDirectionsRequest).to receive(:call).with(user_coordinates:,
                                                                    store_coordinates:,
                                                                    transportation:)
@@ -118,6 +120,9 @@ describe GetDirectionsService, type: :service do
       end
 
       before do
+        allow(redis).to receive(:get).with(store_id).and_return(store_coordinates.to_json)
+        allow(service).to receive(:fetch_cached_value).and_return(redis.get(store_id))
+
         allow(Mapbox::GetDirectionsRequest).to receive(:call).with(user_coordinates:,
                                                                    store_coordinates:,
                                                                    transportation:)
