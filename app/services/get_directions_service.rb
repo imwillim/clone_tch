@@ -16,11 +16,12 @@ class GetDirectionsService < BaseService
     validate!
     return self if error?
 
-    if fetch_cached_value.present?
-      store_coordinates = JSON.parse(fetch_cached_value)
+    cached_store_coordinates = CacheManager.fetch_value(@store_id)
+    if cached_store_coordinates.present?
+      store_coordinates = JSON.parse(cached_store_coordinates)
     else
       store_coordinates = [@store.address.longitude, @store.address.latitude]
-      assign_cached_value(store_coordinates)
+      CacheManager.assign_value(@store_id, store_coordinates)
     end
 
     fetch_request(store_coordinates)
@@ -56,17 +57,5 @@ class GetDirectionsService < BaseService
     return @store if defined? @store
 
     @store = Store.includes(:address).find_by(id: @store_id)
-  end
-
-  def fetch_cached_value
-    RedisWrapper.redis_pool.then do |redis|
-      redis.get(@store_id)
-    end
-  end
-
-  def assign_cached_value(store_coordinates)
-    RedisWrapper.redis_pool.then do |redis|
-      redis.set(@store_id, store_coordinates)
-    end
   end
 end
