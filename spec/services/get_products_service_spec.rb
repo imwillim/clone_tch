@@ -28,6 +28,7 @@ describe GetProductsService do
       end
     end
 
+    # TODO: FIX WITH CACHE
     describe '#call' do
       context 'when a category does not have a parent category' do
         let(:category_id) { all_category.id }

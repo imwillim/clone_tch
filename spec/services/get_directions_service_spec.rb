@@ -48,12 +48,10 @@ describe GetDirectionsService, type: :service do
     end
   end
 
+  # TODO: FIX WITH CACHE
   describe '#call' do
-    include_context 'redis mock'
-
     context 'when store coordinate exists in cache' do
       let(:cached_coordinates) { store_coordinates.to_json }
-
 
       before do
         allow(redis).to receive(:get).with(store_id).and_return(cached_coordinates)
