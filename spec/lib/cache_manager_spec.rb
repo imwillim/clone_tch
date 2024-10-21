@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe CacheManager do
-  include_context 'redis mock'
   let(:key) { 'key' }
   let(:value) { 'value' }
 
