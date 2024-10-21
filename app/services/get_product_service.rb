@@ -7,11 +7,16 @@ class GetProductService < BaseService
   end
 
   def call
-    validate
-    return self if error?
+    cached_product = CacheManager.fetch_value(product_id)
+    if cached_product.present?
+      @result = JSON.parse(cached_product)
+    else
+      validate
+      return self if error?
 
-    @result = Product.includes(:sizes, :toppings, :tag).find_by(id: product_id)
-    result
+      @result = Product.includes(:sizes, :toppings, :tag).find_by(id: product_id)
+      CacheManager.assign_value(product_id, @result.to_json)
+    end
   end
 
   private

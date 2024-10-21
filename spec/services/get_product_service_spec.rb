@@ -18,6 +18,10 @@ describe GetProductService do
     context 'when product_id is nil' do
       let(:product_id) { nil }
 
+      before do
+        allow(CacheManager).to receive(:fetch_value).and_return(nil)
+      end
+
       it 'returns error' do
         service.call
 
@@ -29,6 +33,10 @@ describe GetProductService do
     context 'when product_id does not exist in database' do
       let(:product_id) { SecureRandom.uuid }
 
+      before do
+        allow(CacheManager).to receive(:fetch_value).and_return(nil)
+      end
+
       it 'returns error' do
         service.call
 
@@ -39,16 +47,33 @@ describe GetProductService do
   end
 
   describe '#call' do
-    context 'when validation succeeds' do
-      let(:product_id) { tea.id }
+    include_context 'redis mock'
+    let(:product_id) { tea.id }
 
-      it 'returns tea' do
+    context 'when a cached product is present' do
+      before do
+        allow(CacheManager).to receive(:fetch_value).and_return(tea.to_json)
+      end
+      it 'return cache value' do
         service.call
 
         expect(service.success?).to eq true
-        expect(service.result.id).to eq tea.id
-        expect(service.result.id).not_to eq milk_tea.id
+        expect(service.result['id']).to eq tea.id
+        expect(service.result['id']).not_to eq milk_tea.id
       end
+    end
+
+    before do
+      allow(CacheManager).to receive(:fetch_value).and_return(nil)
+      allow(CacheManager).to receive(:assign_value).with(tea.id, tea.to_json)
+    end
+
+    it 'fetches product from database and caches it' do
+      service.call
+
+      expect(service.success?).to eq true
+      expect(service.result['id']).to eq(tea.id)
+      expect(service.result['id']).not_to eq milk_tea.id
     end
   end
 end
