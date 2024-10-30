@@ -41,3 +41,4 @@ en:
     params:
       empty: '%{param} is empty'
       too_long: '%{param} is too long'
+      test_something: 'hello i am testing something'
