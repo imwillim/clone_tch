@@ -100,7 +100,6 @@ describe GetProductsService do
           it 'returns categories having products' do
             service.call
 
-
             expect(service.success?).to eq true
             expect(service.result.size).to eq 3
             expect(service.result.to_json).to eq(expected_result.to_json)
@@ -147,7 +146,6 @@ describe GetProductsService do
 
             it 'returns children categories having products' do
               service.call
-
 
               expect(service.success?).to eq true
               expect(service.result.size).to eq 2
@@ -261,8 +259,6 @@ describe GetProductsService do
           it 'returns categories having products' do
             service.call
 
-            expect(redis.set(category_id, expected_result.to_json))
-
             expect(service.success?).to eq true
             expect(service.result.size).to eq 3
             expect(service.result).to match_array(expected_result)
@@ -311,8 +307,6 @@ describe GetProductsService do
             it 'returns children categories having products' do
               service.call
 
-              expect(redis.set(category_id, expected_result.to_json))
-
               expect(service.success?).to eq true
               expect(service.result.size).to eq 2
               expect(service.result).to match_array(expected_result)
@@ -348,8 +342,6 @@ describe GetProductsService do
 
             it 'returns that category having products' do
               service.call
-
-              expect(redis.set(category_id, expected_result.to_json))
 
               expect(service.success?).to eq true
               expect(service.result.size).to eq 1
