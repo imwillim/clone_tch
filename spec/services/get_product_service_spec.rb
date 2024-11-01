@@ -69,7 +69,7 @@ describe GetProductService do
         allow(CacheManager).to receive(:assign_value).with(tea.id, tea.to_json)
       end
 
-      it 'return product from database and set it in cache' do
+      it 'return product from database' do
         service.call
 
         expect(service.success?).to eq true
