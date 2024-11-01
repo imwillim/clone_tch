@@ -68,7 +68,7 @@ describe GetDirectionsService, type: :service do
               'Turn right onto Đường Hoàng Minh Giám.'] }]
       end
 
-      context 'when store coordinate is fetched in cache' do
+      context 'when store coordinate exists in cache' do
         before do
           allow(CacheManager).to receive(:fetch_value).and_return(store_coordinates.to_json)
 
@@ -86,7 +86,7 @@ describe GetDirectionsService, type: :service do
         end
       end
 
-      context 'when store coordinate is not fetched in cache' do
+      context 'when store coordinate does not exist in cache' do
         include_context 'redis mock'
 
         before do
