@@ -50,11 +50,11 @@ describe GetProductService do
     include_context 'redis mock'
     let(:product_id) { tea.id }
 
-    context 'when a cached product is present' do
+    context 'when a product exists in cache' do
       before do
         allow(CacheManager).to receive(:fetch_value).and_return(tea.to_json)
       end
-      it 'return cache value' do
+      it 'return cached product' do
         service.call
 
         expect(service.success?).to eq true
@@ -63,17 +63,19 @@ describe GetProductService do
       end
     end
 
-    before do
-      allow(CacheManager).to receive(:fetch_value).and_return(nil)
-      allow(CacheManager).to receive(:assign_value).with(tea.id, tea.to_json)
-    end
+    context 'when a product does not exist in cache' do
+      before do
+        allow(CacheManager).to receive(:fetch_value).and_return(nil)
+        allow(CacheManager).to receive(:assign_value).with(tea.id, tea.to_json)
+      end
 
-    it 'fetches product from database and caches it' do
-      service.call
+      it 'return product from database and set it in cache' do
+        service.call
 
-      expect(service.success?).to eq true
-      expect(service.result['id']).to eq(tea.id)
-      expect(service.result['id']).not_to eq milk_tea.id
+        expect(service.success?).to eq true
+        expect(service.result['id']).to eq(tea.id)
+        expect(service.result['id']).not_to eq milk_tea.id
+      end
     end
   end
 end
