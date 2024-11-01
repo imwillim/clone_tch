@@ -67,28 +67,28 @@ describe GetProductsService do
               {
                 name: 'Milk Tea category',
                 products: match_array([{
-                                         id: milk_tea.id,
-                                         name: milk_tea.name,
-                                         price: milk_tea.price,
-                                         thumbnail: milk_tea.thumbnail,
-                                         tag: {
-                                           color: nil,
-                                           name: nil
-                                         }
-                                       }])
+                                        id: milk_tea.id,
+                                        name: milk_tea.name,
+                                        price: milk_tea.price,
+                                        thumbnail: milk_tea.thumbnail,
+                                        tag: {
+                                          color: nil,
+                                          name: nil
+                                        }
+                                      }])
               },
               {
                 name: 'Hi Tea category',
                 products: match_array([{
-                                         id: hi_tea.id,
-                                         name: hi_tea.name,
-                                         price: hi_tea.price,
-                                         thumbnail: hi_tea.thumbnail,
-                                         tag: {
-                                           color: nil,
-                                           name: nil
-                                         }
-                                       }])
+                                        id: hi_tea.id,
+                                        name: hi_tea.name,
+                                        price: hi_tea.price,
+                                        thumbnail: hi_tea.thumbnail,
+                                        tag: {
+                                          color: nil,
+                                          name: nil
+                                        }
+                                      }])
               }
             ]
           end
@@ -114,28 +114,28 @@ describe GetProductsService do
                 {
                   name: 'Hi Tea category',
                   products: match_array([{
-                                           id: hi_tea.id,
-                                           name: hi_tea.name,
-                                           price: hi_tea.price,
-                                           thumbnail: hi_tea.thumbnail,
-                                           tag: {
-                                             color: nil,
-                                             name: nil
-                                           }
-                                         }])
+                                          id: hi_tea.id,
+                                          name: hi_tea.name,
+                                          price: hi_tea.price,
+                                          thumbnail: hi_tea.thumbnail,
+                                          tag: {
+                                            color: nil,
+                                            name: nil
+                                          }
+                                        }])
                 },
                 {
                   name: 'Milk Tea category',
                   products: match_array([{
-                                           id: milk_tea.id,
-                                           name: milk_tea.name,
-                                           price: milk_tea.price,
-                                           thumbnail: milk_tea.thumbnail,
-                                           tag: {
-                                             color: nil,
-                                             name: nil
-                                           }
-                                         }])
+                                          id: milk_tea.id,
+                                          name: milk_tea.name,
+                                          price: milk_tea.price,
+                                          thumbnail: milk_tea.thumbnail,
+                                          tag: {
+                                            color: nil,
+                                            name: nil
+                                          }
+                                        }])
                 }
               ]
             end
@@ -225,28 +225,28 @@ describe GetProductsService do
               {
                 name: 'Milk Tea category',
                 products: match_array([{
-                                         id: milk_tea.id,
-                                         name: milk_tea.name,
-                                         price: milk_tea.price,
-                                         thumbnail: milk_tea.thumbnail,
-                                         tag: {
-                                           color: nil,
-                                           name: nil
-                                         }
-                                       }])
+                                        id: milk_tea.id,
+                                        name: milk_tea.name,
+                                        price: milk_tea.price,
+                                        thumbnail: milk_tea.thumbnail,
+                                        tag: {
+                                          color: nil,
+                                          name: nil
+                                        }
+                                      }])
               },
               {
                 name: 'Hi Tea category',
                 products: match_array([{
-                                         id: hi_tea.id,
-                                         name: hi_tea.name,
-                                         price: hi_tea.price,
-                                         thumbnail: hi_tea.thumbnail,
-                                         tag: {
-                                           color: nil,
-                                           name: nil
-                                         }
-                                       }])
+                                        id: hi_tea.id,
+                                        name: hi_tea.name,
+                                        price: hi_tea.price,
+                                        thumbnail: hi_tea.thumbnail,
+                                        tag: {
+                                          color: nil,
+                                          name: nil
+                                        }
+                                      }])
               }
             ]
           end
@@ -273,28 +273,28 @@ describe GetProductsService do
                 {
                   name: 'Hi Tea category',
                   products: match_array([{
-                                           id: hi_tea.id,
-                                           name: hi_tea.name,
-                                           price: hi_tea.price,
-                                           thumbnail: hi_tea.thumbnail,
-                                           tag: {
-                                             color: nil,
-                                             name: nil
-                                           }
-                                         }])
+                                          id: hi_tea.id,
+                                          name: hi_tea.name,
+                                          price: hi_tea.price,
+                                          thumbnail: hi_tea.thumbnail,
+                                          tag: {
+                                            color: nil,
+                                            name: nil
+                                          }
+                                        }])
                 },
                 {
                   name: 'Milk Tea category',
                   products: match_array([{
-                                           id: milk_tea.id,
-                                           name: milk_tea.name,
-                                           price: milk_tea.price,
-                                           thumbnail: milk_tea.thumbnail,
-                                           tag: {
-                                             color: nil,
-                                             name: nil
-                                           }
-                                         }])
+                                          id: milk_tea.id,
+                                          name: milk_tea.name,
+                                          price: milk_tea.price,
+                                          thumbnail: milk_tea.thumbnail,
+                                          tag: {
+                                            color: nil,
+                                            name: nil
+                                          }
+                                        }])
                 }
               ]
             end
