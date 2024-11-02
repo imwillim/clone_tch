@@ -34,6 +34,10 @@ describe GetProductsService do
 
     describe '#call' do
       context 'when products within category exists in cache' do
+        before do
+          allow(CacheManager).to receive(:fetch_value).and_return(expected_result.to_json)
+        end
+
         context 'when a category does not have a parent category' do
           let(:category_id) { all_category.id }
           let(:expected_result) do
@@ -91,10 +95,6 @@ describe GetProductsService do
                                       }])
               }
             ]
-          end
-
-          before do
-            allow(CacheManager).to receive(:fetch_value).and_return(expected_result.to_json)
           end
 
           it 'returns categories having products' do
@@ -140,10 +140,6 @@ describe GetProductsService do
               ]
             end
 
-            before do
-              allow(CacheManager).to receive(:fetch_value).and_return(expected_result.to_json)
-            end
-
             it 'returns children categories having products' do
               service.call
 
@@ -175,10 +171,6 @@ describe GetProductsService do
               ]
             end
 
-            before do
-              allow(CacheManager).to receive(:fetch_value).and_return(expected_result.to_json)
-            end
-
             it 'returns that category having products' do
               service.call
 
@@ -192,6 +184,12 @@ describe GetProductsService do
 
       context 'when products within category does not exist in cache' do
         include_context 'redis mock'
+
+        before do
+          allow(CacheManager).to receive(:fetch_value).and_return(nil)
+          allow(CacheManager).to receive(:assign_value).and_return(category_id, expected_result.to_json)
+        end
+
         context 'when a category does not have a parent category' do
           let(:category_id) { all_category.id }
           let(:expected_result) do
@@ -251,11 +249,6 @@ describe GetProductsService do
             ]
           end
 
-          before do
-            allow(CacheManager).to receive(:fetch_value).and_return(nil)
-            allow(CacheManager).to receive(:assign_value).and_return(category_id, expected_result.to_json)
-          end
-
           it 'returns categories having products' do
             service.call
 
@@ -299,11 +292,6 @@ describe GetProductsService do
               ]
             end
 
-            before do
-              allow(CacheManager).to receive(:fetch_value).and_return(nil)
-              allow(CacheManager).to receive(:assign_value).and_return(category_id, expected_result.to_json)
-            end
-
             it 'returns children categories having products' do
               service.call
 
@@ -333,11 +321,6 @@ describe GetProductsService do
                   ]
                 }
               ]
-            end
-
-            before do
-              allow(CacheManager).to receive(:fetch_value).and_return(nil)
-              allow(CacheManager).to receive(:assign_value).with(category_id, expected_result.to_json)
             end
 
             it 'returns that category having products' do
