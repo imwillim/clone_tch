@@ -50,7 +50,7 @@ describe GetProductService do
       before do
         allow(CacheManager).to receive(:fetch_value).and_return(tea.to_json)
       end
-      it 'return cached product' do
+      it 'returns cached product' do
         service.call
 
         expect(service.success?).to eq true
@@ -61,15 +61,14 @@ describe GetProductService do
     context 'when a product does not exist in cache' do
       before do
         allow(CacheManager).to receive(:fetch_value).and_return(nil)
-        allow(CacheManager).to receive(:assign_value).with(tea.id, tea.to_json).and_call_original
       end
 
-      it 'return product from database' do
+      it 'returns product from database' do
         service.call
 
         expect(service.success?).to eq true
         expect(service.result['id']).to eq(tea.id)
-        expect(redis.get(tea.id)).to eq tea
+        expect(redis.get(tea.id)).to eq tea.to_json
       end
     end
   end
