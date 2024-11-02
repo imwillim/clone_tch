@@ -15,12 +15,12 @@ describe GetProductService do
   let!(:tea) { create(:product, category: tea_category, name: 'tea') }
 
   describe '#validate' do
+    before do
+      allow(CacheManager).to receive(:fetch_value).and_return(nil)
+    end
+
     context 'when product_id is nil' do
       let(:product_id) { nil }
-
-      before do
-        allow(CacheManager).to receive(:fetch_value).and_return(nil)
-      end
 
       it 'returns error' do
         service.call
@@ -32,10 +32,6 @@ describe GetProductService do
 
     context 'when product_id does not exist in database' do
       let(:product_id) { SecureRandom.uuid }
-
-      before do
-        allow(CacheManager).to receive(:fetch_value).and_return(nil)
-      end
 
       it 'returns error' do
         service.call
@@ -59,7 +55,6 @@ describe GetProductService do
 
         expect(service.success?).to eq true
         expect(service.result['id']).to eq tea.id
-        expect(service.result['id']).not_to eq milk_tea.id
       end
     end
 
@@ -74,7 +69,6 @@ describe GetProductService do
 
         expect(service.success?).to eq true
         expect(service.result['id']).to eq(tea.id)
-        expect(service.result['id']).not_to eq milk_tea.id
       end
     end
   end
