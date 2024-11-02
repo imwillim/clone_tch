@@ -14,12 +14,12 @@ describe GetDirectionsService, type: :service do
   let(:store_coordinates) { [106.66796536861601, 10.794422140319528] }
 
   describe '#validate' do
+    before do
+      allow(CacheManager).to receive(:fetch_value).and_return(nil)
+    end
+
     context 'when the store_id is not found in database' do
       let(:store_id) { nil }
-
-      before do
-        allow(CacheManager).to receive(:fetch_value).and_return(nil)
-      end
 
       it 'returns error' do
         service.call
@@ -32,7 +32,6 @@ describe GetDirectionsService, type: :service do
     context 'when store does not have an address' do
       before do
         store.address.destroy
-        allow(CacheManager).to receive(:fetch_value).and_return(nil)
       end
 
       it 'returns error' do
@@ -45,9 +44,7 @@ describe GetDirectionsService, type: :service do
 
     context 'when transportation is not valid' do
       let(:transportation) { 'transportation' }
-      before do
-        allow(CacheManager).to receive(:fetch_value).and_return(nil)
-      end
+
       it 'returns error' do
         service.call
 
