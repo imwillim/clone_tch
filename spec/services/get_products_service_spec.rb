@@ -100,11 +100,11 @@ describe GetProductsService do
               },
               {
                 name: 'Milk Tea category',
-                products: match_array([expected_milk_tea])
+                products: [expected_milk_tea]
               },
               {
                 name: 'Hi Tea category',
-                products: match_array([expected_hi_tea])
+                products: [expected_hi_tea]
               }
             ]
           end
@@ -125,11 +125,11 @@ describe GetProductsService do
               [
                 {
                   name: 'Hi Tea category',
-                  products: match_array([expected_hi_tea])
+                  products: [expected_hi_tea]
                 },
                 {
                   name: 'Milk Tea category',
-                  products: match_array([expected_milk_tea])
+                  products: [expected_milk_tea]
                 }
               ]
             end
@@ -149,7 +149,7 @@ describe GetProductsService do
               [
                 {
                   name: 'Milk Tea category',
-                  products: match_array([expected_milk_tea])
+                  products: [expected_milk_tea]
                 }
               ]
             end
@@ -202,11 +202,11 @@ describe GetProductsService do
               },
               {
                 name: 'Milk Tea category',
-                products: match_array([expected_milk_tea])
+                products: [expected_milk_tea]
               },
               {
                 name: 'Hi Tea category',
-                products: match_array([expected_hi_tea])
+                products: [expected_hi_tea]
               }
             ]
           end
@@ -243,7 +243,7 @@ describe GetProductsService do
               expect(service.success?).to eq true
               expect(service.result.size).to eq 2
               expect(service.result).to eq(expected_result)
-              expect(cached_value).to match_array(expected_result)
+              expect(cached_value).to eq(expected_result)
             end
           end
 
@@ -264,7 +264,7 @@ describe GetProductsService do
               expect(service.success?).to eq true
               expect(service.result.size).to eq 1
               expect(service.result).to eq(expected_result)
-              expect(cached_value).to match_array(expected_result)
+              expect(cached_value).to eq(expected_result)
             end
           end
         end
