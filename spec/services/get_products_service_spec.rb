@@ -33,6 +33,58 @@ describe GetProductsService do
     end
 
     describe '#call' do
+      let(:expected_hi_tea) do
+        {
+          id: hi_tea.id,
+          name: hi_tea.name,
+          price: hi_tea.price,
+          thumbnail: hi_tea.thumbnail,
+          tag: {
+            color: nil,
+            name: nil
+          }
+        }
+      end
+
+      let(:expected_iced_coffee) do
+        {
+          id: iced_coffee.id,
+          name: iced_coffee.name,
+          price: iced_coffee.price,
+          thumbnail: iced_coffee.thumbnail,
+          tag: {
+            color: nil,
+            name: nil
+          }
+        }
+      end
+
+      let(:expected_americano) do
+        {
+          id: americano.id,
+          name: americano.name,
+          price: americano.price,
+          thumbnail: americano.thumbnail,
+          tag: {
+            color: nil,
+            name: nil
+          }
+        }
+      end
+
+      let(:expected_milk_tea) do
+        {
+          id: milk_tea.id,
+          name: milk_tea.name,
+          price: milk_tea.price,
+          thumbnail: milk_tea.thumbnail,
+          tag: {
+            color: nil,
+            name: nil
+          }
+        }
+      end
+
       context 'when products within category exists in cache' do
         before do
           allow(CacheManager).to receive(:fetch_value).and_return(expected_result.to_json)
@@ -44,55 +96,15 @@ describe GetProductsService do
             [
               {
                 name: 'Coffee category',
-                products: match_array([
-                                        {
-                                          id: iced_coffee.id,
-                                          name: iced_coffee.name,
-                                          price: iced_coffee.price,
-                                          thumbnail: iced_coffee.thumbnail,
-                                          tag: {
-                                            color: nil,
-                                            name: nil
-                                          }
-                                        },
-                                        {
-                                          id: americano.id,
-                                          name: americano.name,
-                                          price: americano.price,
-                                          thumbnail: americano.thumbnail,
-                                          tag: {
-                                            color: nil,
-                                            name: nil
-                                          }
-                                        }
-                                      ])
-
+                products: match_array([expected_iced_coffee, expected_americano])
               },
               {
                 name: 'Milk Tea category',
-                products: match_array([{
-                                        id: milk_tea.id,
-                                        name: milk_tea.name,
-                                        price: milk_tea.price,
-                                        thumbnail: milk_tea.thumbnail,
-                                        tag: {
-                                          color: nil,
-                                          name: nil
-                                        }
-                                      }])
+                products: match_array([expected_milk_tea])
               },
               {
                 name: 'Hi Tea category',
-                products: match_array([{
-                                        id: hi_tea.id,
-                                        name: hi_tea.name,
-                                        price: hi_tea.price,
-                                        thumbnail: hi_tea.thumbnail,
-                                        tag: {
-                                          color: nil,
-                                          name: nil
-                                        }
-                                      }])
+                products: match_array([expected_hi_tea])
               }
             ]
           end
@@ -113,29 +125,11 @@ describe GetProductsService do
               [
                 {
                   name: 'Hi Tea category',
-                  products: match_array([{
-                                          id: hi_tea.id,
-                                          name: hi_tea.name,
-                                          price: hi_tea.price,
-                                          thumbnail: hi_tea.thumbnail,
-                                          tag: {
-                                            color: nil,
-                                            name: nil
-                                          }
-                                        }])
+                  products: match_array([expected_hi_tea])
                 },
                 {
                   name: 'Milk Tea category',
-                  products: match_array([{
-                                          id: milk_tea.id,
-                                          name: milk_tea.name,
-                                          price: milk_tea.price,
-                                          thumbnail: milk_tea.thumbnail,
-                                          tag: {
-                                            color: nil,
-                                            name: nil
-                                          }
-                                        }])
+                  products: match_array([expected_milk_tea])
                 }
               ]
             end
@@ -155,18 +149,7 @@ describe GetProductsService do
               [
                 {
                   name: 'Milk Tea category',
-                  products: [
-                    {
-                      id: milk_tea.id,
-                      name: 'Milk Tea',
-                      price: 9.99,
-                      thumbnail: 'MyString',
-                      tag: {
-                        name: nil,
-                        color: nil
-                      }
-                    }
-                  ]
+                  products: match_array([expected_milk_tea])
                 }
               ]
             end
@@ -185,8 +168,6 @@ describe GetProductsService do
       context 'when products within category does not exist in cache' do
         include_context 'redis mock'
 
-        let(:cached_value) { JSON.parse(redis.get(category_id)) }
-
         before do
           allow(CacheManager).to receive(:fetch_value).and_return(nil)
         end
@@ -197,55 +178,15 @@ describe GetProductsService do
             [
               {
                 name: 'Coffee category',
-                products: match_array([
-                                        {
-                                          id: iced_coffee.id,
-                                          name: iced_coffee.name,
-                                          price: iced_coffee.price,
-                                          thumbnail: iced_coffee.thumbnail,
-                                          tag: {
-                                            color: nil,
-                                            name: nil
-                                          }
-                                        },
-                                        {
-                                          id: americano.id,
-                                          name: americano.name,
-                                          price: americano.price,
-                                          thumbnail: americano.thumbnail,
-                                          tag: {
-                                            color: nil,
-                                            name: nil
-                                          }
-                                        }
-                                      ])
-
+                products: match_array([expected_iced_coffee, expected_americano])
               },
               {
                 name: 'Milk Tea category',
-                products: match_array([{
-                                        id: milk_tea.id,
-                                        name: milk_tea.name,
-                                        price: milk_tea.price,
-                                        thumbnail: milk_tea.thumbnail,
-                                        tag: {
-                                          color: nil,
-                                          name: nil
-                                        }
-                                      }])
+                products: match_array([expected_milk_tea])
               },
               {
                 name: 'Hi Tea category',
-                products: match_array([{
-                                        id: hi_tea.id,
-                                        name: hi_tea.name,
-                                        price: hi_tea.price,
-                                        thumbnail: hi_tea.thumbnail,
-                                        tag: {
-                                          color: nil,
-                                          name: nil
-                                        }
-                                      }])
+                products: match_array([expected_hi_tea])
               }
             ]
           end
@@ -266,29 +207,11 @@ describe GetProductsService do
               [
                 {
                   name: 'Hi Tea category',
-                  products: match_array([{
-                                          id: hi_tea.id,
-                                          name: hi_tea.name,
-                                          price: hi_tea.price,
-                                          thumbnail: hi_tea.thumbnail,
-                                          tag: {
-                                            color: nil,
-                                            name: nil
-                                          }
-                                        }])
+                  products: [expected_hi_tea]
                 },
                 {
                   name: 'Milk Tea category',
-                  products: match_array([{
-                                          id: milk_tea.id,
-                                          name: milk_tea.name,
-                                          price: milk_tea.price,
-                                          thumbnail: milk_tea.thumbnail,
-                                          tag: {
-                                            color: nil,
-                                            name: nil
-                                          }
-                                        }])
+                  products: [expected_milk_tea]
                 }
               ]
             end
@@ -298,7 +221,7 @@ describe GetProductsService do
 
               expect(service.success?).to eq true
               expect(service.result.size).to eq 2
-              expect(service.result).to match_array(expected_result)
+              expect(service.result).to eq(expected_result)
             end
           end
 
@@ -308,18 +231,7 @@ describe GetProductsService do
               [
                 {
                   name: 'Milk Tea category',
-                  products: [
-                    {
-                      id: milk_tea.id,
-                      name: 'Milk Tea',
-                      price: '9.99',
-                      thumbnail: 'MyString',
-                      tag: {
-                        name: nil,
-                        color: nil
-                      }
-                    }
-                  ]
+                  products: [expected_milk_tea],
                 }
               ]
             end
