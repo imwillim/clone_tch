@@ -185,9 +185,10 @@ describe GetProductsService do
       context 'when products within category does not exist in cache' do
         include_context 'redis mock'
 
+        let(:cached_value) { JSON.parse(redis.get(category_id)) }
+
         before do
           allow(CacheManager).to receive(:fetch_value).and_return(nil)
-          allow(CacheManager).to receive(:assign_value).and_return(category_id, expected_result.to_json)
         end
 
         context 'when a category does not have a parent category' do
