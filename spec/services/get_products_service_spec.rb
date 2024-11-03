@@ -253,7 +253,7 @@ describe GetProductsService do
               [
                 {
                   name: 'Milk Tea category',
-                  products: [expected_milk_tea],
+                  products: [expected_milk_tea]
                 }
               ]
             end
