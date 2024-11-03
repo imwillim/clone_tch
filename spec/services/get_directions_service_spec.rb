@@ -84,11 +84,12 @@ describe GetDirectionsService, type: :service do
       end
 
       context 'when store coordinate does not exist in cache' do
+        let(:cached_value) { JSON.parse(redis.get(store_id)) }
+
         include_context 'redis mock'
 
         before do
           allow(CacheManager).to receive(:fetch_value).and_return(nil)
-          allow(CacheManager).to receive(:assign_value).with(store_id, store_coordinates)
 
           allow(Mapbox::GetDirectionsRequest).to receive(:call).with(user_coordinates:,
                                                                      store_coordinates:,
@@ -101,6 +102,7 @@ describe GetDirectionsService, type: :service do
 
           expect(service.success?).to be true
           expect(service.result).to eq(result)
+          expect(cached_value).to eq(store_coordinates)
         end
       end
     end
