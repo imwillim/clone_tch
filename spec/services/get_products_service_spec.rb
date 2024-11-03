@@ -241,8 +241,7 @@ describe GetProductsService do
 
               expect(service.success?).to eq true
               expect(service.result.size).to eq 1
-              expect(service.result.first[:products].size).to eq 1
-              expect(service.result.first[:products].first[:id]).to eq expected_result.first[:products].first[:id]
+              expect(service.result).to eq(expected_result)
             end
           end
         end
