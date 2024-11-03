@@ -168,6 +168,26 @@ describe GetProductsService do
       context 'when products within category does not exist in cache' do
         include_context 'redis mock'
 
+        let(:cached_value) do
+          JSON.parse(redis.get(category_id)).map do |category|
+            {
+              name: category['name'],
+              products: category['products'].map do |product|
+                {
+                  id: product['id'],
+                  name: product['name'],
+                  price: product['price'].to_f,
+                  thumbnail: product['thumbnail'],
+                  tag: {
+                    color: product['tag']['color'],
+                    name: product['tag']['name']
+                  }
+                }
+              end
+            }
+          end
+        end
+
         before do
           allow(CacheManager).to receive(:fetch_value).and_return(nil)
         end
@@ -197,6 +217,7 @@ describe GetProductsService do
             expect(service.success?).to eq true
             expect(service.result.size).to eq 3
             expect(service.result).to match_array(expected_result)
+            expect(cached_value).to match_array(expected_result)
           end
         end
 
@@ -222,6 +243,7 @@ describe GetProductsService do
               expect(service.success?).to eq true
               expect(service.result.size).to eq 2
               expect(service.result).to eq(expected_result)
+              expect(cached_value).to match_array(expected_result)
             end
           end
 
@@ -242,6 +264,7 @@ describe GetProductsService do
               expect(service.success?).to eq true
               expect(service.result.size).to eq 1
               expect(service.result).to eq(expected_result)
+              expect(cached_value).to match_array(expected_result)
             end
           end
         end
