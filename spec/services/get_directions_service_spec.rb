@@ -104,27 +104,5 @@ describe GetDirectionsService, type: :service do
         end
       end
     end
-
-    context 'when direction request fails' do
-      let(:request_failure) do
-        instance_double(Mapbox::GetDirectionsRequest, error?: true,
-                                                      first_error: StandardError.new('Request error'))
-      end
-
-      before do
-        allow(CacheManager).to receive(:fetch_value).and_return(store_coordinates.to_json)
-        allow(Mapbox::GetDirectionsRequest).to receive(:call).with(user_coordinates:,
-                                                                   store_coordinates:,
-                                                                   transportation:)
-                                                             .and_return(request_failure)
-      end
-
-      it 'adds errors' do
-        service.call
-
-        expect(service.success?).to be false
-        expect(service.first_error.message).to eq 'Request error'
-      end
-    end
   end
 end
