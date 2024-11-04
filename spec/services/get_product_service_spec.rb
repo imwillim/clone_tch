@@ -15,6 +15,10 @@ describe GetProductService do
   let!(:tea) { create(:product, category: tea_category, name: 'tea') }
 
   describe '#validate' do
+    before do
+      allow(CacheManager).to receive(:fetch_value).and_return(nil)
+    end
+
     context 'when product_id is nil' do
       let(:product_id) { nil }
 
@@ -39,15 +43,32 @@ describe GetProductService do
   end
 
   describe '#call' do
-    context 'when validation succeeds' do
-      let(:product_id) { tea.id }
+    include_context 'redis mock'
+    let(:product_id) { tea.id }
 
-      it 'returns tea' do
+    context 'when a product exists in cache' do
+      before do
+        allow(CacheManager).to receive(:fetch_value).and_return(tea.to_json)
+      end
+      it 'returns cached product' do
         service.call
 
         expect(service.success?).to eq true
-        expect(service.result.id).to eq tea.id
-        expect(service.result.id).not_to eq milk_tea.id
+        expect(service.result['id']).to eq tea.id
+      end
+    end
+
+    context 'when a product does not exist in cache' do
+      before do
+        allow(CacheManager).to receive(:fetch_value).and_return(nil)
+      end
+
+      it 'returns product from database' do
+        service.call
+
+        expect(service.success?).to eq true
+        expect(service.result['id']).to eq(tea.id)
+        expect(redis.get(tea.id)).to eq tea.to_json
       end
     end
   end
