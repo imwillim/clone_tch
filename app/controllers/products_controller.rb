@@ -4,6 +4,7 @@ class ProductsController < ApplicationController
   schema(:index) do
     required(:category_id).value(:string, :uuid_v4?)
   end
+
   def index
     service = GetProductsService.call(params[:category_id])
 
@@ -23,8 +24,10 @@ class ProductsController < ApplicationController
 
     if service.success?
       # TODO: Use custom serializer to accept more generic case
-      product = ProductSerializer.new(service.result).serializable_hash
+      product = service.result
+      product = ProductSerializer.new(product).serializable_hash if product.is_a? Product
       render json: { data: product }, status: :ok
+
     else
       render json: { message: service.first_error.message }, status: :unprocessable_entity
     end

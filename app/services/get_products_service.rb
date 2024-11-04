@@ -7,11 +7,16 @@ class GetProductsService < BaseService
   end
 
   def call
-    validate
-    return self if error?
+    cached_products = CacheManager.fetch_value(category_id)
+    if cached_products.present?
+      @result = JSON.parse(cached_products)
+    else
+      validate
+      return self if error?
 
-    fetch_products
-    self
+      @result = fetch_products
+      CacheManager.assign_value(category_id, @result.to_json)
+    end
   end
 
   private
