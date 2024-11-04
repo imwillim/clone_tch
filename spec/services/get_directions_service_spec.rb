@@ -6,12 +6,12 @@ describe GetDirectionsService, type: :service do
   subject(:service) { described_class.new(store_id:, transportation:, user_coordinates:) }
 
   let(:city) { create(:city) }
-  let!(:address) { create(:address, longitude: 106.66796536861601, latitude: 10.794422140319528, city:, store:) }
+  let!(:address) { create(:address, longitude: 106.66, latitude: 10.79, city:, store:) }
   let(:store) { create(:store) }
   let(:store_id) { store.id }
   let(:transportation) { 'driving' }
   let(:user_coordinates) { [106.6732885, 10.8096836] }
-  let(:store_coordinates) { [106.66796536861601, 10.794422140319528] }
+  let(:store_coordinates) { [106.66, 10.79] }
 
   describe '#validate' do
     before do
@@ -68,7 +68,6 @@ describe GetDirectionsService, type: :service do
       context 'when store coordinate exists in cache' do
         before do
           allow(CacheManager).to receive(:fetch_value).and_return(store_coordinates.to_json)
-
           allow(Mapbox::GetDirectionsRequest).to receive(:call).with(user_coordinates:,
                                                                      store_coordinates:,
                                                                      transportation:)
@@ -90,7 +89,6 @@ describe GetDirectionsService, type: :service do
 
         before do
           allow(CacheManager).to receive(:fetch_value).and_return(nil)
-
           allow(Mapbox::GetDirectionsRequest).to receive(:call).with(user_coordinates:,
                                                                      store_coordinates:,
                                                                      transportation:)
