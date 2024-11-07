@@ -13,15 +13,23 @@ class GetDirectionsService < BaseService
   end
 
   def call
-    validate!
-    return self if error?
+    cached_store_coordinates = CacheManager.fetch_value(@store_id)
+    if cached_store_coordinates.present?
+      store_coordinates = JSON.parse(cached_store_coordinates)
+    else
+      validate!
+      return self if error?
 
-    fetch_request
+      store_coordinates = [@store.address.longitude, @store.address.latitude]
+      CacheManager.assign_value(@store_id, store_coordinates)
+    end
+
+    fetch_request(store_coordinates)
   end
 
   private
 
-  def fetch_request
+  def fetch_request(store_coordinates)
     get_direction_request = Mapbox::GetDirectionsRequest.call(user_coordinates: @user_coordinates, store_coordinates:,
                                                               transportation: @transportation)
 
@@ -48,9 +56,5 @@ class GetDirectionsService < BaseService
     return @store if defined? @store
 
     @store = Store.includes(:address).find_by(id: @store_id)
-  end
-
-  def store_coordinates
-    [@store.address.longitude, @store.address.latitude]
   end
 end
