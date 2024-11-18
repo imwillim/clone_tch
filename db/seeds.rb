@@ -428,7 +428,7 @@ facilities = [
 ]
 
 stores = [
-  Ap_Bac, Le_Van_Sy, Hong_Ha, Hoang_Viet, Hong_Lac, Nguyen_Xi, Phan_Van_Tri
+  Ap_Bac, Le_Van_Sy, Hong_Ha, Hoang_Viet, Hong_Lac, Nguyen_Xi, Phan_Van_Tri, Victoria_Van_Phu
   # Bui_Huu_Nghia, Ngo_Tat_To, Nguyen_Van_Thuong, Dien_Bien_Phu, The_Grace_Tower,
   # Nguyen_Thi_Thap, Huynh_Tan_Phat, Nguyen_Thi_Thap_2, Sky_Garden, Victoria_Van_Phu,
   # Van_Khe, Vu_Tong_Phan, Aeon_Mall_Ha_Dong, Nguyen_Van_Loc, The_Park_Home, Hoang_Dao_Thuy_2,

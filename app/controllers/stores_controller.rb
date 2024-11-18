@@ -2,6 +2,7 @@
 
 class StoresController < ApplicationController
   WEEKDAYS = %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday].freeze
+  CITY_CODES = %w[HCM HN].freeze
 
   schema(:directions) do
     required(:id).filled(:integer)
@@ -27,6 +28,7 @@ class StoresController < ApplicationController
     optional(:open_hour).value(:time)
     optional(:close_hour).value(:time)
     optional(:address).filled(:string)
+    optional(:city_code).value(included_in?: CITY_CODES)
   end
 
   def index
@@ -41,10 +43,13 @@ class StoresController < ApplicationController
     stores = stores.where('working_hours.day': safe_params[:days]) if safe_params[:days].present?
     stores = stores.where('working_hours.open_hour': safe_params[:open_hour].strftime('%H:%M')..) if safe_params[:open_hour].present?
     stores = stores.where('working_hours.close_hour': ..safe_params[:close_hour].strftime('%H:%M')) if safe_params[:close_hour].present?
+    stores = stores.joins(:city).where('cities.code': safe_params[:city_code]) if safe_params[:city_code].present?
 
     if safe_params[:address].present?
       stores = stores.includes(:address)
-                     .where('addresses.computed_address LIKE ?', "%#{Store.sanitize_sql_like(safe_params[:address])}%")
+                     .where('addresses.computed_address LIKE ?',
+                            "%#{Store.sanitize_sql_like(safe_params[:address])}%"
+                     )
     end
 
     render json: stores

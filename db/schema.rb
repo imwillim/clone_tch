@@ -25,7 +25,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_02_134901) do
     t.datetime "updated_at", null: false
     t.uuid "city_id"
     t.bigint "store_id"
-    t.virtual "computed_address", type: :string, as: "(((((((house_number)::text || ', '::text) || (street)::text) || ', '::text) || (ward)::text) || ', '::text) || (district)::text)", stored: true
+    t.virtual "computed_address", type: :string, as: "(((((((house_number)::text || ' '::text) || (street)::text) || ', '::text) || (ward)::text) || ', '::text) || (district)::text)", stored: true
     t.index ["city_id"], name: "index_addresses_on_city_id"
     t.index ["house_number", "street", "ward", "district"], name: "idx_on_house_number_street_ward_district_a2b67e137c", unique: true
     t.index ["store_id"], name: "index_addresses_on_store_id", unique: true
