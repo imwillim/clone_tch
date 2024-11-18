@@ -267,3 +267,39 @@ GET api/v1/tch/stores/:store_id/directions{?address, transport}
   {
       message: 'Server not available'
   }
+
+# Update a product
+PUT api/v1/tch/products/:product_id
+ Body:
+    {
+        "name": "HCM Sample",
+        "description": "description_sample"
+        "images": ["image_sample.png"],
+        "price": 1,
+    }
+
+ Response 200 (application/json)
+ {
+    "message": "Product updated successfully.",
+    "data": {
+        "name": "HCM Sample",
+        "description": "description_sample"
+        "images": ["image_sample.png"],
+        "price": 1,
+        "updatedAt": 1730822091
+    }
+ }
+
+ Response 422 (application/json)
+  {
+     "message": "Cannot update product.",
+  }
+
+# Delete a product
+DELETE api/v1/tch/products/:product_id
+ Response 204 (application/json) - Empty response
+
+ Response 404 (application/json)
+ {
+     "message": "Product not found.",
+ }
