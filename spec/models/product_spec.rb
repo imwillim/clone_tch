@@ -38,4 +38,22 @@ RSpec.describe Product do
       end
     end
   end
+
+  describe '#invalidate_cache' do
+    context 'when product exists in cache' do
+      include_context 'redis mock'
+      let(:category) { create(:category) }
+      let(:product) { create(:product, category:) }
+
+      before do
+        redis.set(product.id, product.to_json)
+      end
+
+      it 'invalidates product' do
+        product.destroy
+
+        expect(redis.get(product.id)).to eq(nil)
+      end
+    end
+  end
 end

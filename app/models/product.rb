@@ -11,11 +11,16 @@ class Product < ApplicationRecord
   belongs_to :category
 
   after_update :update_cache
+  after_destroy :invalidate_cache
 
   private
 
   def update_cache
     CacheManager.unassign_value(id)
     CacheManager.assign_value(id, to_json)
+  end
+
+  def invalidate_cache
+    CacheManager.unassign_value(id)
   end
 end

@@ -46,4 +46,14 @@ class ProductsController < ApplicationController
 
     render json: { data: @product }, status: :ok
   end
+
+  schema(:destroy) do
+    required(:id).value(:uuid_v4?)
+  end
+
+  def destroy
+    @product = Product.destroy(safe_params[:id])
+
+    render status: :no_content
+  end
 end
