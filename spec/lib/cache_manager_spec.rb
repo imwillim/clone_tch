@@ -23,4 +23,13 @@ RSpec.describe CacheManager do
       expect(redis.get(key)).to eq(value)
     end
   end
+
+  describe '#unassign_value' do
+    it 'delete a key-value pair' do
+      redis.set(key, value)
+
+      expect(CacheManager.unassign_value(key)).to eq(1)
+      expect(redis.get(key)).to eq(nil)
+    end
+  end
 end
