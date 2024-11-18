@@ -9,4 +9,13 @@ class Product < ApplicationRecord
   has_many :toppings, dependent: :destroy
   has_one :tag, dependent: :destroy
   belongs_to :category
+
+  after_update :update_cache
+
+  private
+
+  def update_cache
+    CacheManager.unassign_value(id)
+    CacheManager.assign_value(id, to_json)
+  end
 end

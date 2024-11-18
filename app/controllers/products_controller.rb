@@ -32,4 +32,18 @@ class ProductsController < ApplicationController
       render json: { message: service.first_error.message }, status: :unprocessable_entity
     end
   end
+
+  schema(:update) do
+    required(:id).value(:uuid_v4?)
+    optional(:name).filled(:string)
+    optional(:description).filled(:string)
+    optional(:price).filled(:float).value(gt?: 0)
+    optional(:image_urls).filled(array[:string])
+  end
+
+  def update
+    @product = Product.update!(safe_params[:id], safe_params.to_h)
+
+    render json: { data: @product }, status: :ok
+  end
 end

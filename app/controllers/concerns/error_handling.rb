@@ -17,4 +17,8 @@ module ErrorHandling
   def render_not_found(error)
     render json: { errors: error }, status: :not_found
   end
+
+  def render_invalid_record(error)
+    render json: { message: error.to_s }, status: :unprocessable_entity
+  end
 end
