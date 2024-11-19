@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     resources :products, only: %i[show index]
     resources :stores do
       get 'directions', on: :member
+      get 'show'
     end
   end
 end

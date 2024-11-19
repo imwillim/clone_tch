@@ -20,6 +20,15 @@ class StoresController < ApplicationController
     render json: { data: directions }, status: :ok
   end
 
+  def show
+    # byebug
+    result = StoreWorkingHour.includes(:store, :working_hour).where(store_id: params[:id])
+
+    # test = WorkingHourSerializer.new(results).serializable_hash
+    render json: { data: result }, each_serializer: WorkingHourSerializer
+    # TODO: query -> serializer -> response -> request
+  end
+
   private
 
   def process_service(service_name:, params: {})
