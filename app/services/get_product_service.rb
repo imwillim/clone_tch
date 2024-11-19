@@ -15,7 +15,8 @@ class GetProductService < BaseService
       return self if error?
 
       @result = Product.includes(:sizes, :toppings, :tag).find_by(id: product_id)
-      CacheManager.assign_value(product_id, @result.to_json)
+      serialized_product = ProductSerializer.new(@result).serializable_hash
+      CacheManager.assign_value(product_id, serialized_product.to_json)
     end
   end
 
