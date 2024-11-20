@@ -20,6 +20,10 @@ class StoresController < ApplicationController
     render json: { data: directions }, status: :ok
   end
 
+  schema(:show) do
+    required(:id).value(:integer)
+  end
+
   def show
     result = StoreWorkingHour.includes(:store, :working_hour).where(store_id: params[:id])
 
