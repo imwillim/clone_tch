@@ -21,11 +21,9 @@ class StoresController < ApplicationController
   end
 
   def show
-    # byebug
     result = StoreWorkingHour.includes(:store, :working_hour).where(store_id: params[:id])
 
-    # test = WorkingHourSerializer.new(results).serializable_hash
-    render json: { data: result }, each_serializer: WorkingHourSerializer
+    render json: result, each_serializer: StoreWorkingHourSerializer
     # TODO: query -> serializer -> response -> request
   end
 
