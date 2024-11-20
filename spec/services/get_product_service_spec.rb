@@ -63,7 +63,7 @@ describe GetProductService do
         allow(CacheManager).to receive(:fetch_value).and_return(nil)
       end
 
-      let(:expected_result) {
+      let(:expected_result) do
         {
           id: tea.id,
           name: tea.name,
@@ -74,7 +74,7 @@ describe GetProductService do
           toppings: [],
           tag: nil
         }
-      }
+      end
 
       it 'returns product from database' do
         service.call
