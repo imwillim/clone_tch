@@ -2,7 +2,7 @@
 
 Rails.application.routes.draw do
   scope '/api/v1/tch' do
-    resources :products, only: %i[show index]
+    resources :products, only: %i[show index update]
     resources :stores do
       get 'directions', on: :member
     end

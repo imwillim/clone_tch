@@ -17,4 +17,25 @@ RSpec.describe Product do
       end
     end
   end
+
+  describe '#update_cache' do
+    context 'when product is updated' do
+      let(:category) { create(:category) }
+      let(:product) { create(:product, category:) }
+
+      include_context 'redis mock'
+      let(:body) { { 'name' => 'Tea' } }
+      let(:cached_product) { redis.get(product.id) }
+
+      before do
+        redis.set(product.id, product.to_json)
+      end
+
+      it 'invalidates product' do
+        product.update!(body)
+
+        expect(cached_product).to eq(product.to_json)
+      end
+    end
+  end
 end
