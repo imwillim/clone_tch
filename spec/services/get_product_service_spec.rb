@@ -63,12 +63,25 @@ describe GetProductService do
         allow(CacheManager).to receive(:fetch_value).and_return(nil)
       end
 
+      let(:expected_result) do
+        {
+          id: tea.id,
+          name: tea.name,
+          description: tea.description,
+          price: tea.price,
+          image_urls: tea.image_urls,
+          sizes: [],
+          toppings: [],
+          tag: nil
+        }
+      end
+
       it 'returns product from database' do
         service.call
 
         expect(service.success?).to eq true
         expect(service.result['id']).to eq(tea.id)
-        expect(redis.get(tea.id)).to eq tea.to_json
+        expect(redis.get(tea.id)).to eq expected_result.to_json
       end
     end
   end
