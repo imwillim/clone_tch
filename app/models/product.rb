@@ -9,4 +9,12 @@ class Product < ApplicationRecord
   has_many :toppings, dependent: :destroy
   has_one :tag, dependent: :destroy
   belongs_to :category
+
+  after_destroy :invalidate_cache
+
+  private
+
+  def invalidate_cache
+    CacheManager.unassign_value(id)
+  end
 end
