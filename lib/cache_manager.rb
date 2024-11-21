@@ -12,4 +12,10 @@ class CacheManager
       redis.set(key, value)
     end
   end
+
+  def self.unassign_value(key)
+    RedisWrapper.redis_pool.then do |redis|
+      redis.del(key)
+    end
+  end
 end
