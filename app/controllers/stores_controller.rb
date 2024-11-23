@@ -20,6 +20,17 @@ class StoresController < ApplicationController
     render json: { data: directions }, status: :ok
   end
 
+  schema(:index) do
+    required(:day).filled(:string)
+  end
+
+  def index
+    stores = Store.includes(:stores_working_hours, :working_hours)
+                  .where('stores_working_hours.day': safe_params[:day])
+
+    render json: stores
+  end
+
   private
 
   def process_service(service_name:, params: {})
