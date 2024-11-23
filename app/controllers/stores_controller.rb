@@ -25,10 +25,9 @@ class StoresController < ApplicationController
   end
 
   def show
-    result = StoreWorkingHour.includes(:store, :working_hour).where(store_id: params[:id])
+    result = Store.includes(:stores_working_hours).find_by(id: params[:id])
 
-    render json: result, each_serializer: StoreWorkingHourSerializer
-    # TODO: query -> serializer -> response -> request
+    render json: result, include: %w[working_hours working_hours.working_hour]
   end
 
   private

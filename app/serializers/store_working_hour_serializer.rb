@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
 class StoreWorkingHourSerializer < ActiveModel::Serializer
-  attributes :day
+  attributes :day, :open_hour, :close_hour
 
-  belongs_to :store, serializer: StoreSerializer
-  belongs_to :working_hour, serializer: WorkingHourSerializer
+  def open_hour
+    object.working_hour.open_hour
+  end
+
+  def close_hour
+    object.working_hour.close_hour
+  end
 end

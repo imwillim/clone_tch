@@ -10,7 +10,7 @@ RSpec.describe WorkingHourSerializer, type: :serializer do
     let(:expected_working_hour_json) do
       {
         open_hour: working_hour.open_hour,
-        close_hour: working_hour.close_hour,
+        close_hour: working_hour.close_hour
       }
     end
     it 'returns the expected json of working hour' do

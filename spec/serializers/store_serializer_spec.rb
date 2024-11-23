@@ -10,7 +10,7 @@ RSpec.describe StoreSerializer, type: :serializer do
     let(:expected_store_json) do
       {
         name: store.name,
-        image_urls: store.image_urls,
+        image_urls: store.image_urls
       }
     end
     it 'returns the expected json of store' do
