@@ -99,4 +99,65 @@ RSpec.describe StoresController, type: :controller do
       end
     end
   end
+
+  describe 'GET /api/v1/tch/stores', type: :request do
+    let(:path) { '/api/v1/tch/stores' }
+    let(:params) do
+      {
+        days:
+      }
+    end
+
+    let(:days) { %w[Monday] }
+    let(:store) { create(:store) }
+    let(:working_hour) { create(:working_hour) }
+
+    before do
+      create(:store_working_hour, store:, working_hour:)
+    end
+
+    describe '#validate' do
+      let(:days) { %w[days] }
+      context 'when days parameter not valid' do
+        it 'returns 400 response' do
+          get(path, params:)
+
+          expect(response).to have_http_status(:bad_request)
+          expect(response.parsed_body['errors']).to eq('0 must be one of: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday')
+        end
+      end
+    end
+
+    describe 'when request succeeds' do
+      context 'when store does not work on a specific day' do
+        it 'returns empty' do
+          get(path, params:)
+
+          expect(response).to have_http_status(:ok)
+          expect(response.parsed_body).to eq(expected_result)
+        end
+      end
+
+      context 'when store works on a specific day' do
+        let(:expected_result) do
+          [{
+             'id' => store.id,
+             'name' => store.name,
+             'stores_working_hours' => [{
+                                          'day' => 'Monday',
+                                          'open_hour' => '9:30',
+                                          'close_hour' => '22:00'
+                                        }]
+           }]
+        end
+
+        it 'returns result of stores' do
+          get(path, params:)
+
+          expect(response).to have_http_status(:ok)
+          expect(response.parsed_body).to eq(expected_result)
+        end
+      end
+    end
+  end
 end

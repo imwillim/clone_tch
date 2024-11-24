@@ -21,12 +21,14 @@ class StoresController < ApplicationController
   end
 
   schema(:index) do
-    required(:day).filled(:string)
+    optional(:days)
+      .array(:string)
+      .each(included_in?: %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday])
   end
 
   def index
     stores = Store.includes(:stores_working_hours, :working_hours)
-                  .where('stores_working_hours.day': safe_params[:day])
+                  .where('stores_working_hours.day': safe_params[:days])
 
     render json: stores
   end
