@@ -27,8 +27,9 @@ class StoresController < ApplicationController
   end
 
   def index
-    stores = Store.includes(:stores_working_hours, :working_hours)
-                  .where('stores_working_hours.day': safe_params[:days])
+    stores = Store.includes(:stores_working_hours, :working_hours).where.not('stores_working_hours.day': nil)
+
+    stores = stores.where('stores_working_hours.day': safe_params[:days]) if safe_params[:days].present?
 
     render json: stores
   end

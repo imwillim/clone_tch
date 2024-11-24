@@ -113,7 +113,7 @@ RSpec.describe StoresController, type: :controller do
     let(:working_hour) { create(:working_hour) }
 
     before do
-      create(:store_working_hour, store:, working_hour:)
+      store.stores_working_hours.create(day: 'Monday', working_hour:)
     end
 
     describe '#validate' do
@@ -129,7 +129,47 @@ RSpec.describe StoresController, type: :controller do
     end
 
     describe 'when request succeeds' do
-      context 'when store does not work on a specific day' do
+      context 'when request does not have parameters' do
+        let(:another_store) { create(:store) }
+        let(:another_working_hour) { create(:working_hour) }
+        let(:expected_result) do
+          [{
+            'id' => another_store.id,
+            'name' => another_store.name,
+            'stores_working_hours' => [{
+               'day' => 'Monday',
+               'open_hour' => '9:30',
+               'close_hour' => '22:00'
+             }]
+          },
+           {
+             'id' => store.id,
+             'name' => store.name,
+             'stores_working_hours' => [{
+               'day' => 'Monday',
+               'open_hour' => '9:30',
+               'close_hour' => '22:00'
+             }]
+           }
+          ]
+        end
+
+        before do
+          another_store.stores_working_hours.create(day: 'Monday', working_hour:)
+        end
+
+        it 'returns all stores' do
+          get(path, params:)
+
+          expect(response).to have_http_status(:ok)
+          expect(response.parsed_body.to_json).to eq(expected_result.to_json)
+        end
+      end
+
+      context 'when request filters a day-off' do
+        let(:days) { %w[Tuesday] }
+        let(:expected_result) { [] }
+
         it 'returns empty' do
           get(path, params:)
 
@@ -138,17 +178,17 @@ RSpec.describe StoresController, type: :controller do
         end
       end
 
-      context 'when store works on a specific day' do
+      context 'when request filters a work day' do
         let(:expected_result) do
           [{
-             'id' => store.id,
-             'name' => store.name,
-             'stores_working_hours' => [{
-                                          'day' => 'Monday',
-                                          'open_hour' => '9:30',
-                                          'close_hour' => '22:00'
-                                        }]
-           }]
+            'id' => store.id,
+            'name' => store.name,
+            'stores_working_hours' => [{
+               'day' => 'Monday',
+               'open_hour' => '9:30',
+               'close_hour' => '22:00'
+             }]
+          }]
         end
 
         it 'returns result of stores' do
