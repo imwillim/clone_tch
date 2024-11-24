@@ -137,7 +137,7 @@ RSpec.describe StoresController, type: :controller do
       context 'when a store exists' do
         let(:id) { store.id }
 
-        let(:expected_result) {
+        let(:expected_result) do
           {
             'id' => store.id,
             'name' => store.name,
@@ -148,7 +148,7 @@ RSpec.describe StoresController, type: :controller do
               'close_hour' => '22:00'
             }]
           }
-        }
+        end
 
         it 'returns 200 response' do
           get(path)
