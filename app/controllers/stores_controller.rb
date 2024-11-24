@@ -20,6 +20,20 @@ class StoresController < ApplicationController
     render json: { data: directions }, status: :ok
   end
 
+  schema(:show) do
+    required(:id).value(:integer)
+  end
+
+  def show
+    result = Store.includes(:stores_working_hours).find_by(id: params[:id])
+
+    if result.present?
+      render json: result, include: %w[working_hours working_hours.working_hour]
+    else
+      render json: { message: I18n.t('errors.models.not_found', record: :store) }, status: :not_found
+    end
+  end
+
   private
 
   def process_service(service_name:, params: {})
