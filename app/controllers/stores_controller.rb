@@ -24,12 +24,17 @@ class StoresController < ApplicationController
     optional(:days)
       .array(:string)
       .each(included_in?: %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday])
+
+    optional(:open_hour)
+      .value(:string)
   end
 
   def index
     stores = Store.includes(:stores_working_hours, :working_hours).where.not('stores_working_hours.day': nil)
 
     stores = stores.where('stores_working_hours.day': safe_params[:days]) if safe_params[:days].present?
+
+    stores = stores.where('working_hours.open_hour': safe_params[:open_hour]..)
 
     render json: stores
   end
