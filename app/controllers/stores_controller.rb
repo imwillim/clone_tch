@@ -27,7 +27,11 @@ class StoresController < ApplicationController
   def show
     result = Store.includes(:stores_working_hours).find_by(id: params[:id])
 
-    render json: result, include: %w[working_hours working_hours.working_hour]
+    if result.present?
+      render json: result, include: %w[working_hours working_hours.working_hour]
+    else
+      render json: { message: I18n.t('errors.models.not_found', record: :store) }, status: :not_found
+    end
   end
 
   private
