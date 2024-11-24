@@ -9,8 +9,10 @@ RSpec.describe StoreSerializer, type: :serializer do
   context 'when serializing store' do
     let(:expected_store_json) do
       {
+        id: store.id,
         name: store.name,
-        image_urls: store.image_urls
+        image_urls: store.image_urls,
+        working_hours: []
       }
     end
     it 'returns the expected json of store' do

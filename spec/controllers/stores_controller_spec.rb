@@ -99,4 +99,64 @@ RSpec.describe StoresController, type: :controller do
       end
     end
   end
+
+  describe 'GET /api/v1/tch/stores/:id', type: :request do
+    let(:store) { create(:store) }
+    let(:working_hour) { create(:working_hour) }
+    let(:path) { "/api/v1/tch/stores/#{id}" }
+
+    before do
+      store.stores_working_hours.create(day: 'Monday', working_hour:)
+    end
+
+    describe '#validate' do
+      context 'when validation fails' do
+        let(:id) { 'not-integer' }
+
+        it 'returns 400 response' do
+          get(path)
+
+          expect(response.status).to eq(400)
+          expect(response.parsed_body['errors']).to eq 'id must be an integer'
+        end
+      end
+    end
+
+    describe 'when request succeeds' do
+      context 'when a store does not exist' do
+        let(:id) { -1 }
+
+        it 'returns 400 response' do
+          get(path)
+
+          expect(response.status).to eq(404)
+          expect(response.parsed_body['message']).to eq 'store is not found.'
+        end
+      end
+
+      context 'when a store exists' do
+        let(:id) { store.id }
+
+        let(:expected_result) {
+          {
+            'id' => store.id,
+            'name' => store.name,
+            'image_urls' => [],
+            'working_hours' => [{
+              'day' => 'Monday',
+              'open_hour' => '9:30',
+              'close_hour' => '22:00'
+            }]
+          }
+        }
+
+        it 'returns 200 response' do
+          get(path)
+
+          expect(response.status).to eq(200)
+          expect(response.parsed_body).to eq expected_result
+        end
+      end
+    end
+  end
 end
