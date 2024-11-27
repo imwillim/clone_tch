@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
+require 'dry-validation'
+
 class StoresController < ApplicationController
+  TIME_RANGE = /\A(08:00|08:[0-5]\d|0[89]:\d{2}|1[0-9]:\d{2}|20:[0-5]\d|21:[0-5]\d|22:00)\z/
+
+  WEEKDAYS = %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday].freeze
+
   schema(:directions) do
     required(:id).filled(:integer)
     required(:address).value(:string)
@@ -21,20 +27,17 @@ class StoresController < ApplicationController
   end
 
   schema(:index) do
-    optional(:days)
-      .array(:string)
-      .each(included_in?: %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday])
-
-    optional(:open_hour)
-      .value(:string)
+    optional(:days).array(:string).each(included_in?: WEEKDAYS)
+    optional(:open_hour).value(:string, format?: TIME_RANGE)
+    optional(:close_hour).value(:string, format?: TIME_RANGE)
   end
 
   def index
     stores = Store.includes(:stores_working_hours, :working_hours).where.not('stores_working_hours.day': nil)
 
     stores = stores.where('stores_working_hours.day': safe_params[:days]) if safe_params[:days].present?
-
-    stores = stores.where('working_hours.open_hour': safe_params[:open_hour]..)
+    stores = stores.where('working_hours.open_hour': safe_params[:open_hour]..) if safe_params[:open_hour].present?
+    stores = stores.where('working_hours.close_hour': ..safe_params[:close_hour]) if safe_params[:close_hour].present?
 
     render json: stores
   end

@@ -117,8 +117,9 @@ RSpec.describe StoresController, type: :controller do
     end
 
     describe '#validate' do
-      let(:days) { %w[days] }
       context 'when days parameter not valid' do
+        let(:days) { %w[days] }
+
         it 'returns 400 response' do
           get(path, params:)
 
@@ -126,78 +127,111 @@ RSpec.describe StoresController, type: :controller do
           expect(response.parsed_body['errors']).to eq('0 must be one of: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday')
         end
       end
-    end
 
-    describe 'when request succeeds' do
-      context 'when request does not have parameters' do
-        let(:another_store) { create(:store) }
-        let(:another_working_hour) { create(:working_hour) }
-        let(:expected_result) do
-          [{
-            'id' => another_store.id,
-            'name' => another_store.name,
-            'stores_working_hours' => [{
-               'day' => 'Monday',
-               'open_hour' => '9:30',
-               'close_hour' => '22:00'
-             }]
-          },
-           {
-             'id' => store.id,
-             'name' => store.name,
-             'stores_working_hours' => [{
-               'day' => 'Monday',
-               'open_hour' => '9:30',
-               'close_hour' => '22:00'
-             }]
-           }
-          ]
+      context 'when open hour is not in between 8:00 and 22:00' do
+        let(:open_hour) { '23:00' }
+        let(:params) do
+          {
+            open_hour:
+          }
         end
 
-        before do
-          another_store.stores_working_hours.create(day: 'Monday', working_hour:)
-        end
-
-        it 'returns all stores' do
+        it 'returns 400 response' do
           get(path, params:)
 
-          expect(response).to have_http_status(:ok)
-          expect(response.parsed_body.to_json).to eq(expected_result.to_json)
+          expect(response).to have_http_status(:bad_request)
+          expect(response.parsed_body['errors']).to eq('open_hour is in invalid format')
         end
       end
 
-      context 'when request filters a day-off' do
-        let(:days) { %w[Tuesday] }
-        let(:expected_result) { [] }
+      context 'when close hour is not in between 8:00 and 22:00' do
+        let(:close_hour) { '23:00' }
+        let(:params) do
+          {
+            close_hour:
+          }
+        end
 
-        it 'returns empty' do
+        it 'returns 400 response' do
           get(path, params:)
 
-          expect(response).to have_http_status(:ok)
-          expect(response.parsed_body).to eq(expected_result)
+          expect(response).to have_http_status(:bad_request)
+          expect(response.parsed_body['errors']).to eq('close_hour is in invalid format')
         end
       end
 
-      context 'when request filters a work day' do
-        let(:expected_result) do
-          [{
-            'id' => store.id,
-            'name' => store.name,
-            'stores_working_hours' => [{
-               'day' => 'Monday',
-               'open_hour' => '9:30',
-               'close_hour' => '22:00'
-             }]
-          }]
+      describe 'when request succeeds' do
+        context 'when request does not have parameters' do
+          let(:another_store) { create(:store) }
+          let(:another_working_hour) { create(:working_hour) }
+          let(:expected_result) do
+            [{
+              'id' => another_store.id,
+              'name' => another_store.name,
+              'stores_working_hours' => [{
+                 'day' => 'Monday',
+                 'open_hour' => '9:30',
+                 'close_hour' => '22:00'
+               }]
+            },
+             {
+               'id' => store.id,
+               'name' => store.name,
+               'stores_working_hours' => [{
+                 'day' => 'Monday',
+                 'open_hour' => '9:30',
+                 'close_hour' => '22:00'
+               }]
+             }
+            ]
+          end
+
+          before do
+            another_store.stores_working_hours.create(day: 'Monday', working_hour:)
+          end
+
+          it 'returns all stores' do
+            get(path, params:)
+
+            expect(response).to have_http_status(:ok)
+            expect(response.parsed_body.to_json).to eq(expected_result.to_json)
+          end
         end
 
-        it 'returns result of stores' do
-          get(path, params:)
+        context 'when request filters a day not in weekdays' do
+          let(:days) { %w[Tuesday] }
+          let(:expected_result) { [] }
 
-          expect(response).to have_http_status(:ok)
-          expect(response.parsed_body).to eq(expected_result)
+          it 'returns empty' do
+            get(path, params:)
+
+            expect(response).to have_http_status(:ok)
+            expect(response.parsed_body).to eq(expected_result)
+          end
+        end
+
+        context 'when request filters a day in weekdays' do
+          let(:expected_result) do
+            [{
+              'id' => store.id,
+              'name' => store.name,
+              'stores_working_hours' => [{
+                 'day' => 'Monday',
+                 'open_hour' => '9:30',
+                 'close_hour' => '22:00'
+               }]
+            }]
+          end
+
+          it 'returns result of stores' do
+            get(path, params:)
+
+            expect(response).to have_http_status(:ok)
+            expect(response.parsed_body).to eq(expected_result)
+          end
         end
       end
+      # TODO: Add Unit test for open_hour & close_hour filters
     end
   end
 end
