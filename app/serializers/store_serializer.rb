@@ -3,5 +3,5 @@
 class StoreSerializer < ActiveModel::Serializer
   attributes :id, :name
 
-  has_many :stores_working_hours
+  has_many :working_hours
 end

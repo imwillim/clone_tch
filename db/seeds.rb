@@ -440,30 +440,14 @@ stores.each do |store|
   store.facilities.append(*store_facilities) # Append them to the store
 end
 
-weekend_hours_1 = WorkingHour.create(open_hour: '6:00', close_hour: '20:30')
-weekend_hours_2 = WorkingHour.create(open_hour: '7:00', close_hour: '21:30')
-weekend_hours_3 = WorkingHour.create(open_hour: '6:30', close_hour: '21:00')
-weekend_hours_4 = WorkingHour.create(open_hour: '7:30', close_hour: '22:00')
-weekend_hours_5 = WorkingHour.create(open_hour: '6:00', close_hour: '21:30')
-weekend_hours_6 = WorkingHour.create(open_hour: '7:00', close_hour: '22:30')
-weekend_hours_7 = WorkingHour.create(open_hour: '6:30', close_hour: '19:30')
-weekend_hours_8 = WorkingHour.create(open_hour: '7:30', close_hour: '20:30')
+open_hours = %w[12:00 8:10 9:10 11:10 13:10 16:30 15:30 9:35]
+closed_hours = %w[22:00 23:10 21:10 21:30 22:10 23:30 22:30 00:30]
 
-working_hours = [
-  weekend_hours_1,
-  weekend_hours_2,
-  weekend_hours_3,
-  weekend_hours_4,
-  weekend_hours_5,
-  weekend_hours_6,
-  weekend_hours_7,
-  weekend_hours_8
-]
-
-days_of_week = %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday]
+weekdays = %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday]
 
 stores.each do |store|
-  days = days_of_week.sample(4)
-
-  days.each { |day| store.stores_working_hours.create(day:, working_hour: working_hours.sample) }
+  days = weekdays.sample(4)
+  days.each do |day|
+    store.working_hours.create!(open_hour: open_hours.sample, close_hour: closed_hours.sample, day: day)
+  end
 end
