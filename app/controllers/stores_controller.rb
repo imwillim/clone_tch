@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'dry-validation'
-
 class StoresController < ApplicationController
   TIME_RANGE = /\A(08:00|08:[0-5]\d|0[89]:\d{2}|1[0-9]:\d{2}|20:[0-5]\d|21:[0-5]\d|22:00)\z/
 
@@ -33,9 +31,9 @@ class StoresController < ApplicationController
   end
 
   def index
-    stores = Store.includes(:stores_working_hours, :working_hours).where.not('stores_working_hours.day': nil)
+    stores = Store.includes(:working_hours).where.not('working_hours.day': nil)
 
-    stores = stores.where('stores_working_hours.day': safe_params[:days]) if safe_params[:days].present?
+    stores = stores.where('working_hours.day': safe_params[:days]) if safe_params[:days].present?
     stores = stores.where('working_hours.open_hour': safe_params[:open_hour]..) if safe_params[:open_hour].present?
     stores = stores.where('working_hours.close_hour': ..safe_params[:close_hour]) if safe_params[:close_hour].present?
 
