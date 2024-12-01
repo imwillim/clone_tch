@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class StoresController < ApplicationController
-  TIME_RANGE = /\A(08:00|08:[0-5]\d|0[89]:\d{2}|1[0-9]:\d{2}|20:[0-5]\d|21:[0-5]\d|22:00)\z/
-
   WEEKDAYS = %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday].freeze
 
   schema(:directions) do
@@ -26,16 +24,31 @@ class StoresController < ApplicationController
 
   schema(:index) do
     optional(:days).array(:string).each(included_in?: WEEKDAYS)
-    optional(:open_hour).value(:string, format?: TIME_RANGE)
-    optional(:close_hour).value(:string, format?: TIME_RANGE)
+    optional(:open_hour).value(:time)
+    optional(:close_hour).value(:time)
+    optional(:address).filled(:string)
   end
 
   def index
-    stores = Store.includes(:working_hours).where.not('working_hours.day': nil)
+    if safe_params[:open_hour] && safe_params[:close_hour]
+      if safe_params[:close_hour] < safe_params[:open_hour]
+        raise ::CustomErrors::InvalidParams, 'close_hour cannot be less than open_hour'
+      end
+    end
+
+    stores = Store.includes(:working_hours).where.associated(:working_hours)
 
     stores = stores.where('working_hours.day': safe_params[:days]) if safe_params[:days].present?
-    stores = stores.where('working_hours.open_hour': safe_params[:open_hour]..) if safe_params[:open_hour].present?
-    stores = stores.where('working_hours.close_hour': ..safe_params[:close_hour]) if safe_params[:close_hour].present?
+    stores = stores.where('working_hours.open_hour': safe_params[:open_hour].strftime('%H:%M')..) if safe_params[:open_hour].present?
+    stores = stores.where('working_hours.close_hour': ..safe_params[:close_hour].strftime('%H:%M')) if safe_params[:close_hour].present?
+
+    if safe_params[:address].present?
+      stores = stores.includes(:address)
+                     .where('addresses.street LIKE ? OR addresses.ward LIKE ? OR addresses.district LIKE ?',
+                            "%#{Store.sanitize_sql_like(safe_params[:address])}%",
+                            "%#{Store.sanitize_sql_like(safe_params[:address])}%",
+                            "%#{Store.sanitize_sql_like(safe_params[:address])}%")
+    end
 
     render json: stores
   end

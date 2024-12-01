@@ -4,10 +4,10 @@ class WorkingHourSerializer < ActiveModel::Serializer
   attributes :id, :day, :open_hour, :close_hour
 
   def open_hour
-    "#{object.open_hour.hour}:#{'%02i' % object.open_hour.min}"
+    object.open_hour.strftime('%H:%M')
   end
 
   def close_hour
-    "#{object.close_hour.hour}:#{object.close_hour.min}"
+    object.close_hour.strftime('%H:%M')
   end
 end
