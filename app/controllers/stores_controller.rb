@@ -44,10 +44,7 @@ class StoresController < ApplicationController
 
     if safe_params[:address].present?
       stores = stores.includes(:address)
-                     .where('addresses.street LIKE ? OR addresses.ward LIKE ? OR addresses.district LIKE ?',
-                            "%#{Store.sanitize_sql_like(safe_params[:address])}%",
-                            "%#{Store.sanitize_sql_like(safe_params[:address])}%",
-                            "%#{Store.sanitize_sql_like(safe_params[:address])}%")
+                     .where('addresses.computed_address LIKE ?', "%#{Store.sanitize_sql_like(safe_params[:address])}%")
     end
 
     render json: stores
