@@ -110,7 +110,8 @@ RSpec.describe StoresController, type: :controller do
           days:,
           open_hour:,
           close_hour:,
-          address:
+          address:,
+          city_code:
         }
       end
 
@@ -119,18 +120,20 @@ RSpec.describe StoresController, type: :controller do
         let(:open_hour) { 'not_valid' }
         let(:close_hour) { 'not_valid' }
         let(:address) { '' }
+        let(:city_code) { 'not_valid' }
 
         let(:invalid_days) { '0 must be one of: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday' }
         let(:invalid_open_hour) { 'open_hour must be a time' }
         let(:invalid_close_hour) { 'close_hour must be a time' }
         let(:empty_address) { 'address must be filled' }
+        let(:invalid_city_code) { 'city_code must be one of: HCM, HN' }
 
         it 'returns 400 response' do
           get(path, params:)
 
           expect(response).to have_http_status(:bad_request)
           expect(response.parsed_body['errors'])
-            .to eq("#{invalid_days}, #{invalid_open_hour}, #{invalid_close_hour}, #{empty_address}")
+            .to eq("#{invalid_days}, #{invalid_open_hour}, #{invalid_close_hour}, #{empty_address}, #{invalid_city_code}")
         end
       end
 
@@ -154,113 +157,83 @@ RSpec.describe StoresController, type: :controller do
     end
 
     describe 'when request succeeds' do
-      let!(:store) { create(:store) }
-      let!(:working_hour) { create(:working_hour, store_id: store.id) }
+      let(:city) { create(:city) }
+      let!(:address) { create(:address, city:, store: store1) }
+      let!(:address2) { create(:address, city:, store: store2) }
+      let!(:working_hours) { create(:working_hour, store: store1) }
+      let!(:working_hours2) { create(:working_hour, store: store2) }
+      let(:store1) { create(:store) }
+      let(:store2) { create(:store) }
 
-      let(:days) { %w[Monday] }
-      let(:params) { :days }
+      let(:params) { {} }
 
       context 'when request does not have parameters' do
-        let!(:another_store) { create(:store) }
-        let!(:another_working_hour) { create(:working_hour, store_id: another_store.id) }
-
-        let(:expected_result) do
-          [
-            {
-              'id' => store.id,
-              'name' => store.name,
-              'working_hours' => [{
-                'id' => working_hour.id,
-                'day' => 'Monday',
-                'open_hour' => '09:30',
-                'close_hour' => '22:00'
-              }]
-            },
-            {
-              'id' => another_store.id,
-              'name' => another_store.name,
-              'working_hours' => [{
-                'id' => another_working_hour.id,
-                'day' => 'Monday',
-                'open_hour' => '09:30',
-                'close_hour' => '22:00'
-              }]
-            }
-          ]
-        end
-
         it 'returns all stores' do
           get(path, params:)
-
           expect(response).to have_http_status(:ok)
-          expect(response.parsed_body.to_json).to eq(expected_result.to_json)
+          expect(response.parsed_body.pluck('id')).to match_array([store1.id, store2.id])
         end
       end
 
-      context 'when request filters a day' do
-        let(:expected_result) do
-          [{
-            'id' => store.id,
-            'name' => store.name,
-            'working_hours' => [{
-               'id' => working_hour.id,
-               'day' => 'Monday',
-               'open_hour' => '09:30',
-               'close_hour' => '22:00'
-             }]
-          }]
+      context 'when request filters by day' do
+        let(:days) { %w[Monday] }
+
+        before do
+          params.update({ days: })
+          working_hours.update(day: 'Sunday')
         end
 
         it 'returns stores' do
           get(path, params:)
 
           expect(response).to have_http_status(:ok)
-          expect(response.parsed_body).to eq(expected_result)
+          expect(response.parsed_body.pluck(:id)).to match_array([store2.id])
         end
       end
 
-      context 'when request filters open_hour' do
-        let!(:working_hour) { create(:working_hour, store_id: store.id, open_hour:) }
-        let(:open_hour) { '6:00' }
-        let(:params) { :open_hour }
+      context 'when request filters by open_hour' do
+        let(:open_hour) { '10:00' }
 
-        let(:expected_result) do
-          [{
-            'id' => store.id,
-            'name' => store.name,
-            'working_hours' => [{
-               'id' => working_hour.id,
-               'day' => 'Monday',
-               'open_hour' => '06:00',
-               'close_hour' => '22:00'
-             }]
-          }]
+        before do
+          working_hours.update(open_hour:)
+          params.update({ open_hour: })
         end
 
         it 'returns stores' do
           get(path, params:)
 
           expect(response).to have_http_status(:ok)
-          expect(response.parsed_body).to eq(expected_result)
+          expect(response.parsed_body.pluck(:id)).to match_array([store1.id])
         end
       end
 
-      context 'when request filters close_hour' do
-        let!(:working_hour) { create(:working_hour, store_id: store.id, close_hour:) }
-        let(:close_hour) { '21:00' }
-        let(:params) { :close_hour }
+      context 'when request filters by close_hour' do
+        let(:close_hour) { '17:00' }
 
-        let(:expected_result) do
-          [{
-            'id' => store.id,
-            'name' => store.name,
-            'working_hours' => [{
-               'id' => working_hour.id,
-               'day' => 'Monday',
-               'open_hour' => '06:00',
-               'close_hour' => '21:00'
-             }]
-          }]
+        before do
+          working_hours.update(close_hour:)
+          params.update({ close_hour: })
+        end
+
+        it 'returns stores' do
+          get(path, params:)
+
+          expect(response).to have_http_status(:ok)
+          expect(response.parsed_body.pluck(:id)).to match_array([store1.id])
+        end
+      end
+
+      context 'when request filters by address' do
+        before do
+          store1.address.update(house_number: 'address')
+          params.update({ address: 'address'})
+        end
+
+        it 'returns stores' do
+          get(path, params:)
+
+          expect(response).to have_http_status(:ok)
+          expect(response.parsed_body.pluck(:id)).to match_array([store1.id])
         end
       end
     end
