@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class StoresController < ApplicationController
-  WEEKDAYS = %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday].freeze
+  DAYS = %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday].freeze
   CITY_CODES = %w[HCM HN].freeze
+  AVAILABILITY = %w[MORNING AFTERNOON EVENING WEEKDAY WEEKEND].freeze
 
   schema(:directions) do
     required(:id).filled(:integer)
@@ -24,11 +25,12 @@ class StoresController < ApplicationController
   end
 
   schema(:index) do
-    optional(:days).array(:string).each(included_in?: WEEKDAYS)
+    optional(:days).array(:string).each(included_in?: DAYS)
     optional(:open_hour).value(:time)
     optional(:close_hour).value(:time)
     optional(:address).filled(:string)
     optional(:city_code).value(included_in?: CITY_CODES)
+    optional(:availability).array(:string).each(included_in?: AVAILABILITY)
   end
 
   def index
@@ -47,9 +49,22 @@ class StoresController < ApplicationController
 
     if safe_params[:address].present?
       stores = stores.includes(:address)
-                     .where('addresses.computed_address LIKE ?',
-                            "%#{Store.sanitize_sql_like(safe_params[:address])}%"
-                     )
+                     .where('addresses.computed_address LIKE ?', "%#{Store.sanitize_sql_like(safe_params[:address])}%")
+    end
+
+    if safe_params[:availability].present?
+      if (%w[WEEKEND WEEKDAY] & safe_params[:availability]) != %w[WEEKEND WEEKDAY]
+        if safe_params[:availability].include?('WEEKEND')
+          stores = stores.where('working_hours.day': %w[Saturday Sunday])
+        end
+        if safe_params[:availability].include?('WEEKDAY')
+          stores = stores.where('working_hours.day': %w[Monday Tuesday Wednesday Thursday Friday])
+        end
+      end
+
+      # if (%w[WEEKEND WEEKDAY] & safe_params[:availability]) == %w[WEEKEND WEEKDAY]
+      #   stores = stores.and(Store.where('working_hours.day': %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday]))
+      # end
     end
 
     render json: stores

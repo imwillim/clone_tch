@@ -111,7 +111,8 @@ RSpec.describe StoresController, type: :controller do
           open_hour:,
           close_hour:,
           address:,
-          city_code:
+          city_code:,
+          availability:
         }
       end
 
@@ -121,19 +122,21 @@ RSpec.describe StoresController, type: :controller do
         let(:close_hour) { 'not_valid' }
         let(:address) { '' }
         let(:city_code) { 'not_valid' }
+        let(:availability) { %w[invalid_availability] }
 
         let(:invalid_days) { '0 must be one of: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday' }
         let(:invalid_open_hour) { 'open_hour must be a time' }
         let(:invalid_close_hour) { 'close_hour must be a time' }
         let(:empty_address) { 'address must be filled' }
         let(:invalid_city_code) { 'city_code must be one of: HCM, HN' }
+        let(:invalid_availability) { '0 must be one of: MORNING, AFTERNOON, EVENING, WEEKDAY, WEEKEND' }
 
         it 'returns 400 response' do
           get(path, params:)
 
           expect(response).to have_http_status(:bad_request)
           expect(response.parsed_body['errors'])
-            .to eq("#{invalid_days}, #{invalid_open_hour}, #{invalid_close_hour}, #{empty_address}, #{invalid_city_code}")
+            .to eq("#{invalid_days}, #{invalid_open_hour}, #{invalid_close_hour}, #{empty_address}, #{invalid_city_code}, #{invalid_availability}")
         end
       end
 
