@@ -102,9 +102,16 @@ RSpec.describe StoresController, type: :controller do
 
   describe 'GET /api/v1/tch/stores', type: :request do
     let(:path) { '/api/v1/tch/stores' }
-    let(:days) { %w[Monday Tuesday] }
+    let(:params) { {} }
 
-    describe '#validate' do
+    context 'when parameters are not valid' do
+      let(:days) { %w[invalid_days] }
+      let(:open_hour) { 'not_valid' }
+      let(:close_hour) { 'not_valid' }
+      let(:address) { '' }
+      let(:city_code) { 'not_valid' }
+      let(:availability) { %w[invalid_availability] }
+
       let(:params) do
         {
           days:,
@@ -116,26 +123,16 @@ RSpec.describe StoresController, type: :controller do
         }
       end
 
-      context 'when parameters are not valid' do
-        let(:days) { %w[invalid_days] }
-        let(:open_hour) { 'not_valid' }
-        let(:close_hour) { 'not_valid' }
-        let(:address) { '' }
-        let(:city_code) { 'not_valid' }
-        let(:availability) { %w[invalid_availability] }
+      it 'returns 400 response' do
+        get(path, params:)
 
-        it 'returns 400 response' do
-          get(path, params:)
-
-          expect(response).to have_http_status(:bad_request)
-          expect(response.parsed_body['errors']).to eq('0 must be one of: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday, open_hour is in invalid format, close_hour is in invalid format, address must be filled, city_code must be one of: HCM, HN, 0 must be one of: WEEKDAY, WEEKEND')
-        end
+        expect(response).to have_http_status(:bad_request)
+        expect(response.parsed_body['errors']).to eq('0 must be one of: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday, open_hour is in invalid format, close_hour is in invalid format, address must be filled, city_code must be one of: HCM, HN, 0 must be one of: WEEKDAY, WEEKEND')
       end
     end
 
     context 'when parameters are valid' do
       let(:service_result) { instance_double(GetStoresService, success?: true, result: stores) }
-      let(:params) { {} }
       let(:stores) {
         [
           {
