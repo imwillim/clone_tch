@@ -77,4 +77,78 @@ RSpec.describe ProductsController, type: :controller do
       end
     end
   end
+
+  describe 'PUT #update' do
+    context 'validation' do
+      let(:request_param) do
+        { id: 'invalid-id', name: '', price: -2 }
+      end
+
+      context 'when validation fails' do
+        it 'returns 400 response' do
+          put :update, params: request_param
+
+          expect(response.status).to eq 400
+          expect(response.parsed_body).to eq(
+            'errors' => 'id is not a valid UUID, name must be filled, price must be greater than 0'
+          )
+        end
+      end
+    end
+
+    context 'when product does not exist in database' do
+      let(:id) { SecureRandom.uuid }
+      let(:request_param) { { id: } }
+
+      it 'returns 404 response' do
+        put :update, params: request_param
+
+        expect(response.status).to eq 404
+        expect(response.parsed_body).to eq('errors' => "Couldn't find Product with 'id'=#{id}")
+      end
+    end
+
+    context 'when name is duplicated' do
+      let(:request_param) do
+        { id: tea.id, name: milk_tea.name }
+      end
+
+      let(:milk_tea) { create(:product, category: tea_category) }
+
+      it 'returns 422 response' do
+        put :update, params: request_param
+
+        expect(response.status).to eq 422
+        expect(response.parsed_body).to eq('message' => 'Validation failed: Name has already been taken')
+      end
+    end
+
+    context 'when body is valid' do
+      let(:request_param) do
+        { id: tea.id, name: 'Milk tea' }
+      end
+
+      let(:expected_body) do
+        {
+          'name' => 'Milk tea',
+          'thumbnail' => 'MyString',
+          'description' => 'MyString',
+          'image_urls' => [],
+          'price' => '9.99'
+        }
+      end
+
+      before do
+        allow(CacheManager).to receive(:unassign_value).with(tea.id)
+        allow(CacheManager).to receive(:assign_value)
+      end
+
+      it 'returns 200 response' do
+        put :update, params: request_param
+
+        expect(response.status).to eq 200
+        expect(response.parsed_body['data']).to include(expected_body)
+      end
+    end
+  end
 end
