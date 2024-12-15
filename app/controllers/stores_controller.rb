@@ -57,8 +57,8 @@ class StoresController < ApplicationController
   end
 
   def validate_time_interval
-    if safe_params[:close_hour] < safe_params[:open_hour]
-      raise ::CustomErrors::InvalidParams, 'close_hour cannot be less than open_hour'
-    end
+    return unless safe_params[:close_hour] < safe_params[:open_hour]
+
+    raise ::CustomErrors::InvalidParams, 'close_hour cannot be less than open_hour'
   end
 end

@@ -8,7 +8,7 @@ RSpec.describe Store, type: :model do
   end
 
   describe 'associations' do
-    it { is_expected.to have_one(:address).dependent(:nullify) }
+    it { is_expected.to have_one(:address).dependent(:destroy) }
     it { is_expected.to have_one(:city).through(:address) }
     it { is_expected.to have_many(:facilities_stores).dependent(:destroy) }
     it { is_expected.to have_many(:facilities).through(:facilities_stores) }

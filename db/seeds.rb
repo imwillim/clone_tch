@@ -448,6 +448,6 @@ weekdays = %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday]
 stores.each do |store|
   days = weekdays.sample(4)
   days.each do |day|
-    store.working_hours.create!(open_hour: open_hours.sample, close_hour: closed_hours.sample, day: day)
+    store.working_hours.create!(open_hour: open_hours.sample, close_hour: closed_hours.sample, day:)
   end
 end

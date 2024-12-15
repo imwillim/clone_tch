@@ -127,13 +127,15 @@ RSpec.describe StoresController, type: :controller do
         get(path, params:)
 
         expect(response).to have_http_status(:bad_request)
+        # rubocop:disable Layout/LineLength
         expect(response.parsed_body['errors']).to eq('0 must be one of: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday, open_hour is in invalid format, close_hour is in invalid format, address must be filled, city_code must be one of: HCM, HN, 0 must be one of: WEEKDAY, WEEKEND')
+        # rubocop:enable Layout/LineLength
       end
     end
 
     context 'when parameters are valid' do
       let(:service_result) { instance_double(GetStoresService, success?: true, result: stores) }
-      let(:stores) {
+      let(:stores) do
         [
           {
             'id' => 1,
@@ -142,7 +144,7 @@ RSpec.describe StoresController, type: :controller do
             'working_hours' => []
           }
         ]
-      }
+      end
 
       before do
         allow(GetStoresService).to receive(:call).and_return(service_result)

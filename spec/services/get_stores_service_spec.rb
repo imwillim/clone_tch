@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe GetStoresService do
@@ -37,7 +39,7 @@ describe GetStoresService do
     let(:days) { ['Monday'] }
     let(:safe_params) do
       {
-        days:,
+        days:
       }
     end
 
@@ -53,7 +55,7 @@ describe GetStoresService do
     let(:open_hour) { '13:00' }
     let(:safe_params) do
       {
-        open_hour:,
+        open_hour:
       }
     end
 
@@ -69,7 +71,7 @@ describe GetStoresService do
     let(:close_hour) { '17:00' }
     let(:safe_params) do
       {
-        close_hour:,
+        close_hour:
       }
     end
 
@@ -84,7 +86,7 @@ describe GetStoresService do
   describe 'when filter by address' do
     let(:safe_params) do
       {
-        address: address.street.to_s,
+        address: address.street.to_s
       }
     end
 
@@ -100,7 +102,7 @@ describe GetStoresService do
     let(:city_code) { city.code }
     let(:safe_params) do
       {
-        city_code:,
+        city_code:
       }
     end
 
@@ -116,7 +118,7 @@ describe GetStoresService do
     let(:city_code) { city.code }
     let(:safe_params) do
       {
-        city_code:,
+        city_code:
       }
     end
 
@@ -132,7 +134,7 @@ describe GetStoresService do
     let(:availability) { ['WEEKDAY'] }
     let(:safe_params) do
       {
-        availability:,
+        availability:
       }
     end
 

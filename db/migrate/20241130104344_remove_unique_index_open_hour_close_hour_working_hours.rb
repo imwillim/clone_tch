@@ -2,6 +2,6 @@
 
 class RemoveUniqueIndexOpenHourCloseHourWorkingHours < ActiveRecord::Migration[7.1]
   def change
-    remove_index :working_hours, [:open_hour, :close_hour], unique: true
+    remove_index :working_hours, %i[open_hour close_hour], unique: true
   end
 end

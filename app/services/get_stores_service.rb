@@ -11,6 +11,7 @@ class GetStoresService < BaseService
     @availability = safe_params[:availability]
   end
 
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def call
     stores = Store.includes(:working_hours).where.associated(:working_hours)
     stores = stores.where('working_hours.day': @days) if @days.present?
@@ -26,6 +27,7 @@ class GetStoresService < BaseService
     stores = filter_availability(stores) if @availability.present?
     @result = stores
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   private
 
