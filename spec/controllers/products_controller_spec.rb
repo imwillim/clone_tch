@@ -97,13 +97,14 @@ RSpec.describe ProductsController, type: :controller do
     end
 
     context 'when product does not exist in database' do
-      let(:request_param) { { id: SecureRandom.uuid } }
+      let(:id) { SecureRandom.uuid }
+      let(:request_param) { { id: } }
 
       it 'returns 404 response' do
         put :update, params: request_param
 
         expect(response.status).to eq 404
-        expect(response.parsed_body).to eq('message' => 'Not found')
+        expect(response.parsed_body).to eq('errors' => "Couldn't find Product with 'id'=#{id}")
       end
     end
 
