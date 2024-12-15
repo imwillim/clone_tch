@@ -13,4 +13,8 @@ module ErrorHandling
     Rails.logger.info(error)
     render json: { errors: 'Internal Server Error' }, status: :internal_server_error
   end
+
+  def render_not_found(error)
+    render json: { errors: error }, status: :not_found
+  end
 end

@@ -99,4 +99,63 @@ RSpec.describe StoresController, type: :controller do
       end
     end
   end
+
+  describe 'GET /api/v1/tch/stores', type: :request do
+    let(:path) { '/api/v1/tch/stores' }
+    let(:params) { {} }
+
+    context 'when parameters are not valid' do
+      let(:days) { %w[invalid_days] }
+      let(:open_hour) { 'not_valid' }
+      let(:close_hour) { 'not_valid' }
+      let(:address) { '' }
+      let(:city_code) { 'not_valid' }
+      let(:availability) { %w[invalid_availability] }
+
+      let(:params) do
+        {
+          days:,
+          open_hour:,
+          close_hour:,
+          address:,
+          city_code:,
+          availability:
+        }
+      end
+
+      it 'returns 400 response' do
+        get(path, params:)
+
+        expect(response).to have_http_status(:bad_request)
+        # rubocop:disable Layout/LineLength
+        expect(response.parsed_body['errors']).to eq('0 must be one of: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday, open_hour is in invalid format, close_hour is in invalid format, address must be filled, city_code must be one of: HCM, HN, 0 must be one of: WEEKDAY, WEEKEND')
+        # rubocop:enable Layout/LineLength
+      end
+    end
+
+    context 'when parameters are valid' do
+      let(:service_result) { instance_double(GetStoresService, success?: true, result: stores) }
+      let(:stores) do
+        [
+          {
+            'id' => 1,
+            'name' => '',
+            'address' => '',
+            'working_hours' => []
+          }
+        ]
+      end
+
+      before do
+        allow(GetStoresService).to receive(:call).and_return(service_result)
+      end
+
+      it 'returns 200 response' do
+        get(path, params:)
+
+        expect(response).to have_http_status(:ok)
+        expect(response.parsed_body.first['id']).to eq 1
+      end
+    end
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_25_145624) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_02_134901) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,6 +25,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_25_145624) do
     t.datetime "updated_at", null: false
     t.uuid "city_id"
     t.bigint "store_id"
+    t.virtual "computed_address", type: :string, as: "(((((((house_number)::text || ' '::text) || (street)::text) || ', '::text) || (ward)::text) || ', '::text) || (district)::text)", stored: true
     t.index ["city_id"], name: "index_addresses_on_city_id"
     t.index ["house_number", "street", "ward", "district"], name: "idx_on_house_number_street_ward_district_a2b67e137c", unique: true
     t.index ["store_id"], name: "index_addresses_on_store_id", unique: true
@@ -97,17 +98,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_25_145624) do
     t.index ["name"], name: "index_stores_on_name", unique: true
   end
 
-  create_table "stores_working_hours", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "day", null: false
-    t.bigint "store_id", null: false
-    t.uuid "working_hour_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["day", "store_id"], name: "index_stores_working_hours_on_day_and_store_id"
-    t.index ["store_id"], name: "index_stores_working_hours_on_store_id"
-    t.index ["working_hour_id"], name: "index_stores_working_hours_on_working_hour_id"
-  end
-
   create_table "tags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "color", null: false
@@ -127,11 +117,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_25_145624) do
   end
 
   create_table "working_hours", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "open_hour", null: false
-    t.string "close_hour", null: false
+    t.time "open_hour", null: false
+    t.time "close_hour", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["open_hour", "close_hour"], name: "index_working_hours_on_open_hour_and_close_hour", unique: true
+    t.bigint "store_id"
+    t.string "day"
+    t.index ["store_id"], name: "index_working_hours_on_store_id"
   end
 
   add_foreign_key "addresses", "cities"
@@ -141,8 +133,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_25_145624) do
   add_foreign_key "facilities_stores", "stores"
   add_foreign_key "products", "categories"
   add_foreign_key "sizes", "products"
-  add_foreign_key "stores_working_hours", "stores"
-  add_foreign_key "stores_working_hours", "working_hours"
   add_foreign_key "tags", "products"
   add_foreign_key "toppings", "products"
+  add_foreign_key "working_hours", "stores"
 end
