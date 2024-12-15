@@ -151,4 +151,40 @@ RSpec.describe ProductsController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    context 'when product_id is invalid' do
+      it 'returns 400 response' do
+        delete :destroy, params: { id: 'invalid-uuid-format' }
+
+        expect(response.status).to eq 400
+        expect(response.parsed_body).to eq('errors' => 'id is not a valid UUID')
+      end
+    end
+
+    context 'when product_id is valid' do
+      context 'when product exists in database' do
+        before do
+          allow(CacheManager).to receive(:unassign_value).with(tea.id)
+        end
+
+        it 'returns 204 response' do
+          delete :destroy, params: { id: tea.id }
+
+          expect(response.status).to eq 204
+          expect(Product.find_by(id: tea.id)).to eq nil
+        end
+      end
+
+      context 'when product does not exist in database' do
+        let(:id) { SecureRandom.uuid }
+        it 'returns 404 response' do
+          delete :destroy, params: { id: }
+
+          expect(response.status).to eq 404
+          expect(response.parsed_body).to eq('errors' => "Couldn't find Product with 'id'=#{id}")
+        end
+      end
+    end
+  end
 end
