@@ -6,5 +6,7 @@ Rails.application.routes.draw do
     resources :stores do
       get 'directions', on: :member
     end
+
+    resources :facilities, only: %i[show index update destroy]
   end
 end
