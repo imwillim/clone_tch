@@ -11,6 +11,22 @@ class FacilitiesController < ApplicationController
     render json: facility, status: :ok
   end
 
+  schema(:create) do
+    required(:store_id).value(:integer)
+    required(:name).filled(:string)
+    required(:icon).filled(:string)
+  end
+
+  def create
+    store = Store.find(safe_params[:store_id])
+    facility = store.facilities.create!(
+      name: safe_params[:name],
+      icon: safe_params[:icon]
+    )
+
+    render json: facility, status: :created
+  end
+
   schema(:update) do
     required(:id).value(:uuid_v4?)
     optional(:name).filled(:string)
