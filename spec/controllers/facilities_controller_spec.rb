@@ -94,12 +94,12 @@ RSpec.describe FacilitiesController, type: :controller do
     end
 
     context 'when request succeeds' do
-      let(:name) { 'Name' }
-      let(:icon) { 'Icon' }
-      let(:id) { facility.id }
+      context 'when request body is filled' do
+        let(:id) { facility.id }
+        let(:name) { 'Name' }
+        let(:icon) { 'Icon' }
 
-      context 'when facility exists' do
-        it 'returns a 200 response' do
+        it 'returns a 200 response of updated facility' do
           patch(:update, params:)
 
           expect(response).to have_http_status(:accepted)
@@ -108,6 +108,22 @@ RSpec.describe FacilitiesController, type: :controller do
           expect(response.parsed_body['icon']).to eq(icon)
           expect(Facility.first.name).to eq(name)
           expect(Facility.first.icon).to eq(icon)
+        end
+      end
+
+      context 'when request body is empty' do
+        let(:params) { { id: } }
+        let(:id) { facility.id }
+
+        it 'returns a 200 response of original facility' do
+          patch(:update, params:)
+
+          expect(response).to have_http_status(:accepted)
+          expect(response.parsed_body['id']).to eq(facility.id)
+          expect(response.parsed_body['name']).to eq(facility.name)
+          expect(response.parsed_body['icon']).to eq(facility.icon)
+          expect(Facility.first.name).to eq(facility.name)
+          expect(Facility.first.icon).to eq(facility.icon)
         end
       end
     end

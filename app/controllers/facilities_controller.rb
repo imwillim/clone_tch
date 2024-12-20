@@ -35,11 +35,16 @@ class FacilitiesController < ApplicationController
   end
 
   def update
-    facility = Facility.update!(safe_params[:id],
-                                name: safe_params[:name],
-                                icon: safe_params[:icon])
+    body = safe_params.to_h.except(:id)
+    if body.blank?
+      render json: Facility.find(safe_params[:id]), status: :accepted
+    else
+      facility = Facility.update!(safe_params[:id],
+                                  name: safe_params[:name],
+                                  icon: safe_params[:icon])
 
-    render json: facility, status: :accepted
+      render json: facility, status: :accepted
+    end
   end
 
   schema(:destroy) do
