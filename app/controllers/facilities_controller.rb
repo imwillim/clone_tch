@@ -24,17 +24,20 @@ class FacilitiesController < ApplicationController
       icon: safe_params[:icon]
     )
 
-    render json: facility, status: :created
+    render json: facility, store_id: safe_params[:store_id],
+           status: :created
   end
 
   schema(:update) do
     required(:id).value(:uuid_v4?)
-    optional(:name).filled(:string)
-    optional(:icon).filled(:string)
+    optional(:name).value(:string)
+    optional(:icon).value(:string)
   end
 
   def update
-    facility = Facility.update!(safe_params[:id], name: safe_params[:name], icon: safe_params[:icon])
+    facility = Facility.update!(safe_params[:id],
+                                name: safe_params[:name],
+                                icon: safe_params[:icon])
 
     render json: facility, status: :accepted
   end
@@ -47,5 +50,18 @@ class FacilitiesController < ApplicationController
     Facility.destroy_by(id: safe_params[:id])
 
     render status: :no_content
+  end
+
+  private
+
+  def serialize(facility, store_id)
+    {
+      id: facility.id,
+      name: facility.name,
+      icon: facility.icon,
+      created_at: facility.created_at,
+      updated_at: facility.updated_at,
+      store_id:
+    }
   end
 end

@@ -63,6 +63,7 @@ RSpec.describe FacilitiesController, type: :controller do
           post(:create, params:)
 
           expect(response).to have_http_status(:created)
+          expect(response.parsed_body['id']).to eq(Facility.first.id)
           expect(Facility.count).to eq 1
         end
       end
@@ -81,14 +82,12 @@ RSpec.describe FacilitiesController, type: :controller do
 
     context 'when request fails validation' do
       let(:id) { 'invalid' }
-      let(:name) { '' }
-      let(:icon) { '' }
 
       it 'returns 400 response' do
         patch(:update, params:)
 
         expect(response).to have_http_status(:bad_request)
-        expect(response.parsed_body['errors']).to eq 'id is not a valid UUID, name must be filled, icon must be filled'
+        expect(response.parsed_body['errors']).to eq 'id is not a valid UUID'
       end
     end
 
