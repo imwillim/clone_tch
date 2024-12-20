@@ -71,7 +71,7 @@ RSpec.describe FacilitiesController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let!(:facility) { create(:facility, name: 'Facility') }
+    let!(:facility) { create(:facility) }
     let(:params) do
       {
         id:,
@@ -82,6 +82,8 @@ RSpec.describe FacilitiesController, type: :controller do
 
     context 'when request fails validation' do
       let(:id) { 'invalid' }
+      let(:name) { '' }
+      let(:icon) { '' }
 
       it 'returns 400 response' do
         patch(:update, params:)
