@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GetStoresService < BaseService
+  DEFAULT_ITEM_PER_PAGE = 10
+
   def initialize(safe_params)
     super()
     @days = safe_params[:days]
@@ -9,37 +11,44 @@ class GetStoresService < BaseService
     @city_code = safe_params[:city_code]
     @address = safe_params[:address]
     @availability = safe_params[:availability]
+    @page = safe_params[:page]
+    @items_per_page = safe_params[:items_per_page] || DEFAULT_ITEM_PER_PAGE
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def call
-    stores = Store.includes(:working_hours).where.associated(:working_hours)
-    stores = stores.where('working_hours.day': @days) if @days.present?
-    stores = stores.where('working_hours.open_hour': @open_hour..) if @open_hour.present?
-    stores = stores.where('working_hours.close_hour': ..@close_hour) if @close_hour.present?
-    stores = stores.joins(:city).where('cities.code': @city_code) if @city_code.present?
+    @scope = Store.includes(:working_hours).where.associated(:working_hours)
 
-    if @address.present?
-      stores = stores.includes(:address)
-                     .where('addresses.computed_address LIKE ?', "%#{Store.sanitize_sql_like(@address)}%")
-    end
+    filter_time
+    filter_location
+    filter_week if @availability.present? && (%w[WEEKEND WEEKDAY] & @availability) != %w[WEEKEND WEEKDAY]
 
-    stores = filter_availability(stores) if @availability.present?
-    @result = stores
+    @result = scope.page(@page).per(@items_per_page)
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   private
 
-  def filter_availability(result)
-    filter_week(result) if (%w[WEEKEND WEEKDAY] & @availability) != %w[WEEKEND WEEKDAY]
+  attr_accessor :scope
+
+  def filter_time
+    @scope = @scope.where('working_hours.day': @days) if @days.present?
+    @scope = @scope.where('working_hours.open_hour': @open_hour..) if @open_hour.present?
+    @scope = @scope.where('working_hours.close_hour': ..@close_hour) if @close_hour.present?
   end
 
-  def filter_week(result)
-    result = result.where('working_hours.day': %w[Saturday Sunday]) if @availability.include?('WEEKEND')
+  def filter_location
+    @scope = @scope.joins(:city).where('cities.code': @city_code) if @city_code.present?
 
-    return result unless @availability.include?('WEEKDAY')
+    return if @address.blank?
 
-    result.where('working_hours.day': %w[Monday Tuesday Wednesday Thursday Friday])
+    @scope = @scope.includes(:address)
+                   .where('addresses.computed_address LIKE ?', "%#{Store.sanitize_sql_like(@address)}%")
+  end
+
+  def filter_week
+    @scope = @scope.where('working_hours.day': %w[Saturday Sunday]) if @availability.include?('WEEKEND')
+
+    return @scope unless @availability.include?('WEEKDAY')
+
+    @scope = @scope.where('working_hours.day': %w[Monday Tuesday Wednesday Thursday Friday])
   end
 end
