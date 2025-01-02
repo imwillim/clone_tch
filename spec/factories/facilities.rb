@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :facility do
-    { name: 'Mua mang đi' }
+    name { 'Mua mang đi' }
+    icon { 'Icon' }
   end
 end

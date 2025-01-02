@@ -9,10 +9,14 @@ Rails.application.routes.draw do
     end
     resources :stores do
       get 'directions', on: :member
+      resources :facilities, only: [:create]
     end
+
     resources :categories do
       get 'toppings', on: :member
       get 'sizes', on: :member
     end
+
+    resources :facilities, only: %i[show index update destroy]
   end
 end

@@ -32,19 +32,29 @@ class StoresController < ApplicationController
     optional(:address).filled(:string)
     optional(:city_code).value(included_in?: CITY_CODES)
     optional(:availability).array(:string).each(included_in?: AVAILABILITY)
+    optional(:page).value(:integer, gteq?: 1)
+    optional(:items_per_page).value(:integer, gteq?: 1)
   end
 
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def index
     validate_time_interval if safe_params[:close_hour] && safe_params[:open_hour]
 
     service = GetStoresService.call(safe_params)
 
     if service.success?
-      render json: service.result
+      result = service.result
+      render json: { items: result,
+                     total_pages: result.total_pages,
+                     total_items: result.total_count,
+                     page_index: safe_params[:page],
+                     items_per_page: safe_params[:items_per_page] || ::GetStoresService::DEFAULT_ITEM_PER_PAGE }
     else
       render json: { message: service.first_error&.message }, status: :unprocessable_entity
     end
   end
+
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   private
 

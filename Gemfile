@@ -39,6 +39,7 @@ gem 'dry-rails'
 gem 'dry-schema'
 gem 'faker'
 gem 'faraday'
+gem 'kaminari'
 gem 'redis'
 gem 'rspec'
 gem 'rubocop-factory_bot', require: false

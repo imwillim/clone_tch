@@ -7,6 +7,7 @@ class ProductsController < ApplicationController
 
   def index
     service = GetProductsService.call(safe_params[:category_id])
+
     if service.success?
       render json: { data: service.result }, status: :ok, each_serializer: ProductSerializer
     else

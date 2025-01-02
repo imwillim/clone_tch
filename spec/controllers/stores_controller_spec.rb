@@ -134,16 +134,15 @@ RSpec.describe StoresController, type: :controller do
     end
 
     context 'when parameters are valid' do
-      let(:service_result) { instance_double(GetStoresService, success?: true, result: stores) }
-      let(:stores) do
-        [
-          {
-            'id' => 1,
-            'name' => '',
-            'address' => '',
-            'working_hours' => []
-          }
-        ]
+      let(:params) do
+        {
+          page: 1,
+          items_per_page: 1
+        }
+      end
+      let(:service_result) { instance_double(GetStoresService, success?: true, result:) }
+      let(:result) do
+        double(total_pages: 1, total_count: 1, page_index: 1, items_per_page: 1)
       end
 
       before do
@@ -154,7 +153,10 @@ RSpec.describe StoresController, type: :controller do
         get(path, params:)
 
         expect(response).to have_http_status(:ok)
-        expect(response.parsed_body.first['id']).to eq 1
+        expect(response.parsed_body[:total_items]).to eq 1
+        expect(response.parsed_body[:total_pages]).to eq 1
+        expect(response.parsed_body[:page_index]).to eq 1
+        expect(response.parsed_body[:items_per_page]).to eq 1
       end
     end
   end
