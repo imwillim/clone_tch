@@ -2,14 +2,13 @@
 
 class ProductsController < ApplicationController
   schema(:index) do
-    required(:category_id).value(:string, :uuid_v4?)
+    required(:category_id).value(:uuid_v4?)
   end
 
   def index
-    service = GetProductsService.call(params[:category_id])
-
+    service = GetProductsService.call(safe_params[:category_id])
     if service.success?
-      render json: { data: service.result }, status: :ok
+      render json: { data: service.result }, status: :ok, each_serializer: ProductSerializer
     else
       render json: { message: service.first_error.message }, status: :unprocessable_entity
     end
@@ -31,6 +30,14 @@ class ProductsController < ApplicationController
     else
       render json: { message: service.first_error.message }, status: :unprocessable_entity
     end
+  end
+
+  def above_average_price
+    products = Product.where(
+      'price > (SELECT AVG(price) FROM products p2 WHERE p2.id != products.id)'
+    )
+
+    render json: products, status: :ok
   end
 
   schema(:update) do
