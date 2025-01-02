@@ -2,11 +2,11 @@
 
 class ProductsController < ApplicationController
   schema(:index) do
-    required(:category_id).value(:string, :uuid_v4?)
+    required(:category_id).value(:uuid_v4?)
   end
 
   def index
-    service = GetProductsService.call(params[:category_id])
+    service = GetProductsService.call(safe_params[:category_id])
 
     if service.success?
       render json: { data: service.result }, status: :ok

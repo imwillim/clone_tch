@@ -5,6 +5,9 @@ Rails.application.routes.draw do
     resources :products, only: %i[show index update destroy]
     resources :stores do
       get 'directions', on: :member
+      resources :facilities, only: [:create]
     end
+
+    resources :facilities, only: %i[show index update destroy]
   end
 end
