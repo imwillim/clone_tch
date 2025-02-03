@@ -13,9 +13,8 @@ Rails.application.routes.draw do
     end
 
     resources :facilities, only: %i[show index update destroy]
-    resources :categories do
-      get 'toppings', on: :member
-      get 'sizes', on: :member
-    end
+
+    post 'sign_up', to: 'users#create'
+    post 'login', to: 'users#login'
   end
 end
