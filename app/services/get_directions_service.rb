@@ -13,16 +13,10 @@ class GetDirectionsService < BaseService
   end
 
   def call
-    cached_store_coordinates = CacheManager.fetch_value(@store_id)
-    if cached_store_coordinates.present?
-      store_coordinates = JSON.parse(cached_store_coordinates)
-    else
-      validate!
-      return self if error?
+    validate!
+    return self if error?
 
-      store_coordinates = [@store.address.longitude, @store.address.latitude]
-      CacheManager.assign_value(@store_id, store_coordinates)
-    end
+    store_coordinates = [@store.address.longitude, @store.address.latitude]
 
     fetch_request(store_coordinates)
   end

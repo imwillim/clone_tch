@@ -14,10 +14,6 @@ describe GetDirectionsService, type: :service do
   let(:store_coordinates) { [106.66, 10.79] }
 
   describe '#validate' do
-    before do
-      allow(CacheManager).to receive(:fetch_value).and_return(nil)
-    end
-
     context 'when the store_id is not found in database' do
       let(:store_id) { nil }
 
@@ -67,7 +63,6 @@ describe GetDirectionsService, type: :service do
 
       context 'when store coordinate exists in cache' do
         before do
-          allow(CacheManager).to receive(:fetch_value).and_return(store_coordinates.to_json)
           allow(Mapbox::GetDirectionsRequest).to receive(:call).with(user_coordinates:,
                                                                      store_coordinates:,
                                                                      transportation:)
@@ -79,28 +74,6 @@ describe GetDirectionsService, type: :service do
 
           expect(service.success?).to be true
           expect(service.result).to eq(result)
-        end
-      end
-
-      context 'when store coordinate does not exist in cache' do
-        let(:cached_value) { JSON.parse(redis.get(store_id)) }
-
-        include_context 'redis mock'
-
-        before do
-          allow(CacheManager).to receive(:fetch_value).and_return(nil)
-          allow(Mapbox::GetDirectionsRequest).to receive(:call).with(user_coordinates:,
-                                                                     store_coordinates:,
-                                                                     transportation:)
-                                                               .and_return(request_success)
-        end
-
-        it 'returns the result' do
-          service.call
-
-          expect(service.success?).to be true
-          expect(service.result).to eq(result)
-          expect(cached_value).to eq(store_coordinates)
         end
       end
     end

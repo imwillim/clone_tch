@@ -23,7 +23,7 @@ class ProductsController < ApplicationController
   end
 
   def show
-    service = GetProductService.call(params[:id])
+    service = GetProductService.call(safe_params[:id])
 
     if service.success?
       # TODO: Use custom serializer to accept more generic case

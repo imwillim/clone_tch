@@ -8,16 +8,10 @@ class GetProductsService < BaseService
   end
 
   def call
-    cached_products = CacheManager.fetch_value(category_id)
-    if cached_products.present?
-      @result = JSON.parse(cached_products)
-    else
-      validate
-      return self if error?
+    validate
+    return self if error?
 
-      @result = fetch_products
-      CacheManager.assign_value(category_id, @result.to_json)
-    end
+    @result = fetch_products
   end
 
   private
@@ -39,7 +33,7 @@ class GetProductsService < BaseService
     products = products.left_outer_joins(:tag)
                        .joins(:category)
                        .joins(category: :parent)
-    products = product.order('products.price': @price) if @price.present?
+    products = products.order('products.price': @price) if @price.present?
     products.select('products.id AS product_id, products.name AS product_name,
                  products.price AS product_price, products.thumbnail AS product_thumbnail,
                  categories.id AS category_id, categories.name AS category_name,
@@ -48,7 +42,7 @@ class GetProductsService < BaseService
 
   def fetch_products
     products = build_query
-    @result = products.group_by { |product| product[:category_name] }.map do |category_name, elements|
+    products.group_by { |product| product[:category_name] }.map do |category_name, elements|
       {
         name: category_name,
         products: elements.map! do |element|
