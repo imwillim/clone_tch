@@ -122,8 +122,8 @@ RSpec.describe ProductsController, type: :controller do
 
           expect(response.status).to eq 400
           expect(response.parsed_body).to eq(
-                                            'errors' => 'id is not a valid UUID, name must be filled, price must be greater than 0'
-                                          )
+            'errors' => 'id is not a valid UUID, name must be filled, price must be greater than 0'
+          )
         end
       end
     end
