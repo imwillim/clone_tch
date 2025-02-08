@@ -3,7 +3,13 @@
 require 'rails_helper'
 
 describe GetProductsService do
-  subject(:service) { described_class.new(category_id) }
+  subject(:service) { described_class.new(safe_params) }
+  let(:safe_params) do
+    {
+      category_id:,
+      price: 'desc'
+    }
+  end
 
   let(:all_category) { create(:category, name: 'all') }
   let(:tea_category) { create(:category, parent: all_category, name: 'Tea category') }
@@ -85,188 +91,151 @@ describe GetProductsService do
         }
       end
 
-      context 'when products within category exists in cache' do
-        before do
-          allow(CacheManager).to receive(:fetch_value).and_return(expected_result.to_json)
+      context 'when a category does not have a parent category' do
+        let(:category_id) { all_category.id }
+        let(:expected_result) do
+          [
+            {
+              name: 'Coffee category',
+              products: match_array([expected_americano, expected_iced_coffee])
+            },
+            {
+              name: 'Milk Tea category',
+              products: [expected_milk_tea]
+            },
+            {
+              name: 'Hi Tea category',
+              products: [expected_hi_tea]
+            }
+          ]
         end
 
-        context 'when a category does not have a parent category' do
-          let(:category_id) { all_category.id }
+        it 'returns categories having products' do
+          service.call
+
+          expect(service.success?).to eq true
+          expect(service.result.size).to eq 3
+          expect(service.result).to match_array(expected_result)
+        end
+      end
+
+      context 'when a category has a parent category' do
+        context 'when a category has children categories' do
+          let(:category_id) { tea_category.id }
           let(:expected_result) do
             [
               {
-                name: 'Coffee category',
-                products: match_array([expected_iced_coffee, expected_americano])
+                name: 'Hi Tea category',
+                products: [expected_hi_tea]
               },
               {
                 name: 'Milk Tea category',
                 products: [expected_milk_tea]
-              },
-              {
-                name: 'Hi Tea category',
-                products: [expected_hi_tea]
               }
             ]
           end
 
-          it 'returns categories having products' do
+          it 'returns children categories having products' do
             service.call
 
             expect(service.success?).to eq true
-            expect(service.result.size).to eq 3
-            expect(service.result.to_json).to eq(expected_result.to_json)
+            expect(service.result.size).to eq 2
+            expect(service.result).to eq(expected_result)
           end
         end
 
-        context 'when a category has a parent category' do
-          context 'when a category has children categories' do
-            let(:category_id) { tea_category.id }
-            let(:expected_result) do
-              [
-                {
-                  name: 'Hi Tea category',
-                  products: [expected_hi_tea]
-                },
-                {
-                  name: 'Milk Tea category',
-                  products: [expected_milk_tea]
-                }
-              ]
-            end
-
-            it 'returns children categories having products' do
-              service.call
-
-              expect(service.success?).to eq true
-              expect(service.result.size).to eq 2
-              expect(service.result.to_json).to eq(expected_result.to_json)
-            end
+        context 'when a category does not have children categories' do
+          let(:category_id) { milk_tea_category.id }
+          let(:expected_result) do
+            [
+              {
+                name: 'Milk Tea category',
+                products: [expected_milk_tea]
+              }
+            ]
           end
 
-          context 'when a category does not have children categories' do
-            let(:category_id) { milk_tea_category.id }
-            let(:expected_result) do
-              [
-                {
-                  name: 'Milk Tea category',
-                  products: [expected_milk_tea]
-                }
-              ]
-            end
+          it 'returns that category having products' do
+            service.call
 
-            it 'returns that category having products' do
-              service.call
-
-              expect(service.success?).to eq true
-              expect(service.result.size).to eq 1
-              expect(service.result.to_json).to eq(expected_result.to_json)
-            end
+            expect(service.success?).to eq true
+            expect(service.result.size).to eq 1
+            expect(service.result).to eq(expected_result)
           end
         end
       end
 
-      context 'when products within category does not exist in cache' do
-        include_context 'redis mock'
-
-        let(:cached_value) do
-          JSON.parse(redis.get(category_id)).map do |category|
-            {
-              name: category['name'],
-              products: category['products'].map do |product|
-                {
-                  id: product['id'],
-                  name: product['name'],
-                  price: product['price'].to_f,
-                  thumbnail: product['thumbnail'],
-                  tag: {
-                    color: product['tag']['color'],
-                    name: product['tag']['name']
-                  }
-                }
-              end
-            }
-          end
-        end
-
-        before do
-          allow(CacheManager).to receive(:fetch_value).and_return(nil)
-        end
-
-        context 'when a category does not have a parent category' do
-          let(:category_id) { all_category.id }
+      context 'when a category has a parent category' do
+        context 'when a category has children categories' do
+          let(:category_id) { tea_category.id }
           let(:expected_result) do
             [
               {
-                name: 'Coffee category',
-                products: match_array([expected_iced_coffee, expected_americano])
+                name: 'Hi Tea category',
+                products: [expected_hi_tea]
               },
               {
                 name: 'Milk Tea category',
                 products: [expected_milk_tea]
-              },
-              {
-                name: 'Hi Tea category',
-                products: [expected_hi_tea]
               }
             ]
           end
 
-          it 'returns categories having products' do
+          it 'returns children categories having products' do
             service.call
 
             expect(service.success?).to eq true
-            expect(service.result.size).to eq 3
+            expect(service.result.size).to eq 2
             expect(service.result).to match_array(expected_result)
-            expect(cached_value).to match_array(expected_result)
           end
         end
 
-        context 'when a category has a parent category' do
-          context 'when a category has children categories' do
-            let(:category_id) { tea_category.id }
-            let(:expected_result) do
-              [
-                {
-                  name: 'Hi Tea category',
-                  products: [expected_hi_tea]
-                },
-                {
-                  name: 'Milk Tea category',
-                  products: [expected_milk_tea]
-                }
-              ]
-            end
-
-            it 'returns children categories having products' do
-              service.call
-
-              expect(service.success?).to eq true
-              expect(service.result.size).to eq 2
-              expect(service.result).to eq(expected_result)
-              expect(cached_value).to eq(expected_result)
-            end
+        context 'when a category does not have children categories' do
+          let(:category_id) { milk_tea_category.id }
+          let(:expected_result) do
+            [
+              {
+                name: 'Milk Tea category',
+                products: [expected_milk_tea]
+              }
+            ]
           end
 
-          context 'when a category does not have children categories' do
-            let(:category_id) { milk_tea_category.id }
-            let(:expected_result) do
-              [
-                {
-                  name: 'Milk Tea category',
-                  products: [expected_milk_tea]
-                }
-              ]
-            end
+          it 'returns that category having products' do
+            service.call
 
-            it 'returns that category having products' do
-              service.call
-
-              expect(service.success?).to eq true
-              expect(service.result.size).to eq 1
-              expect(service.result).to eq(expected_result)
-              expect(cached_value).to eq(expected_result)
-            end
+            expect(service.success?).to eq true
+            expect(service.result.size).to eq 1
+            expect(service.result).to eq(expected_result)
           end
+        end
+      end
+
+      context 'when a category does not have a parent category' do
+        let(:category_id) { all_category.id }
+        let(:expected_result) do
+          [
+            {
+              name: 'Coffee category',
+              products: match_array([expected_iced_coffee, expected_americano])
+            },
+            {
+              name: 'Milk Tea category',
+              products: [expected_milk_tea]
+            },
+            {
+              name: 'Hi Tea category',
+              products: [expected_hi_tea]
+            }
+          ]
+        end
+
+        it 'returns categories having products' do
+          service.call
+
+          expect(service.success?).to eq true
+          expect(service.result.size).to eq 3
+          expect(service.result).to match_array(expected_result)
         end
       end
     end

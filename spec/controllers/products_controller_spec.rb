@@ -4,7 +4,12 @@ require 'rails_helper'
 
 RSpec.describe ProductsController, type: :controller do
   let(:tea_category) { create(:category) }
-  let(:tea) { create(:product, category: tea_category) }
+  let!(:tea) { create(:product, category: tea_category) }
+  let(:safe_params) do
+    {
+      category_id: tea_category.id
+    }
+  end
 
   describe 'GET #index' do
     context 'when category_id is invalid' do
@@ -17,17 +22,44 @@ RSpec.describe ProductsController, type: :controller do
     end
 
     context 'when category_id is valid' do
-      let(:service_result) { instance_double(GetProductService, success?: true, result: tea) }
+      let(:products) do
+        {
+          success?: true,
+          result:
+        }
+      end
+      let(:products_service) { instance_double(GetProductsService, products) }
+      let(:result) do
+        {
+          items: [
+            {
+              name: tea_category.name,
+              products: [
+                {
+                  id: tea.id,
+                  name: tea.name,
+                  price: tea.price,
+                  thumbnail: tea.thumbnail,
+                  tag: {
+                    name: nil,
+                    color: nil
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      end
 
       before do
-        allow(GetProductsService).to receive(:call).with(tea_category.id).and_return(service_result)
+        allow(GetProductsService).to receive(:call).and_return(products_service)
       end
 
       it 'renders products successfully' do
-        get :index, params: { category_id: tea_category.id }
+        get :index, params: safe_params
 
         expect(response).to have_http_status(:ok)
-        expect(response.parsed_body['data']).to be_present
+        expect(response.parsed_body['data'].to_json).to eq(result.to_json)
       end
     end
   end
@@ -35,7 +67,7 @@ RSpec.describe ProductsController, type: :controller do
   describe 'GET #show' do
     context 'when product_id is invalid' do
       it 'returns expected response' do
-        get :show, params: { id: 'invalid-uuid-format' }
+        get :show, params: { id: 'invalid-id' }
 
         expect(response.status).to eq 400
         expect(response.parsed_body).to eq('errors' => 'id is not a valid UUID')
