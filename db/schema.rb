@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_05_145713) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_08_101409) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "addresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "house_number", null: false
@@ -114,6 +114,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_05_145713) do
     t.datetime "updated_at", null: false
     t.uuid "product_id", null: false
     t.index ["product_id"], name: "index_toppings_on_product_id"
+  end
+
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "email", null: false
+    t.string "password_digest", null: false
+    t.string "phone"
+    t.string "address"
+    t.datetime "verified_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   create_table "working_hours", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

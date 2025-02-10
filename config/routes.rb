@@ -17,5 +17,9 @@ Rails.application.routes.draw do
       get 'toppings', on: :member
       get 'sizes', on: :member
     end
+
+    post 'sign_up', to: 'users#create'
+    post 'login', to: 'users#login'
+    post 'sign_out', to: 'users#logout'
   end
 end
