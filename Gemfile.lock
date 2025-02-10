@@ -158,6 +158,9 @@ GEM
       logger
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
+    fugit (1.11.1)
+      et-orbi (~> 1, >= 1.2.11)
+      raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.7)
@@ -395,6 +398,8 @@ DEPENDENCIES
   rubocop-factory_bot
   rubocop-rails
   shoulda-matchers
+  solid_queue (~> 1.1)
+  sqlite3 (~> 2.5)
   tzinfo-data
   vcr
 
