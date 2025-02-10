@@ -391,7 +391,7 @@ DEPENDENCIES
   mock_redis
   pg (~> 1.1)
   puma (~> 6.0)
-  rails (~> 8.0.0)
+  rails (~> 8.0.1)
   redis
   rspec
   rspec-rails
