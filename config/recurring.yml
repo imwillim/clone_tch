@@ -1,0 +1,9 @@
+ development:
+   periodic_cleanup:
+     class: ClearBlackListJwtJob
+     queue: background
+     schedule: every 1 second
+#   periodic_command:
+#     command: "SoftDeletedRecord.due.delete_all"
+#     priority: 2
+#     schedule: at 5am every dayq

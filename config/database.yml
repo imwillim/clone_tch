@@ -22,9 +22,16 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
-  <<: *default
-  database: tch_dev
-
+  primary:
+    <<: *default
+    database: tch_dev
+  queue:
+    adapter: sqlite3
+    encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    database: development_queue
+    migrations_paths: db/queue_migrate
+    timeout: 3000
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
