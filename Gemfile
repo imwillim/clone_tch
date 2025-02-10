@@ -68,7 +68,3 @@ group :test do
   gem 'shoulda-matchers'
   gem 'vcr'
 end
-
-gem "solid_queue", "~> 1.1"
-
-gem "sqlite3", "~> 2.5"
