@@ -32,4 +32,7 @@ RSpec.describe CacheManager do
       expect(redis.get(key)).to eq(nil)
     end
   end
+
+
+  # TODO: write rspec
 end

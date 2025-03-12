@@ -18,4 +18,10 @@ class CacheManager
       redis.del(key)
     end
   end
+
+  def self.exists?(key)
+    RedisWrapper.redis_pool.then do |redis|
+      redis.exists?(key)
+    end
+  end
 end
