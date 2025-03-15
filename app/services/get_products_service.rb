@@ -30,10 +30,11 @@ class GetProductsService < BaseService
 
   def build_query
     products = build_products_cte
-    products = products.left_outer_joins(:tag)
+    products = products.left_outer_joins(:tags) # TODO: check again of 'tags' instead of 'tag'
                        .joins(:category)
                        .joins(category: :parent)
     products = products.order('products.price': @price) if @price.present?
+
     products.select('products.id AS product_id, products.name AS product_name,
                  products.price AS product_price, products.thumbnail AS product_thumbnail,
                  categories.id AS category_id, categories.name AS category_name,
