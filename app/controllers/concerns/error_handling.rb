@@ -9,8 +9,12 @@ module ErrorHandling
     render json: { errors: error }, status: :unprocessable_entity
   end
 
+  def render_unauthorized(error)
+    render json: { errors: error }, status: :unauthorized
+  end
+
   def render_redis_error(error)
-    Rails.logger.info(error)
+    Rails.logger.error(error)
     render json: { errors: 'Internal Server Error' }, status: :internal_server_error
   end
 
@@ -20,5 +24,15 @@ module ErrorHandling
 
   def render_invalid_record(error)
     render json: { message: error.to_s }, status: :unprocessable_entity
+  end
+
+  def render_encode_jwt_error(error)
+    Rails.logger.error(error)
+    render json: { errors: 'Internal Server Error' }, status: :internal_server_error
+  end
+
+  def render_decode_jwt_error(error)
+    Rails.logger.error(error)
+    render json: { errors: 'Login failed' }, status: :unauthorized
   end
 end

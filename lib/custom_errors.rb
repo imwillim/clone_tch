@@ -10,4 +10,6 @@ module CustomErrors
   class InvalidParams < BaseError; end
 
   class UnprocessableService < BaseError; end
+
+  class UnauthorizedError < BaseError; end
 end

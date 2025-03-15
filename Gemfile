@@ -48,6 +48,7 @@ gem 'rubocop-factory_bot', require: false
 gem 'rubocop-rails', require: false
 gem 'solid_queue', '~> 1.1'
 gem 'sqlite3', '~> 2.5'
+gem 'timecop', '~> 0.9.10'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
