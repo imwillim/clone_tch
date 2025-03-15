@@ -18,7 +18,7 @@ RSpec.describe ProductSerializer, type: :serializer do
         description: milk_tea.description,
         sizes: [],
         toppings: [],
-        tag: nil
+        tags: []
       }
     end
     it 'returns the expected json of product' do

@@ -5,5 +5,5 @@ class ProductSerializer < ActiveModel::Serializer
 
   has_many :sizes, serializer: SizeSerializer
   has_many :toppings, serializer: ToppingSerializer
-  has_one :tag, serializer: TagSerializer
+  has_many :tags, serializer: TagSerializer
 end
