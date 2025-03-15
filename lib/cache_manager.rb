@@ -7,9 +7,9 @@ class CacheManager
     end
   end
 
-  def self.assign_value(key, value)
+  def self.assign_value(key, value, expired = 60)
     RedisWrapper.redis_pool.then do |redis|
-      redis.set(key, value)
+      redis.set(key, value, ex: expired)
     end
   end
 

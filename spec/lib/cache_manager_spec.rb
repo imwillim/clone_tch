@@ -14,6 +14,20 @@ RSpec.describe CacheManager do
 
       expect(CacheManager.fetch_value(key)).to eq('value')
     end
+
+    context 'given specific expired' do
+      let(:time) { 1.minute.to_i }
+
+      it 'retrieves the value for a given key with specific expired' do
+        redis.set(key, value, ex: time)
+
+        expect(CacheManager.fetch_value(key)).to eq('value')
+
+        Timecop.freeze(Time.zone.now + time) do
+          expect(CacheManager.fetch_value(key)).to eq(nil)
+        end
+      end
+    end
   end
 
   describe '#assign_value' do
@@ -21,6 +35,20 @@ RSpec.describe CacheManager do
       CacheManager.assign_value(key, value)
 
       expect(redis.get(key)).to eq(value)
+    end
+
+    context 'given specific expired' do
+      let(:time) { 1.minute.to_i }
+
+      it 'sets the value for a given key with specific expired' do
+        CacheManager.assign_value(key, value, time)
+
+        expect(redis.get(key)).to eq(value)
+
+        Timecop.freeze(Time.zone.now + time) do
+          expect(redis.get(key)).to eq(nil)
+        end
+      end
     end
   end
 
@@ -33,6 +61,11 @@ RSpec.describe CacheManager do
     end
   end
 
+  describe '#exists?' do
+    it 'check if a key-value pair exists in cache' do
+      redis.set(key, value)
 
-  # TODO: write rspec
+      expect(CacheManager.exists?(key)).to eq(true)
+    end
+  end
 end
