@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_08_101409) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_15_103935) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -79,6 +79,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_08_101409) do
     t.index ["name"], name: "index_products_on_name", unique: true
   end
 
+  create_table "products_tags", force: :cascade do |t|
+    t.uuid "product_id", null: false
+    t.uuid "tag_id", null: false
+    t.index ["product_id"], name: "index_products_tags_on_product_id"
+    t.index ["tag_id"], name: "index_products_tags_on_tag_id"
+  end
+
   create_table "sizes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "icon", null: false
@@ -103,8 +110,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_08_101409) do
     t.string "color", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "product_id", null: false
-    t.index ["product_id"], name: "index_tags_on_product_id"
   end
 
   create_table "toppings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -143,8 +148,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_08_101409) do
   add_foreign_key "facilities_stores", "facilities"
   add_foreign_key "facilities_stores", "stores"
   add_foreign_key "products", "categories"
+  add_foreign_key "products_tags", "products"
+  add_foreign_key "products_tags", "tags"
   add_foreign_key "sizes", "products"
-  add_foreign_key "tags", "products"
   add_foreign_key "toppings", "products"
   add_foreign_key "working_hours", "stores"
 end
