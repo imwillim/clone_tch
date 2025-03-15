@@ -16,17 +16,18 @@ RSpec.describe 'UsersController', type: :controller do
       }
     end
 
+    # rubocop:disable Layout/LineLength
     context 'when request fails validation' do
       context 'when missing required fields' do
         it 'returns errors' do
           post(api_path)
 
           expect(response).to have_http_status(:bad_request)
-          expect(response.parsed_body).to eq('errors' => 'email is missing, password is missing,
-password_confirmation is missing')
+          expect(response.parsed_body).to eq('errors' => 'email is missing, password is missing, password_confirmation is missing')
         end
       end
     end
+    # rubocop:enable Layout/LineLength
 
     context 'when request succeeds' do
       let(:email) { 'email@email.com' }
