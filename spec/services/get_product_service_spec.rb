@@ -8,11 +8,15 @@ describe GetProductService do
   let(:product_id) { SecureRandom.uuid }
 
   let!(:tea_category) { create(:category, name: 'tea_category') }
+
   let!(:sizes) { create_list(:size, 2, product: milk_tea) }
+
   let!(:toppings) { create_list(:topping, 2, product: milk_tea) }
-  let!(:tag) { create(:tag, product: milk_tea) }
+
   let!(:milk_tea) { create(:product, category: tea_category, name: 'milk tea') }
   let!(:tea) { create(:product, category: tea_category, name: 'tea') }
+
+  let!(:tag) { create(:tag) }
 
   describe '#validate' do
     before do
@@ -44,12 +48,14 @@ describe GetProductService do
 
   describe '#call' do
     include_context 'redis mock'
+
     let(:product_id) { tea.id }
 
     context 'when a product exists in cache' do
       before do
         allow(CacheManager).to receive(:fetch_value).and_return(tea.to_json)
       end
+
       it 'returns cached product' do
         service.call
 
@@ -72,7 +78,7 @@ describe GetProductService do
           image_urls: tea.image_urls,
           sizes: [],
           toppings: [],
-          tag: nil
+          tags: []
         }
       end
 
