@@ -42,7 +42,7 @@ class UsersController < ApplicationController
   def logout
     token = request.headers['Authorization']
 
-    CacheManager.assign_value("black_list #{token}", @current_user.id)
+    CacheManager.assign_value("black_list #{token}", '', 10.minutes.to_i)
 
     render json: { data: { message: 'Logout successfully' } }, status: :ok
   end

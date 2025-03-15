@@ -22,7 +22,8 @@ RSpec.describe 'UsersController', type: :controller do
           post(api_path)
 
           expect(response).to have_http_status(:bad_request)
-          expect(response.parsed_body).to eq('errors' => 'email is missing, password is missing, password_confirmation is missing')
+          expect(response.parsed_body).to eq('errors' => 'email is missing, password is missing,
+password_confirmation is missing')
         end
       end
     end
@@ -117,13 +118,15 @@ RSpec.describe 'UsersController', type: :controller do
     let(:api_path) { '/api/v1/tch/sign_out' }
     let(:token) { 'valid_token' }
     let(:headers) { { 'Authorization' => token.to_s } }
+    let(:duration) { 10.minutes.to_i }
 
     context 'when token is valid' do
       before do
         allow_any_instance_of(UsersController).to receive(:authenticate_token) do |controller|
           controller.instance_variable_set(:@current_user, user)
         end
-        allow(CacheManager).to receive(:assign_value).with("black_list #{token}", user.id)
+
+        allow(CacheManager).to receive(:assign_value).with("black_list #{token}", '', duration)
       end
 
       it 'logs out successfully' do
@@ -131,7 +134,7 @@ RSpec.describe 'UsersController', type: :controller do
 
         expect(response).to have_http_status(:ok)
         expect(response.parsed_body).to eq('data' => { 'message' => 'Logout successfully' })
-        expect(CacheManager).to have_received(:assign_value).with("black_list #{token}", user.id)
+        expect(CacheManager).to have_received(:assign_value).with("black_list #{token}", '', duration)
       end
     end
 

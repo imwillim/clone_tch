@@ -26,16 +26,16 @@ class ApplicationController < ActionController::API
     raise ::CustomErrors::UnauthorizedError, 'Unauthorized' if token.blank?
     raise ::CustomErrors::UnauthorizedError, 'Token invalid' if CacheManager.exists?("black_list #{token}")
 
-    payload = JsonWebTokenManager.decode(token)
-
-    raise ::CustomErrors::UnauthorizedError, 'Token timeout' if payload['exp'] < Time.now.to_i
-
-    current_user_with_payload(payload)
+    process_token(token)
   end
 
   private
 
-  def current_user_with_payload(payload)
+  def process_token(token)
+    payload = JsonWebTokenManager.decode(token)
+
+    raise ::CustomErrors::UnauthorizedError, 'Token timeout' if payload['exp'] < Time.now.to_i
+
     @current_user = User.find(payload['user_id'])
   end
 end
