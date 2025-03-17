@@ -82,6 +82,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_15_103935) do
   create_table "products_tags", force: :cascade do |t|
     t.uuid "product_id", null: false
     t.uuid "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_products_tags_on_product_id"
     t.index ["tag_id"], name: "index_products_tags_on_tag_id"
   end
