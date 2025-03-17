@@ -30,10 +30,11 @@ class GetProductsService < BaseService
 
   def build_query
     products = build_products_cte
-    products = products.left_outer_joins(:tag)
+    products = products.left_outer_joins(:tags)
                        .joins(:category)
                        .joins(category: :parent)
     products = products.order('products.price': @price) if @price.present?
+
     products.select('products.id AS product_id, products.name AS product_name,
                  products.price AS product_price, products.thumbnail AS product_thumbnail,
                  categories.id AS category_id, categories.name AS category_name,
@@ -42,26 +43,41 @@ class GetProductsService < BaseService
 
   def fetch_products
     products = build_query
+
+    group_products_by_category(products)
+  end
+
+  def group_products_by_category(products)
     products.group_by { |product| product[:category_name] }.map do |category_name, elements|
       {
         name: category_name,
-        products: elements.map! do |element|
-          transform_product(element)
-        end
+        products: process_category_products(elements)
       }
     end
   end
 
-  def transform_product(product)
+  def process_category_products(elements)
+    elements.group_by { |element| element[:product_id] }.values.map do |product_group|
+      base_product = product_group.first
+      tags = extract_tags(product_group)
+
+      transform_product(base_product, tags)
+    end
+  end
+
+  def extract_tags(product_group)
+    product_group.filter_map do |product|
+      { name: product[:tag_name], color: product[:tag_color] } if product[:tag_name]
+    end
+  end
+
+  def transform_product(product, tags)
     {
       id: product[:product_id],
       name: product[:product_name],
       price: product[:product_price],
       thumbnail: product[:product_thumbnail],
-      tag: {
-        name: product[:tag_name],
-        color: product[:tag_color]
-      }
+      tags: tags
     }
   end
 

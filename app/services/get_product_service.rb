@@ -8,14 +8,16 @@ class GetProductService < BaseService
 
   def call
     cached_product = CacheManager.fetch_value(product_id)
+
     if cached_product.present?
       @result = JSON.parse(cached_product)
     else
       validate
       return self if error?
 
-      @result = Product.includes(:sizes, :toppings, :tag).find_by(id: product_id)
+      @result = Product.includes(:sizes, :toppings, :tags).find_by(id: product_id)
       serialized_product = ProductSerializer.new(@result).serializable_hash
+
       CacheManager.assign_value(product_id, serialized_product.to_json)
     end
   end

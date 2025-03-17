@@ -115,7 +115,7 @@ new_tag = Tag.create(
   color: 'white'
 )
 
-blao_milktea.tag = new_tag
+blao_milktea.tags.append(new_tag)
 
 TP_HCM = City.create(
   name: 'Thành phố Hồ Chí Minh',
@@ -451,3 +451,16 @@ stores.each do |store|
     store.working_hours.create!(open_hour: open_hours.sample, close_hour: closed_hours.sample, day:)
   end
 end
+
+discount_ten = Tag.create(
+  name: 'Discount 10%',
+  color: 'red'
+)
+
+discount_fifteen = Tag.create(
+  name: 'Discount 15%',
+  color: 'red'
+)
+
+vietnam_coffee.tags.append(discount_ten, discount_fifteen)
+blao_milktea.tags.append(discount_fifteen)

@@ -3,5 +3,8 @@
 class Tag < ApplicationRecord
   validates :name, presence: true
   validates :color, presence: true
-  belongs_to :product
+
+  # rubocop:disable Rails/HasAndBelongsToMany
+  has_and_belongs_to_many :products
+  # rubocop:enable Rails/HasAndBelongsToMany
 end

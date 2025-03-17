@@ -45,10 +45,7 @@ describe GetProductsService do
           name: hi_tea.name,
           price: hi_tea.price,
           thumbnail: hi_tea.thumbnail,
-          tag: {
-            color: nil,
-            name: nil
-          }
+          tags: []
         }
       end
 
@@ -58,10 +55,7 @@ describe GetProductsService do
           name: iced_coffee.name,
           price: iced_coffee.price,
           thumbnail: iced_coffee.thumbnail,
-          tag: {
-            color: nil,
-            name: nil
-          }
+          tags: []
         }
       end
 
@@ -71,10 +65,7 @@ describe GetProductsService do
           name: americano.name,
           price: americano.price,
           thumbnail: americano.thumbnail,
-          tag: {
-            color: nil,
-            name: nil
-          }
+          tags: []
         }
       end
 
@@ -84,10 +75,7 @@ describe GetProductsService do
           name: milk_tea.name,
           price: milk_tea.price,
           thumbnail: milk_tea.thumbnail,
-          tag: {
-            color: nil,
-            name: nil
-          }
+          tags: []
         }
       end
 
