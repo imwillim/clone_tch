@@ -38,6 +38,10 @@ en:
       not_valid: '%{record} is not valid'
       blank: '%{record} is blank.'
       not_supported: '%{record} is not supported.'
+
     params:
       empty: '%{param} is empty'
       too_long: '%{param} is too long'
+
+    authentication:
+      login_fail: 'Login failed! Please check email or password'
