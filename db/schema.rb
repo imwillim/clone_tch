@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_07_080545) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_22_063916) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -66,11 +66,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_07_080545) do
     t.index ["store_id"], name: "index_facilities_stores_on_store_id"
   end
 
-  create_table "orders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id"
-    t.uuid "store_id"
+  create_table "order_items", force: :cascade do |t|
+    t.uuid "order_id", null: false
+    t.uuid "product_id", null: false
+    t.integer "quantity", null: false
+    t.decimal "price", precision: 10, scale: 2, null: false
+    t.float "discount", default: 0.0
+    t.integer "version", default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "orders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.decimal "total_price", precision: 10, scale: 2, default: "0.0", null: false
+    t.bigint "store_id", null: false
   end
 
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -156,6 +168,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_07_080545) do
   add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "facilities_stores", "facilities"
   add_foreign_key "facilities_stores", "stores"
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "order_items", "products"
+  add_foreign_key "orders", "stores"
+  add_foreign_key "orders", "users"
   add_foreign_key "products", "categories"
   add_foreign_key "products_tags", "products"
   add_foreign_key "products_tags", "tags"
