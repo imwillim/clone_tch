@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_22_063916) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_28_010228) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -83,6 +83,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_22_063916) do
     t.datetime "updated_at", null: false
     t.decimal "total_price", precision: 10, scale: 2, default: "0.0", null: false
     t.bigint "store_id", null: false
+  end
+
+  create_table "product_audits", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "product_id", null: false
+    t.decimal "old_price", precision: 10, scale: 2, null: false
+    t.decimal "new_price", precision: 10, scale: 2, null: false
+    t.integer "version", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_product_audits_on_product_id"
   end
 
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -172,6 +182,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_22_063916) do
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "stores"
   add_foreign_key "orders", "users"
+  add_foreign_key "product_audits", "products"
   add_foreign_key "products", "categories"
   add_foreign_key "products_tags", "products"
   add_foreign_key "products_tags", "tags"
