@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class Product < ApplicationRecord
-  validates :price, numericality: { greater_than: 0, message: I18n.t('errors.models.invalid_price', record: :product) }
+  validates :price, numericality: {
+    greater_than: 0,
+    message: I18n.t('errors.models.invalid_price', record: :product)
+  }
   validates :name, presence: true, uniqueness: true
   validates :thumbnail, presence: true
   validates :description, presence: true
