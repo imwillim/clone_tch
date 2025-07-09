@@ -38,6 +38,8 @@ en:
       not_valid: '%{record} is not valid'
       blank: '%{record} is blank.'
       not_supported: '%{record} is not supported.'
+      invalid_quantity: 'Quantity of %{record} must be greater than 0'
+      create_failed: 'Failed to create %{record}'
 
     params:
       empty: '%{param} is empty'
@@ -45,3 +47,7 @@ en:
 
     authentication:
       login_fail: 'Login failed! Please check email or password'
+
+  success:
+    models:
+      created: '%{record} has been created successfully'
