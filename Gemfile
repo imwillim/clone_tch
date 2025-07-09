@@ -73,3 +73,5 @@ group :test do
   gem 'shoulda-matchers'
   gem 'vcr'
 end
+
+gem "karafka", ">= 2.5.0"
