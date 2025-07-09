@@ -464,3 +464,5 @@ discount_fifteen = Tag.create(
 
 vietnam_coffee.tags.append(discount_ten, discount_fifteen)
 blao_milktea.tags.append(discount_fifteen)
+
+User.create!(phone: '012345678', password: '123456', address: 'Nguyen Van A', email: 'siu@gmail.com')
